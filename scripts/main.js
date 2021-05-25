@@ -1,5 +1,7 @@
 //LISTENERS
 
+// const { error } = require("console");
+
 contactsBtn.addEventListener("mouseover", ()=>{
     removeHidden(contactsLabel)
     contactsBtn.src="./styles/assets/contacts_hover.png"
@@ -40,4 +42,24 @@ regionBtn.addEventListener("mouseleave", ()=>{
     regionBtn.src="./styles/assets/region.png"
 });
 
+
+loginBtn.addEventListener('click', async (event)=>{
+    event.preventDefault();
+    const email= emailInput.value;
+    const pass = passInput.value;
+    try{
+        const to = '/users/login';
+        const body = {
+            "email": email,
+            "password": pass
+        };
+        const method = 'POST';
+
+        const access= await fetch(url, to, body, method);
+        console.log(access)
+    }
+    catch(err){
+        console.error(err)
+    }
+})
 

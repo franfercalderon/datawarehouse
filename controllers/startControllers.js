@@ -5,7 +5,7 @@ const models = require ('../models');
 
 //START USERS:
 
-router.post('/', async (req, res)=>{
+router.post('/users', async (req, res)=>{
         const startUsers =[
             {
                 name: 'Franco',

@@ -26,6 +26,7 @@
   background-color: #748CAB;
   -webkit-box-shadow: 0 2px 8px #303030;
           box-shadow: 0 2px 8px #303030;
+  z-index: 2;
 }
 
 .logocontainer {
@@ -145,5 +146,81 @@
   opacity: 0;
   -webkit-transition: opacity 0.2s ease-in-out;
   transition: opacity 0.2s ease-in-out;
+}
+
+.loginscreen {
+  position: absolute;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  padding-top: 100px;
+  width: 100vw;
+  height: 100vh;
+  background: -webkit-gradient(linear, left top, left bottom, from(#0D1321), to(#3E5C76));
+  background: linear-gradient(#0D1321, #3E5C76);
+  opacity: 0.7;
+  z-index: 1;
+}
+
+.logincontainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 350px;
+  height: 435px;
+  background-color: white;
+  border-radius: 10px;
+  -webkit-box-shadow: 5px 5px 15px black;
+          box-shadow: 5px 5px 15px black;
+  padding: 0 20px 0 20px;
+}
+
+.logincontainer img {
+  width: 180px;
+  margin: 60px 0 50px 0;
+}
+
+.logincontainer input {
+  width: 100%;
+  margin-bottom: 10px;
+  background-color: #f2f2f8;
+  border: none;
+  outline: none;
+  padding: 10px 0 10px 22px;
+  font-size: 13px;
+  color: black;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 25px;
+  -webkit-box-shadow: inset 0 -5px 45px rgba(100, 100, 100, 0.2), 0 1px 1px rgba(255, 255, 255, 0.2);
+          box-shadow: inset 0 -5px 45px rgba(100, 100, 100, 0.2), 0 1px 1px rgba(255, 255, 255, 0.2);
+}
+
+.logincontainer button {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  border: 1px 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 25px;
+  -webkit-box-shadow: inset 1px -1px 4px #0D1321;
+          box-shadow: inset 1px -1px 4px #0D1321;
+  background-color: #3E5C76;
+  color: white;
+}
+
+.logincontainer button:hover {
+  background-color: #748CAB;
+  color: white;
 }
 /*# sourceMappingURL=styles.css.map */
