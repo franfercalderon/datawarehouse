@@ -19,14 +19,14 @@
             <p>Salir</p>
         </div>
     </section>
-    <div class="loginscreen">
+    <!-- <div class="loginscreen">
         <div class="logincontainer">
             <img src="./styles/assets/loginlogo.png" alt="logo data warehouse">
             <input type="text" name="email" class="emailInput" placeholder="Email">
             <input type="password" name="password" class="passInput" placeholder="Password">
             <button type="submit" class="loginBtn">Login</button>
         </div>
-    </div>
+    </div> -->
     <aside class="aside">
         <div class="mainAside">
             <div class="asideBtn contactsBtn">
@@ -58,7 +58,211 @@
         </div>
     </aside>
     <main class="main">
-        <div class="prueba"></div>
+        <section class="contactsSection">
+            <div class="contactsBar">
+                <div class="searchdiv">
+                    <input type="text" placeholder="Búsqueda">
+                    <img src="./styles/assets/magnifier.png" alt="busqueda">
+                    <div class="searchOptions contactsBar-btns">
+                        <img src="./styles/assets/search_options.png" alt="opciones de búsqueda">
+                    </div>
+                </div>
+                <div class="contactsBar-btns-div">
+                    <div class="contactsBar-btns upload">
+                        <p>Subir</p>
+                        <img src="./styles/assets/upload.png" alt="subir">
+                    </div>
+                    <div class="contactsBar-btns download">
+                        <p>Descargar</p>
+                        <img src="./styles/assets/download.png" alt="descargar">
+                    </div>
+                    <div class="contactsBar-btns new">
+                        <p>+</p>
+                    </div>
+                </div>
+            </div>
+            <div class="contactsTable">
+                <div class="tableRow tableHeader">
+                    <div class="tableColumn column1">
+                        <input type="checkbox" name="selectall" id="selectall">
+                    </div>
+                    <div class="tableColumn">
+                        <p>Contacto</p> 
+                        <img src="./styles/assets/order_unsel.png" alt="ordenar">
+                    </div>
+                    <div class="tableColumn">
+                        <p>País/Región</p> 
+                        <img src="./styles/assets/order_unsel.png" alt="ordenar">
+                    </div>
+                    <div class="tableColumn">
+                        <p>Compañía</p> 
+                        <img src="./styles/assets/order_unsel.png" alt="ordenar">
+                    </div>
+                    <div class="tableColumn">
+                        <p>Cargp</p> 
+                        <img src="./styles/assets/order_unsel.png" alt="ordenar">
+                    </div>
+                    <div class="tableColumn">Canal preferido</div>
+                    <div class="tableColumn">
+                        <p>Interés</p> 
+                        <img src="./styles/assets/order_unsel.png" alt="ordenar">
+                    </div>
+                    <div class="tableColumn column8">Opciones</div>
+                </div>
+                <div class="headerDivider"></div>
+                <div class="tableRow itemRow">
+                    <div class="tableColumn column1">
+                        <input type="checkbox" name="select">
+                    </div>
+                    <div class="tableColumn">Franco Fernandez</div>
+                    <div class="tableColumn">Argentina / Latin America</div>
+                    <div class="tableColumn">Saenz Global</div>
+                    <div class="tableColumn">Operations Manager</div>
+                    <div class="tableColumn">Telegram</div>
+                    <div class="tableColumn column7">
+                        <p>25%</p>
+                        <img src="./styles/assets/load25.png" alt="interest">
+                    </div>
+                    <div class="tableColumn column8">...</div>
+                </div>
+                <div class="tableRow itemRow">
+                    <div class="tableColumn column1">
+                        <input type="checkbox" name="select">
+                    </div>
+                    <div class="tableColumn">Bonzo Momazo</div>
+                    <div class="tableColumn">Chile / Latin America</div>
+                    <div class="tableColumn">Momazo LLC</div>
+                    <div class="tableColumn">CEO</div>
+                    <div class="tableColumn">Instagram</div>
+                    <div class="tableColumn column7">
+                        <p>75%</p>
+                        <img src="./styles/assets/load75.png" alt="interest">
+                    </div>
+                    <div class="tableColumn column8">...</div>
+                </div>
+                <div class="tableRow itemRow">
+                    <div class="tableColumn column1">
+                        <input type="checkbox" name="select">
+                    </div>
+                    <div class="tableColumn">Federico Rodriguez</div>
+                    <div class="tableColumn">USA / North America</div>
+                    <div class="tableColumn">Austin Software</div>
+                    <div class="tableColumn">Recruiter</div>
+                    <div class="tableColumn">WhatsApp</div>
+                    <div class="tableColumn column7">
+                        <p>100%</p>
+                        <img src="./styles/assets/load100.png" alt="interest">
+                    </div>
+                    <div class="tableColumn column8">...</div>
+                </div>
+                <div class="tableRow itemRow">
+                    <div class="tableColumn column1">
+                        <input type="checkbox" name="select">
+                    </div>
+                    <div class="tableColumn">Rosario Moroni</div>
+                    <div class="tableColumn">España / Europe</div>
+                    <div class="tableColumn">Yoga Rochi</div>
+                    <div class="tableColumn">Yoga Instructor</div>
+                    <div class="tableColumn">Instagram</div>
+                    <div class="tableColumn column7">
+                        <p>25%</p>
+                        <img src="./styles/assets/load25.png" alt="interest">
+                    </div>
+                    <div class="tableColumn column8">...</div>
+                </div>
+                <div class="tableRow itemRow">
+                    <div class="tableColumn column1">
+                        <input type="checkbox" name="select">
+                    </div>
+                    <div class="tableColumn">Maia Ferran</div>
+                    <div class="tableColumn">Australia / Oceania</div>
+                    <div class="tableColumn">Cakes and fight</div>
+                    <div class="tableColumn">Instructor</div>
+                    <div class="tableColumn">Telegram</div>
+                    <div class="tableColumn column7">
+                        <p>50%</p>
+                        <img src="./styles/assets/load50.png" alt="interest">
+                    </div>
+                    <div class="tableColumn column8">...</div>
+                </div>
+                <div class="tableRow itemRow">
+                    <div class="tableColumn column1">
+                        <input type="checkbox" name="select">
+                    </div>
+                    <div class="tableColumn">Franco Fernandez</div>
+                    <div class="tableColumn">Argentina / Latin America</div>
+                    <div class="tableColumn">Saenz Global</div>
+                    <div class="tableColumn">Operations Manager</div>
+                    <div class="tableColumn">Telegram</div>
+                    <div class="tableColumn column7">
+                        <p>25%</p>
+                        <img src="./styles/assets/load25.png" alt="interest">
+                    </div>
+                    <div class="tableColumn column8">...</div>
+                </div>
+                <div class="tableRow itemRow">
+                    <div class="tableColumn column1">
+                        <input type="checkbox" name="select">
+                    </div>
+                    <div class="tableColumn">Bonzo Momazo</div>
+                    <div class="tableColumn">Chile / Latin America</div>
+                    <div class="tableColumn">Momazo LLC</div>
+                    <div class="tableColumn">CEO</div>
+                    <div class="tableColumn">Instagram</div>
+                    <div class="tableColumn column7">
+                        <p>75%</p>
+                        <img src="./styles/assets/load75.png" alt="interest">
+                    </div>
+                    <div class="tableColumn column8">...</div>
+                </div>
+                <div class="tableRow itemRow">
+                    <div class="tableColumn column1">
+                        <input type="checkbox" name="select">
+                    </div>
+                    <div class="tableColumn">Federico Rodriguez</div>
+                    <div class="tableColumn">USA / North America</div>
+                    <div class="tableColumn">Austin Software</div>
+                    <div class="tableColumn">Recruiter</div>
+                    <div class="tableColumn">WhatsApp</div>
+                    <div class="tableColumn column7">
+                        <p>100%</p>
+                        <img src="./styles/assets/load100.png" alt="interest">
+                    </div>
+                    <div class="tableColumn column8">...</div>
+                </div>
+                <div class="tableRow itemRow">
+                    <div class="tableColumn column1">
+                        <input type="checkbox" name="select">
+                    </div>
+                    <div class="tableColumn">Rosario Moroni</div>
+                    <div class="tableColumn">España / Europe</div>
+                    <div class="tableColumn">Yoga Rochi</div>
+                    <div class="tableColumn">Yoga Instructor</div>
+                    <div class="tableColumn">Instagram</div>
+                    <div class="tableColumn column7">
+                        <p>25%</p>
+                        <img src="./styles/assets/load25.png" alt="interest">
+                    </div>
+                    <div class="tableColumn column8">...</div>
+                </div>
+                <div class="tableRow itemRow">
+                    <div class="tableColumn column1">
+                        <input type="checkbox" name="select">
+                    </div>
+                    <div class="tableColumn">Maia Ferran</div>
+                    <div class="tableColumn">Australia / Oceania</div>
+                    <div class="tableColumn">Cakes and fight</div>
+                    <div class="tableColumn">Instructor</div>
+                    <div class="tableColumn">Telegram</div>
+                    <div class="tableColumn column7">
+                        <p>50%</p>
+                        <img src="./styles/assets/load50.png" alt="interest">
+                    </div>
+                    <div class="tableColumn column8">...</div>
+                </div>
+                <div class="headerDivider"></div>
+            </div>
+        </section>
     </main>
     <footer>
 

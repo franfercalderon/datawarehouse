@@ -1,6 +1,7 @@
 .aside{
-    position: float;
+    position: absolute;
     display: flex;
+    width: auto;
 }
 
 .mainAside{
@@ -8,9 +9,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 100vh;
+    height: 400px;
     width: 50px;
     background-color: $blue1;
+    border-bottom-right-radius: 20px;
 }
 
 .mainAside:hover{

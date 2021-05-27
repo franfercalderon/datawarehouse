@@ -1,17 +1,174 @@
-.main{
-    position: absolute;
-    top: 0;
+
+.contactsSection{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+.contactsBar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
     width: 100%;
-    height: 100%;
-    // background-color: red;
-    margin: 70px 0 0 50px;
-    z-index: -3;
+    height: 82px;
+    background-color: white;
+    padding: 0 25px 0 25px;
+    border-radius: 8px;
+    box-shadow: 2px 2px 8px rgb(211, 209, 209);
 }
 
-// .prueba{
-//     position: relative;
-//     width: 500px;
-//     height: 500px;
-//     border: 2px solid black;
-//     margin: 200px
-// }
+.contactsTable{
+    width: 100%;
+    height: 600px;
+    background-color: white;
+    padding: 0 25px 0 25px;
+    border-radius: 8px;
+    box-shadow: 2px 2px 8px rgb(211, 209, 209);
+}
+
+.searchdiv input{
+    height: 42px;
+    width: 450px;
+    border-radius: 20px;
+    border: 1px solid $blue5;
+    padding-left: 20px; 
+    box-shadow: inset 2px -3px 4px $lightgray;
+}
+
+.searchdiv{
+    display: flex;
+    align-items: center;
+}
+.searchdiv img{
+    position: relative;
+    margin-left: -35px;
+    width: 22px;
+    cursor: pointer;
+}
+
+.contactsBar-btns-div{
+    display: flex;
+}
+
+.contactsBar-btns{
+    display: flex;
+    align-items: center;
+    width: auto;
+    padding:0 15px 0 15px;
+    height: 43px;
+    margin-right: 20px;
+    background-color: rgb(245, 245, 245);
+    font-family: $raleway;
+    font-size: 14px;
+    border-radius: 7px;
+    box-shadow: 2px 2px 3px rgb(211, 209, 209);
+    cursor: pointer;
+    transition: background-color 0s
+}
+
+.contactsBar-btns img{
+    width: 22px;
+    height:auto;
+    margin-left: 10px;
+}
+
+.contactsBar-btns.new{
+    width: 47px;
+    font-size: 30px;
+    display: flex;
+    justify-content: center;
+    background-color: $blue4;
+    color: white;
+}
+
+.contactsBar-btns:hover{
+    background-color: $blue5;
+    font-weight: 500;
+    box-shadow: 2px 2px 3px rgb(156, 156, 156);
+}
+
+.contactsBar-btns.new:hover{
+    background-color: $blue2;
+}
+
+.headerDivider{
+    width: 100%;
+    height: 1px;
+    background-color: $lightgray;
+}
+
+.contactsTable{
+    display: flex;
+    flex-direction: column;
+    font-family: $raleway;
+    font-size: 14px;
+}
+
+.tableHeader{
+    font-weight: 500;
+}
+
+.itemRow{
+    font-weight: 300;
+}
+
+
+.tableRow{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 48px;
+}
+
+.tableColumn{
+    display: flex;
+    width: 15%;
+    justify-content: center;
+    align-items: center;
+}
+
+.tableColumn img{
+    width: 40px;
+    height: 17px;
+}
+
+.column1{
+    width: 4%
+}
+
+.column8{
+    width: 6%;
+}
+
+.itemRow .column8{
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.itemRow .column8:hover{
+    font-weight: 500;
+}
+
+.column7 img{
+    height: 45px;
+    width: auto;
+    margin-left: 15px;
+}
+
+.searchOptions{
+    margin-left: 25px;
+    width: 45px;
+    height: 35px;
+}
+
+.searchOptions img{
+    margin: 0;
+    opacity: 0.6;
+    width: 15px;
+}
+
+.searchOptions:hover{
+    background-color: white;
+    // opacity: 1;
+}
+

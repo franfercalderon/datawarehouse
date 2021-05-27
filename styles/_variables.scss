@@ -4,12 +4,20 @@
     border: 0;
     box-sizing: border-box;
     transition: background-color 0.3s ease-in-out;
-    // transition: width 3s ease-in;
-    // transition: opacity 0s ease-in-out;
 }
 
 *:focus {
     outline: none;
+}
+
+.main{
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: auto;
+    z-index: -3;
+    padding: 95px 30px 30px 75px;
+    background-color: rgb(245, 245, 245);
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@200;300;400;500&display=swap');
@@ -22,6 +30,7 @@ $blue1: #0D1321;
 $blue2: #1D2D44;
 $blue3: #3E5C76;
 $blue4: #748CAB;
+$blue5: #becde0;
 $orange: #e84138;
 $shadow: rgb(48, 48, 48);
 $lightgray: rgb(241, 241, 241);

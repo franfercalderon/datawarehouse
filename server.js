@@ -8,8 +8,6 @@ const models = require ('./models');
 const startControllers = require ('./controllers/startControllers');
 const userControllers = require('./controllers/usersControllers');
 const regionControllers = require('./controllers/regionControllers');
-// const productsControllers = require('./controllers/productsControllers');
-// const ordersControllers = require('./controllers/ordersControllers');
 
 app.use(express.json());
 app.use(helmet());
@@ -17,8 +15,6 @@ app.use(cors());
 app.use('/start', startControllers);
 app.use('/users', userControllers);
 app.use('/regions', regionControllers);
-// app.use('/products', productsControllers);
-// app.use('/orders', ordersControllers);
 
 
 //RELACIONES TABLAS
@@ -33,12 +29,6 @@ models.Country.belongsTo(models.Region, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
 });
-
-// models.OrderStatus.hasMany(models.Order)
-// models.Order.belongsTo(models.OrderStatus)
-
-// models.User.hasMany(models.Order)
-// models.Order.belongsTo(models.User)
 
 
 db.init()
