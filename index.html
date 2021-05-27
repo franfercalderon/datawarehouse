@@ -19,14 +19,14 @@
             <p>Salir</p>
         </div>
     </section>
-    <!-- <div class="loginscreen">
+    <div class="loginscreen">
         <div class="logincontainer">
             <img src="./styles/assets/loginlogo.png" alt="logo data warehouse">
             <input type="text" name="email" class="emailInput" placeholder="Email">
             <input type="password" name="password" class="passInput" placeholder="Password">
             <button type="submit" class="loginBtn">Login</button>
         </div>
-    </div> -->
+    </div>
     <aside class="aside">
         <div class="mainAside">
             <div class="asideBtn contactsBtn">
@@ -58,13 +58,15 @@
         </div>
     </aside>
     <main class="main">
-        <section class="contactsSection">
+        <section class="contactsSection hidden">
             <div class="contactsBar">
                 <div class="searchdiv">
-                    <input type="text" placeholder="Búsqueda">
-                    <img src="./styles/assets/magnifier.png" alt="busqueda">
-                    <div class="searchOptions contactsBar-btns">
+                    <div class="searchBar"></div>
+                    <div class="searchOptions ">
                         <img src="./styles/assets/search_options.png" alt="opciones de búsqueda">
+                    </div>
+                    <div class="contactsBar-btns search">
+                        <img src="./styles/assets/magnifier.png" alt="buscar">
                     </div>
                 </div>
                 <div class="contactsBar-btns-div">
@@ -79,6 +81,61 @@
                     <div class="contactsBar-btns new">
                         <p>+</p>
                     </div>
+                </div>
+            </div>
+            <div class="searchDetail hidden">
+                <div class="searchByName">
+                    <label for="contactName">Nombre</label>
+                    <input type="text" name="contactName" class= "searchInput" placeholder="Nombre del contacto">
+                </div>
+                <div class="searchByRole">
+                    <label for="contactRole">Cargo</label>
+                    <input type="text" name="contactRole" class= "searchInput"  placeholder="Cargo del contacto">
+                </div>
+                <div class="searchByRegion">
+                    <label for="contactRegion">Región</label>
+                    <select name="contactRegion"  class= "searchInput" id="contactRegion">
+                        <option value="" disabled selected>Región del contacto</option>
+                        <option value="Africa">Africa</option>
+                        <option value="Asia">Asia</option>
+                        <option value="Europe">Europe</option>
+                        <option value="Latin America">Latin America</option>
+                        <option value="North America">North America</option>
+                        <option value="Oceania">Oceania</option>
+                    </select>
+                </div>
+                <div class="searchByCountry">
+                    <label for="contactCountry">País</label>
+                    <select name="contactCountry" class= "searchInput"  id="contactCountry">
+                        <option value="" disabled selected>País del contacto</option>
+                        <option value="Argentina">Argentina</option>
+                        <option value="Chile">Chile</option>
+                        <option value="España">España</option>
+                        <option value="Francia">Francia</option>
+                        <option value="Oman">Oman</option>
+                        <option value="Vietnam">Vietnam</option>
+                    </select>
+                </div>
+                <div class="searchByChannel">
+                    <label for="contactChannel">Canal preferido</label>
+                    <select name="contactChannel"  class= "searchInput" id="contactChannel">
+                        <option value="" disabled selected>Canal favorito</option>
+                        <option value="Facebook">Facebook</option>
+                        <option value="Instagram">Instagram</option>
+                        <option value="Telegram">Telegram</option>
+                        <option value="WhatsApp">WhatsApp</option>
+                    </select>
+                </div>
+                <div class="searchByInterest">
+                    <label for="contactInterest">Interés</label>
+                    <select name="contactInterest"  class= "searchInput" id="contactInterest">
+                        <option value="" disabled selected>Interés</option>
+                        <option value="0%">0%</option>
+                        <option value="25%">25%</option>
+                        <option value="50%">50%</option>
+                        <option value="75%">75%</option>
+                        <option value="100%">100%</option>
+                    </select>
                 </div>
             </div>
             <div class="contactsTable">
@@ -165,8 +222,8 @@
                     <div class="tableColumn">Yoga Instructor</div>
                     <div class="tableColumn">Instagram</div>
                     <div class="tableColumn column7">
-                        <p>25%</p>
-                        <img src="./styles/assets/load25.png" alt="interest">
+                        <p>0%</p>
+                        <img src="./styles/assets/load0.png" alt="interest">
                     </div>
                     <div class="tableColumn column8">...</div>
                 </div>
@@ -240,8 +297,8 @@
                     <div class="tableColumn">Yoga Instructor</div>
                     <div class="tableColumn">Instagram</div>
                     <div class="tableColumn column7">
-                        <p>25%</p>
-                        <img src="./styles/assets/load25.png" alt="interest">
+                        <p>0%</p>
+                        <img src="./styles/assets/load0.png" alt="interest">
                     </div>
                     <div class="tableColumn column8">...</div>
                 </div>

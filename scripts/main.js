@@ -22,7 +22,9 @@ regionBtn.addEventListener("mouseover", ()=>{
 
 contactsBtn.addEventListener("mouseleave", ()=>{
     addHidden(contactsLabel)
-    contactsBtn.src="./styles/assets/contacts.png"
+    if(contactsOpen==false){
+        contactsBtn.src="./styles/assets/contacts.png"
+    }
 });
 
 companyBtn.addEventListener("mouseleave", ()=>{
@@ -69,6 +71,23 @@ loggeduseroptions.addEventListener("mouseleave", ()=>{
     opened= false;
     loggeduseroptions.classList.add("hidden")
 })
+
+searchOptions.addEventListener("click", ()=>{
+    searchDetail.classList.toggle("hidden")
+})
+
+searchDetail.addEventListener("mouseleave", ()=>{
+    searchDetail.classList.add("hidden")
+})
+
+searchBtn.addEventListener("mouseover", ()=>{
+    document.querySelector(".search img").src="./styles/assets/magnifier_hover.png"
+})
+
+searchBtn.addEventListener("mouseleave", ()=>{
+    document.querySelector(".search img").src="./styles/assets/magnifier.png"
+})
+
 
 
 

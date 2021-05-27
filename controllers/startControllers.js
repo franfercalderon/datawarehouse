@@ -74,14 +74,73 @@ router.post('/users', async (req, res)=>{
                 region: 1
             },
             {
+                name: 'Australia',
+                region: 6
+            },
+            {
                 name: 'Chile',
                 region: 1
             },
             {
-                name: 'Australia',
-                region: 6
+                name: 'China',
+                region: 4
             },
-
+            {
+                name: 'Colombia',
+                region: 1
+            },
+            {
+                name: 'Cuba',
+                region: 1
+            },
+            {
+                name: 'Egipto',
+                region: 5
+            },
+            {
+                name: 'España',
+                region: 3
+            },
+            {
+                name: 'Filipinas',
+                region: 4
+            },
+            {
+                name: 'Francia',
+                region: 3
+            },
+            {
+                name: 'Italia',
+                region: 3
+            },
+            {
+                name: 'Japon',
+                region: 4
+            },
+            {
+                name: 'Oman',
+                region: 5
+            },
+            {
+                name: 'Peru',
+                region: 1
+            },
+            {
+                name: 'Rusia',
+                region: 4
+            },
+            {
+                name: 'Sudafrica',
+                region: 5
+            },
+            {
+                name: 'Uruguay',
+                region: 1
+            },
+            {
+                name: 'Vietnam',
+                region: 4
+            }
         ];
         startCountries.forEach(e=>{
             models.Country.create(e)

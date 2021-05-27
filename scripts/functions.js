@@ -6,6 +6,12 @@ function addHidden(x){
     x.classList.add("hidden")
 }
 
+function openContacts(){
+    contactsSection.classList.remove("hidden");
+    contactsBtn.src="./styles/assets/contacts_hover.png"
+    contactsOpen= true
+}
+
 async function loginLoad(){
     console.log(`entra a loginLoad`);
     const body = {
@@ -29,7 +35,7 @@ async function loginLoad(){
         
             localStorage.setItem("token", JSON.stringify(res.success.token));
             localStorage.setItem("username", JSON.stringify(res.success.userData.name));
-            localStorage.setItem("username", JSON.stringify(res.success.userData.isAdmin));
+            localStorage.setItem("admin", JSON.stringify(res.success.userData.isAdmin));
 
         }
         else{
@@ -51,6 +57,7 @@ function loginSuccess(user){
     logincontainer.appendChild(welcomeMsg);
     setTimeout(()=>{
         loginscreen.classList.add("hidden");
+        openContacts();
         document.querySelector(".loggedusercontainer").innerHTML=`
         <p>${user.name}</p>
         <img src=${user.photo} alt="foto usuario">`

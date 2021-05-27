@@ -6,6 +6,8 @@ const usersBtn = document.querySelector(".usersBtn img");
 const regionBtn = document.querySelector(".regionBtn img");
 const loginBtn = document.querySelector(".loginBtn");
 const loggedusercontainer = document.querySelector(".loggedusercontainer");
+const searchOptions = document.querySelector(".searchOptions");
+const searchBtn = document.querySelector(".search");
 
 
 //LABELS
@@ -28,5 +30,13 @@ const url = 'http://127.0.0.1:3000';
 //SECTIONS
 const logincontainer = document.querySelector(".logincontainer");
 const loginscreen = document.querySelector(".loginscreen");
+const searchDetail = document.querySelector(".searchDetail");
+const contactsSection = document.querySelector(".contactsSection");
+
+//STATES
+let contactsOpen = false;
+let companyOpen = false;
+let usersOpen = false;
+let regionOpen = false;
 
 
