@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@200;300;400;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500&display=swap");
 * {
   margin: 0;
   padding: 0;
@@ -21,6 +22,9 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
   width: 100%;
   height: 70px;
   background-color: #748CAB;
@@ -49,8 +53,78 @@
   color: #f1f1f1;
 }
 
-.aside {
+.loggedusercontainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  font-family: "Raleway", sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  color: #f1f1f1;
+  cursor: pointer;
+}
+
+.loggedusercontainer img {
+  height: 40px;
+  border-radius: 50%;
+  margin: 0 45px 0 20px;
+  -webkit-box-shadow: 0 2px 8px #0D1321;
+          box-shadow: 0 2px 8px #0D1321;
+}
+
+.loggedusercontainer p {
+  margin-bottom: -7px;
+}
+
+.loggedusercontainer:hover {
+  font-weight: 500;
+  color: white;
+}
+
+.loggeduseroptions {
   position: absolute;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+  padding-right: 35px;
+  top: 0;
+  right: 37px;
+  margin-top: 70px;
+  width: 140px;
+  height: 62px;
+  background-color: #f1f1f1;
+  -webkit-box-shadow: 2px 2px 8px #d3d1d1;
+          box-shadow: 2px 2px 8px #d3d1d1;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  z-index: 1;
+  font-family: "Barlow Semi Condensed", sans-serif;
+  font-weight: 400;
+  font-size: 19px;
+  cursor: pointer;
+  -webkit-transition: margin 0.2s ease-in-out;
+  transition: margin 0.2s ease-in-out;
+}
+
+.loggeduseroptions:hover {
+  font-weight: 500;
+}
+
+.loggeduseroptions.hidden {
+  margin-top: -170px;
+}
+
+.aside {
+  position: float;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -85,6 +159,7 @@
 .asideBtn img {
   width: 30px;
   margin-top: 35px;
+  cursor: pointer;
 }
 
 .asideBtn:nth-child(1) {
@@ -99,6 +174,7 @@
 
 .labeldiv {
   position: absolute;
+  position: relative;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -107,7 +183,7 @@
       -ms-flex-direction: column;
           flex-direction: column;
   top: 58px;
-  left: 50px;
+  left: 0px;
   opacity: 1;
 }
 
@@ -130,6 +206,8 @@
   border-bottom-right-radius: 8px;
   padding-left: 22px;
   z-index: -1;
+  -webkit-transition: margin 0.2s ease-in-out;
+  transition: margin 0.2s ease-in-out;
 }
 
 .label h2 {
@@ -142,10 +220,8 @@
 }
 
 .labeldiv .hidden {
-  left: -70px;
+  margin-left: -160px;
   opacity: 0;
-  -webkit-transition: opacity 0.2s ease-in-out;
-  transition: opacity 0.2s ease-in-out;
 }
 
 .loginscreen {
@@ -222,5 +298,113 @@
 .logincontainer button:hover {
   background-color: #748CAB;
   color: white;
+}
+
+.welcomeMsg {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  font-family: "Raleway", sans-serif;
+  font-weight: 400;
+  font-size: 24px;
+}
+
+.welcomeMsg p {
+  position: relative;
+  bottom: -20px;
+}
+
+.welcomeMsg img {
+  -webkit-animation: Pop 0.5s;
+          animation: Pop 0.5s;
+}
+
+@-webkit-keyframes Pop {
+  0% {
+    width: 100px;
+    opacity: 0;
+  }
+  50% {
+    width: 220px;
+    opacity: 0.7;
+  }
+  100% {
+    width: 180px;
+    opacity: 1;
+  }
+}
+
+@keyframes Pop {
+  0% {
+    width: 100px;
+    opacity: 0;
+  }
+  50% {
+    width: 220px;
+    opacity: 0.7;
+  }
+  100% {
+    width: 180px;
+    opacity: 1;
+  }
+}
+
+.loginErr {
+  position: absolute;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 300px;
+  margin-top: 30px;
+  background-color: white;
+  border-radius: 10px;
+  -webkit-box-shadow: 5px 5px 15px black;
+          box-shadow: 5px 5px 15px black;
+  padding: 0 20px 0 20px;
+  font-family: "Raleway", sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  text-align: center;
+}
+
+.loginErr img {
+  width: 180px;
+  -webkit-animation: Pop 0.5s;
+          animation: Pop 0.5s;
+  margin: 40px 0 45px 0;
+}
+
+.loginErr p {
+  margin-bottom: 30px;
+}
+
+.loginscreen.hidden {
+  display: none;
+}
+
+.main {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  margin: 70px 0 0 50px;
+  z-index: -3;
 }
 /*# sourceMappingURL=styles.css.map */

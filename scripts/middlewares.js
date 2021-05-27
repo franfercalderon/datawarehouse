@@ -63,7 +63,9 @@ const userValidation = async (email, password) => {
         if (selectedUser.password == password.trim()) {
             const tokenCode = newToken(selectedUser.email, selectedUser.isAdmin);
             const userData = {
+                name: selectedUser.name,
                 email: selectedUser.email,
+                photo: selectedUser.photo,
                 isAdmin: selectedUser.isAdmin 
             };
 

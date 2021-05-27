@@ -1,4 +1,5 @@
 const express = require('express');
+// const { Model } = require('sequelize/types');
 // const { User } = require('../models');
 const router = express.Router();
 const models = require ('../models');
@@ -13,6 +14,7 @@ router.post('/users', async (req, res)=>{
                 email: 'franco@gmail.com',
                 phone: '5491130955758',
                 adress: 'Evergreen Ave. 123, Springfield, USA',
+                photo: './styles/assets/users/franco.jpg',
                 password: 'Password123!',
                 isAdmin: true
             },
@@ -22,6 +24,7 @@ router.post('/users', async (req, res)=>{
                 email: 'momo@gmail.com',
                 phone: '5491130955759',
                 adress: 'Evergreen Ave. 123, Springfield, USA',
+                photo: './styles/assets/users/bonzo.jpg',
                 password: 'Password123!',
                 isAdmin: false
             }
@@ -31,6 +34,59 @@ router.post('/users', async (req, res)=>{
             models.User.create(e)
         });
         res.status(200).json({message:'Starting users created!'})
+    })
+
+    //START REGIONS
+
+    .post('/regions', async (req, res)=>{
+        const startRegions=[
+            {
+                name: 'Latin America'
+            },
+            {
+                name: 'North America'
+            },
+            {
+                name: 'Europe'
+            },
+            {
+                name: 'Asia'
+            },
+            {
+                name: 'Africa'
+            },
+            {
+                name: 'Oceania'
+            }
+        ];
+        startRegions.forEach(e=>{
+            models.Region.create(e)
+        });
+        res.status(200).json({message:'Starting regions created!'})
+    })
+
+    //START COUNTRIES
+
+    .post('/countries', async (req, res)=>{
+        const startCountries= [
+            {
+                name: 'Argentina',
+                region: 1
+            },
+            {
+                name: 'Chile',
+                region: 1
+            },
+            {
+                name: 'Australia',
+                region: 6
+            },
+
+        ];
+        startCountries.forEach(e=>{
+            models.Country.create(e)
+        });
+        res.status(200).json({message:'Starting countries created!'})
     })
 
 module.exports = router

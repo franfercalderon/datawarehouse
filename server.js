@@ -5,8 +5,9 @@ const cors = require('cors');
 
 const db = require('./connect');
 const models = require ('./models');
-const startControllers = require ('./controllers/startControllers')
+const startControllers = require ('./controllers/startControllers');
 const userControllers = require('./controllers/usersControllers');
+const regionControllers = require('./controllers/regionControllers');
 // const productsControllers = require('./controllers/productsControllers');
 // const ordersControllers = require('./controllers/ordersControllers');
 
@@ -15,14 +16,23 @@ app.use(helmet());
 app.use(cors());
 app.use('/start', startControllers);
 app.use('/users', userControllers);
+app.use('/regions', regionControllers);
 // app.use('/products', productsControllers);
 // app.use('/orders', ordersControllers);
 
 
 //RELACIONES TABLAS
 
-// models.Order.hasMany(models.OrderInfo)
-// models.OrderInfo.belongsTo(models.Order)
+models.Region.hasMany(models.Country,{
+    foreignKey: 'region',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+});
+models.Country.belongsTo(models.Region, {
+    foreignKey: 'region',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+});
 
 // models.OrderStatus.hasMany(models.Order)
 // models.Order.belongsTo(models.OrderStatus)

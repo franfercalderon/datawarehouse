@@ -1,7 +1,5 @@
 //LISTENERS
 
-// const { error } = require("console");
-
 contactsBtn.addEventListener("mouseover", ()=>{
     removeHidden(contactsLabel)
     contactsBtn.src="./styles/assets/contacts_hover.png"
@@ -43,23 +41,40 @@ regionBtn.addEventListener("mouseleave", ()=>{
 });
 
 
-loginBtn.addEventListener('click', async (event)=>{
+loginBtn.addEventListener('click', (event)=>{
     event.preventDefault();
-    const email= emailInput.value;
-    const pass = passInput.value;
-    try{
-        const to = '/users/login';
-        const body = {
-            "email": email,
-            "password": pass
-        };
-        const method = 'POST';
+    loginLoad()
+});
 
-        const access= await fetch(url, to, body, method);
-        console.log(access)
-    }
-    catch(err){
-        console.error(err)
-    }
+loggedusercontainer.addEventListener("mouseover", ()=>{
+    loggeduseroptions.classList.remove("hidden")
 })
+
+let opened= false;
+
+loggedusercontainer.addEventListener("mouseleave", ()=>{
+    setTimeout(()=>{
+        if(opened== false){
+            loggeduseroptions.classList.add("hidden")
+        }
+    }, 300)
+})
+
+loggeduseroptions.addEventListener("mouseover", ()=>{
+    opened= true;
+    loggeduseroptions.classList.remove("hidden")
+})
+
+loggeduseroptions.addEventListener("mouseleave", ()=>{
+    opened= false;
+    loggeduseroptions.classList.add("hidden")
+})
+
+
+
+// function closeDetail(){
+//     console.log('caca')
+//     loggeduseroptions.classList.add("hidden")
+// }
+
 
