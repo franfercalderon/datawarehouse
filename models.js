@@ -64,5 +64,182 @@ City.init({
     modelName: 'City'
 })
 
+class Contact extends Model {}
+Contact.init({
+    id:{
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true
+    },
+    name: DataTypes.STRING,
+    lastname: DataTypes.STRING,
+    role: DataTypes.STRING,
+    email: DataTypes.STRING,
+    company: DataTypes.INTEGER,
+    photo: DataTypes.STRING,
+    region: DataTypes.INTEGER,
+    country: DataTypes.INTEGER,
+    city: DataTypes.INTEGER,
+    interest: DataTypes.INTEGER,
+    // contactInfo: DataTypes.INTEGER
+},{
+    sequelize,
+    modelName: 'Contact'
+})
 
-module.exports = {User, Region, Country, City};
+class ContactChannel extends Model {}
+ContactChannel.init({
+    id:{
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true
+    },
+    name: DataTypes.STRING
+},{
+    sequelize,
+    modelName: 'ContactChannel'
+})
+
+class ContactInfo extends Model {}
+ContactInfo.init({
+    id:{
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true
+    },
+    idUser: DataTypes.INTEGER,
+    idChannel: DataTypes.INTEGER,
+    account: DataTypes.STRING
+},{
+    sequelize,
+    modelName: 'ContactInfo'
+})
+
+class Company extends Model {}
+Company.init({
+    id:{
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true
+    },
+    name: DataTypes.STRING,
+    email: DataTypes.STRING,
+    phone: DataTypes.STRING,
+    address: DataTypes.STRING,
+    region: DataTypes.INTEGER,
+    country: DataTypes.INTEGER,
+    city: DataTypes.INTEGER
+},{
+    sequelize,
+    modelName: 'Company'
+})
+
+Region.hasMany(Country,{
+    foreignKey: 'region',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+});
+Country.belongsTo(Region, {
+    foreignKey: 'region',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+});
+
+Contact.hasMany(ContactInfo, {
+    foreignKey:'idUser',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+});
+
+ContactInfo.belongsTo(Contact, {
+    foreignKey:'idUser',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+});
+
+ContactChannel.hasMany(ContactInfo, {
+    foreignKey:'idChannel',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+});
+
+ContactInfo.belongsTo(ContactChannel, {
+    foreignKey:'idChannel',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+});
+
+Region.hasMany(Contact, {
+    foreignKey:'region',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+});
+
+Contact.belongsTo(Region, {
+    foreignKey:'region',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+});
+
+Country.hasMany(Contact, {
+    foreignKey:'country',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+});
+
+Contact.belongsTo(Country, {
+    foreignKey:'country',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+});
+
+City.hasMany(Contact, {
+    foreignKey:'city',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+});
+
+Contact.belongsTo(City, {
+    foreignKey:'city',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+});
+
+Region.hasMany(Company, {
+    foreignKey:'region',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+});
+
+Company.belongsTo(Region, {
+    foreignKey:'region',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+});
+
+Country.hasMany(Company, {
+    foreignKey:'country',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+});
+
+Company.belongsTo(Country, {
+    foreignKey:'country',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+});
+
+City.hasMany(Company, {
+    foreignKey:'city',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+});
+
+Company.belongsTo(City, {
+    foreignKey:'city',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+});
+
+
+module.exports = {User, Region, Country, City, ContactChannel, Contact, ContactInfo, Company};

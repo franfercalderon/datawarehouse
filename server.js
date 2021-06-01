@@ -4,31 +4,19 @@ const helmet = require('helmet');
 const cors = require('cors');
 
 const db = require('./connect');
-const models = require ('./models');
+// const models = require ('./models');
 const startControllers = require ('./controllers/startControllers');
 const userControllers = require('./controllers/usersControllers');
-const regionControllers = require('./controllers/regionControllers');
+const locationControllers = require('./controllers/locationControllers');
+// const countryControllers = require('./controllers/countryControllers');
 
 app.use(express.json());
 app.use(helmet());
 app.use(cors());
 app.use('/start', startControllers);
 app.use('/users', userControllers);
-app.use('/regions', regionControllers);
-
-
-//RELACIONES TABLAS
-
-models.Region.hasMany(models.Country,{
-    foreignKey: 'region',
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE'
-});
-models.Country.belongsTo(models.Region, {
-    foreignKey: 'region',
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE'
-});
+app.use('/location', locationControllers);
+// app.use('/countries', countryControllers);
 
 
 db.init()
