@@ -57,8 +57,7 @@ City.init({
         primaryKey: true
     },
     name: DataTypes.STRING,
-    country: DataTypes.INTEGER,
-    region: DataTypes.INTEGER
+    country: DataTypes.INTEGER
 },{
     sequelize,
     modelName: 'City'
@@ -76,11 +75,11 @@ Contact.init({
     role: DataTypes.STRING,
     email: DataTypes.STRING,
     company: DataTypes.INTEGER,
-    photo: DataTypes.STRING,
+    // photo: DataTypes.STRING,
     region: DataTypes.INTEGER,
     country: DataTypes.INTEGER,
     city: DataTypes.INTEGER,
-    interest: DataTypes.INTEGER,
+    interest: DataTypes.INTEGER
     // contactInfo: DataTypes.INTEGER
 },{
     sequelize,
@@ -141,6 +140,18 @@ Region.hasMany(Country,{
 });
 Country.belongsTo(Region, {
     foreignKey: 'region',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+});
+
+Country.hasMany(City,{
+    foreignKey: 'country',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+});
+
+City.belongsTo(Country, {
+    foreignKey: 'country',
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
 });

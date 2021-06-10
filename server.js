@@ -8,6 +8,8 @@ const db = require('./connect');
 const startControllers = require ('./controllers/startControllers');
 const userControllers = require('./controllers/usersControllers');
 const locationControllers = require('./controllers/locationControllers');
+const contactsControllers = require('./controllers/contactsControllers');
+
 // const countryControllers = require('./controllers/countryControllers');
 
 app.use(express.json());
@@ -16,6 +18,8 @@ app.use(cors());
 app.use('/start', startControllers);
 app.use('/users', userControllers);
 app.use('/location', locationControllers);
+app.use('/contacts', contactsControllers);
+
 // app.use('/countries', countryControllers);
 
 

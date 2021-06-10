@@ -88,6 +88,7 @@ searchBtn.addEventListener("mouseleave", ()=>{
     document.querySelector(".search img").src="./styles/assets/magnifier.png"
 })
 
+newContactBtn.addEventListener("click", ()=> {openNewContact()})
 
 
 

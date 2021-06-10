@@ -8,6 +8,7 @@ const loginBtn = document.querySelector(".loginBtn");
 const loggedusercontainer = document.querySelector(".loggedusercontainer");
 const searchOptions = document.querySelector(".searchOptions");
 const searchBtn = document.querySelector(".search");
+const newContactBtn = document.querySelector(".contactsBar-btns.new");
 
 
 //LABELS

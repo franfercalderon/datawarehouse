@@ -1,12 +1,51 @@
-// const models = require("../models");
+//API CALLS
 
-function removeHidden(x){
-    x.classList.remove("hidden")
+//REGIONES
+async function getallRegions(){
+    const regions = await fetchApi(url, '/location/regions', 'GET');
+    return regions
 }
 
-function addHidden(x){
-    x.classList.add("hidden")
+async function getallCountries(){
+    const countries = await fetchApi(url, '/location/countries', 'GET');
+    return countries
 }
+
+//PAISES
+
+async function getCountryByRegion(reg){
+    const region = await fetchApi(url, '/location/regions/name_'+reg, 'GET');
+    const regionId = region.id;
+    // console.log(regionId);
+    const countries = await fetchApi(url, '/location/countries/region_'+regionId, 'GET');
+    // console.log(countries);
+    return countries;
+
+}
+
+//CIUDADES
+
+async function getallCities(){
+    const cities = await fetchApi(url, '/location/cities', 'GET');
+    return cities
+}
+
+async function getCitiesByCountry(ctry){
+    const country = await fetchApi(url, '/location/countries/name_'+ctry, 'GET');
+    const countryId = country.id;
+
+    const cities = await fetchApi(url, '/location/cities/country_'+countryId, 'GET');
+    return cities 
+}
+
+//CANALES DE CONTACTO
+
+async function getallChannels(){
+    const channels = await fetchApi(url, '/contacts/channels', 'GET');
+    return channels
+}
+
+//LLAMADA A API, FUNCION GENERAL:
 
 async function fetchApi(url, target, method, body){
     if(method== 'GET'){
@@ -48,6 +87,18 @@ async function fetchApi(url, target, method, body){
     }
 }
 
+
+//FUNCIONES SECCION:
+
+function removeHidden(x){
+    x.classList.remove("hidden")
+}
+
+function addHidden(x){
+    x.classList.add("hidden")
+}
+
+
 async function openContacts(){
 
     //MUESTRA SEECION
@@ -56,100 +107,37 @@ async function openContacts(){
     contactsBtn.src="./styles/assets/contacts_hover.png";
     contactsOpen= true;
     const regions= await getallRegions();
-    const countries= await getallCountries();
+    const channels = await getallChannels();
 
-    //COMPLETA SELECT REGIONES DESDE DB
-
+    // //COMPLETA SELECT REGIONES DESDE DB
+    
     for(let i= 0; i<regions.length; i++){
-        console.log(regions[i].name);
         const option= document.createElement("option");
         option.value=regions[i].name;
         option.innerHTML= regions[i].name;
         document.querySelector("#contactRegion").appendChild(option)
     }
+    
+    //COMPLETA SELECT PAISES SEGUN REGION:
 
-    //COMPLETA SELECT PAISES DESDE DB
+    dynamicLocation("contactSearch");
 
-    for(let i= 0; i<countries.length; i++){
-        console.log(countries[i].name);
+
+    //COMPLETA CANALES DE CONTACTO
+
+    for(let i= 0; i<channels.length; i++){
         const option= document.createElement("option");
-        option.value=countries[i].name;
-        option.innerHTML= countries[i].name;
-        document.querySelector("#contactCountry").appendChild(option)
+        option.value=channels[i].name;
+        option.innerHTML= channels[i].name;
+        document.querySelector("#contactChannel").appendChild(option) 
     }
 
-
-
 }
 
-async function getallRegions(){
-    const regions = await fetchApi(url, '/regions', 'GET');
-    return regions
-}
 
-async function getallCountries(){
-    const countries = await fetchApi(url, '/countries', 'GET');
-    return countries
-}
-
-{/* <div class="searchDetail hidden">
-    <div class="searchByName">
-        <label for="contactName">Nombre</label>
-        <input type="text" name="contactName" class= "searchInput" placeholder="Nombre del contacto">
-    </div>
-    <div class="searchByRole">
-        <label for="contactRole">Cargo</label>
-        <input type="text" name="contactRole" class= "searchInput"  placeholder="Cargo del contacto">
-    </div>
-    <div class="searchByRegion">
-        <label for="contactRegion">Región</label>
-        <select name="contactRegion"  class= "searchInput" id="contactRegion">
-            <option value="" disabled selected>Región del contacto</option>
-            <option value="Africa">Africa</option>
-            <option value="Asia">Asia</option>
-            <option value="Europe">Europe</option>
-            <option value="Latin America">Latin America</option>
-            <option value="North America">North America</option>
-            <option value="Oceania">Oceania</option>
-        </select>
-    </div>
-    <div class="searchByCountry">
-        <label for="contactCountry">País</label>
-        <select name="contactCountry" class= "searchInput"  id="contactCountry">
-            <option value="" disabled selected>País del contacto</option>
-            <option value="Argentina">Argentina</option>
-            <option value="Chile">Chile</option>
-            <option value="España">España</option>
-            <option value="Francia">Francia</option>
-            <option value="Oman">Oman</option>
-            <option value="Vietnam">Vietnam</option>
-        </select>
-    </div>
-    <div class="searchByChannel">
-        <label for="contactChannel">Canal preferido</label>
-        <select name="contactChannel"  class= "searchInput" id="contactChannel">
-            <option value="" disabled selected>Canal favorito</option>
-            <option value="Facebook">Facebook</option>
-            <option value="Instagram">Instagram</option>
-            <option value="Telegram">Telegram</option>
-            <option value="WhatsApp">WhatsApp</option>
-        </select>
-    </div>
-    <div class="searchByInterest">
-        <label for="contactInterest">Interés</label>
-        <select name="contactInterest"  class= "searchInput" id="contactInterest">
-            <option value="" disabled selected>Interés</option>
-            <option value="0%">0%</option>
-            <option value="25%">25%</option>
-            <option value="50%">50%</option>
-            <option value="75%">75%</option>
-            <option value="100%">100%</option>
-        </select>
-    </div>
-</div> */}
+//FUNCIONES LOGIN
 
 async function loginLoad(){
-    console.log(`entra a loginLoad`);
     const body = {
         "email": emailInput.value,
         "password": passInput.value
@@ -189,7 +177,6 @@ function loginSuccess(user){
 }
 
 function loginError(){
-    // logincontainer.innerHTML= "";
     const loginErr = document.createElement("div");
     loginErr.classList.add("loginErr");
     loginErr.innerHTML=`
@@ -200,8 +187,221 @@ function loginError(){
     passInput.value="";
     setTimeout(()=>{
         loginErr.remove()}, 2000
-    )
+    );
 }
 
 
+async function openNewContact(){
+    const regions= await getallRegions();
+    const channels = await getallChannels(); 
+
+    let newContactDiv = document.createElement("div");
+    newContactDiv.classList.add("contactModal");
+    newContactDiv.innerHTML= `
+    <div class="contactMainDiv">
+        <div class="title">
+            <p>Crear nuevo usuario</p>
+        </div>
+        <div class="contactDataDiv level1">
+            <div class="contactData">
+                <label for="newUserName" >Nombre<span>*</span></label>
+                <input name="newUserName" type="text" placeholder="Nombre">
+            </div>
+            <div class="contactData">
+                <label for="newUserLastname">Apellido<span>*</span></label>
+                <input name="newUserLastname" type="text" placeholder="Apellido">
+            </div>
+            <div class="contactData">
+                <label for="newUserEmail">Email<span>*</span></label>
+                <input name="newUserEmail" type="text" placeholder="Email">
+            </div>
+            <div class="contactData">
+                <label for="newUserCompany">Compañía<span>*</span></label>
+                <input name="newUserCompany" type="text" placeholder="Compañía">
+            </div>
+            <div class="contactData">
+                <label for="newUserRole">Cargo<span>*</span></label>
+                <input name="newUserRole" type="text" placeholder="Cargo">
+            </div>
+        </div>
+        <div class="contactDataDiv level2">
+            <div class="contactData n2">
+                <label for="newUserRegion" >Region</label>
+                <select name="newUserRegion" id="newUserRegion">
+                    <option value="" disabled selected>Región</option>
+                </select>
+            </div>
+            <div class="contactData n2">
+                <label for="newUserCountry" >País</label>
+                <select name="newUserCountry" id="newUserCountry">
+                    <option value="" disabled selected>Pais</option>
+                </select>
+            </div>
+            <div class="contactData n2">
+                <label for="newUserCity" >Ciudad</label>
+                <select name="newUserCity" id="newUserCity">
+                    <option value="" disabled selected>Ciudad</option>
+                </select>
+            </div>
+            <div class="contactData n2">
+                <label for="newUserInterest" >Interés</label>
+                <select name="newUserInterest" id="newUserInterest">
+                    <option value="" disabled selected>Interés</option>
+                    <option value="0">0%</option>
+                    <option value="25">25%</option>
+                    <option value="50">50%</option>
+                    <option value="75">75%</option>
+                    <option value="100">100%</option>
+                </select>
+            </div>
+        </div>
+        <div class="contactDataDiv level3">
+          
+        </div>
+        <div class="contactModalBtns">
+            <div class="cancelNewUser">
+                <p>Cancelar</p>
+            </div>
+            <div class="saveNewUser">
+                <p>Guardar</p>
+            </div>
+        </div>
+    </div>`
+    document.querySelector(".main").appendChild(newContactDiv);
+
+    for(let i=0; i<regions.length; i++){
+        const option = document.createElement("option");
+        option.value= regions[i].name;
+        option.innerHTML= regions[i].name;
+        document.querySelector("#newUserRegion").appendChild(option);
+    }
+
+    //CREA CANALES DE CONTACTO
+
+    for(let i=0; i<channels.length; i++){
+        const channelDiv = document.createElement("div");
+        channelDiv.classList.add("channelDiv");
+        channelDiv.classList.add(`n${i}`);
+        channelDiv.innerHTML= `
+        <div class="contactData n3">
+            <label for="newUserChannel" >Canal de contacto</label>
+            <select name="newUserChannel" id="newUserChannel${i}" class= "newUserChannel">
+                <option value="" disabled selected>Canal</option>
+            </select>
+        </div>
+        <div class="contactData n3">
+            <label for="newUserAccount">Cuenta</label>
+            <input name="newUserAccount" type="text" placeholder="@contact">
+        </div>
+        <div class="contactData n3">
+            <label for="newUserPrefference" >Preferencias</label>
+            <select name="newUserPrefference" id="newUserPrefference">
+                <option value="" disabled selected>Preferencias</option>
+                <option value="Nodisturb">No molestar</option>
+                <option value="Workingdays">Contactar días hábiles</option>
+                <option value="Always">Contactar siempre</option>
+            </select>
+        </div>`
+        document.querySelector(".contactDataDiv.level3").appendChild(channelDiv);
+
+    }
+
+    //AGREGA CANALES DISPONIBLES A SELECT 
+    document.querySelectorAll(".newUserChannel").forEach(e=>{
+        for(let i=0; i<channels.length; i++){
+            const option = document.createElement("option");
+            option.value= channels[i].name;
+            option.innerHTML= channels[i].name;
+            e.appendChild(option);
+        }
+    })
+
+    //LLAMA A SELECT DINAMICO SEGUN REGION/PAIS 
+    dynamicLocation("contactModal");
+
+    //FUNIONES BOTONES
+    document.querySelector(".cancelNewUser").addEventListener("click", ()=>{
+        newContactDiv.remove();
+    })
+    document.querySelector(".saveNewUser").addEventListener("click", ()=>{
+        saveNewConact()
+    });
+
+}
+
+
+
+function dynamicLocation(origin){
+    if(origin == "contactModal"){
+        const regionSelect = document.querySelector("#newUserRegion");
+        const countrySelect = document.querySelector("#newUserCountry");
+        const citySelect = document.querySelector("#newUserCity");
+    
+        regionSelect.addEventListener("change", async ()=>{
+        countrySelect.innerHTML="";
+        const region = regionSelect.value;
+        const countries= await getCountryByRegion(region);
+        
+        for(let i=0; i<countries.length; i++){
+            const option = document.createElement("option");
+            option.value= countries[i].name;
+            option.innerHTML= countries[i].name;
+            countrySelect.appendChild(option);
+            }
+        });
+    
+        countrySelect.addEventListener("change", async () =>{
+        citySelect.innerHTML="";
+        const cities= await getCitiesByCountry(countrySelect.value);
+    
+        for(let i=0; i<cities.length; i++){
+            const option = document.createElement("option");
+            option.value= cities[i].name;
+            option.innerHTML= cities[i].name;
+            citySelect.appendChild(option);
+            }
+        });
+    }
+
+    if(origin == "contactSearch"){
+        const regionSelect = document.querySelector("#contactRegion");
+        const countrySelect = document.querySelector("#contactCountry");
+
+        regionSelect.addEventListener("change", async ()=>{
+            countrySelect.innerHTML="";
+            const region = regionSelect.value;
+            const countries= await getCountryByRegion(region);
+            
+            for(let i=0; i<countries.length; i++){
+                const option = document.createElement("option");
+                option.value= countries[i].name;
+                option.innerHTML= countries[i].name;
+                countrySelect.appendChild(option);
+                }
+            });
+
+    }
+
+}
+
+
+function saveNewConact(){
+    const name = document.querySelector(".newUserName").value;
+    const lastname = document.querySelector(".newUserLastname").value;
+    const email = document.querySelector(".newUserEmail").value;
+    const company = document.querySelector(".newUserCompany").value;
+    const role = document.querySelector(".newUserRole").value;
+    // const imgurl = document.querySelector(".")
+
+    const region = document.querySelector("#newUserRegion").value;
+    const country = document.querySelector("#newUserCountry").value;
+    const city = document.querySelector("#newUserCity").value;
+    const interest = document.querySelector("#newUserInterest").value;
+    const channel = document.querySelector("#newUserChannel").value;
+    const prefference = document.querySelector("#newUserPrefference").value;
+
+    console.log(
+        name+lastname+email+company+role+region+country+city+interest+channel+prefference
+    )
+}
 
