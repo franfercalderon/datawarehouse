@@ -23,6 +23,7 @@ const loggeduseroptions = document.querySelector(".loggeduseroptions");
 
 const emailInput = document.querySelector(".emailInput");
 const passInput = document.querySelector(".passInput");
+// const newContactCompany = document.querySelector(".newContactCompany");
 
 //API
 

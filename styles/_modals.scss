@@ -138,6 +138,10 @@
     cursor: pointer;
 
 }
+.newContactCompany{
+    width: 160px;
+    z-index: 2;
+}
 
 .contactModalBtns div:first-child{
     background-color: $blue5 ;
@@ -154,43 +158,61 @@
     font-weight: 500;
 }
 
-// .addchannel{
-//     display: flex;
-//     align-self: flex-end;
-//     justify-content: center;
-//     align-items: center;
-//     margin-bottom: 5px;
-//     height: 32px;
-//     width:32px;
-//     padding: 0 5px 0 5px;
-//     background-color: $blue4;
-//     border-radius: 8px;
-//     box-shadow: 3px 3px 4px rgb(211, 209, 209);
-//     color: white;
-//     cursor: pointer;
-//     font-family: $raleway;
-//     font-size: 25px;
-//     font-weight: 400;
-// }
+.createPrompt{
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 300px;
+    margin-top: 30px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 5px 5px 15px rgba($shadow, $alpha: 0.5);
+    padding: 0 20px 0 20px;
+    font-family: $raleway;
+    font-weight: 400;
+    font-size: 18px;
+    text-align: center;
+    z-index: 3;
+}
+.createPrompt img{
+    width: 150px;
+    animation: Pop 0.5s;
+    margin: 40px 0 45px 0;
+}
 
-// .addchannel:hover{
-//     background-color: $blue3;
-// }
+.createPrompt p{
+    margin-bottom: 30px;
+}
 
-// .contactDataDiv_5{
-//     position: relative;
-//     display: flex;
-//     width: 645px;
-//     align-self: flex-start;
-//     margin: 25px 30px 0 0;
-//     justify-content: space-between;
-// }
+.companiesSugDiv{
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    width: 160px;
+    height: auto;
+    background-color: white;
+    margin-top: 43px;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border: 1px solid $blue5;
+    border-top: none;
+    z-index: 1;
+}
 
-// .moreChannels{
-//     position: relative;
-//     display: flex;
-//     justify-self: flex-start;
-//     align-self: flex-start;
-//     flex-direction: column;
-//     margin: 230px 0 35px 30px;
-// }
+.companiesSugDiv p {
+    cursor: pointer;
+    margin: 5px 0 5px 7px;
+    color: rgba($shadow, $alpha: 0.7);
+}
+
+.companiesSugDiv p:hover {
+    // margin: 3px 0 3px 5px;
+    color: $shadow;
+    font-weight: 400;
+}
+
+.companiesSugDiv p:first-child{
+    margin-top: 12px;
+}

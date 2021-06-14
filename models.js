@@ -75,12 +75,10 @@ Contact.init({
     role: DataTypes.STRING,
     email: DataTypes.STRING,
     company: DataTypes.INTEGER,
-    // photo: DataTypes.STRING,
     region: DataTypes.INTEGER,
     country: DataTypes.INTEGER,
     city: DataTypes.INTEGER,
     interest: DataTypes.INTEGER
-    // contactInfo: DataTypes.INTEGER
 },{
     sequelize,
     modelName: 'Contact'
@@ -108,7 +106,8 @@ ContactInfo.init({
     },
     idUser: DataTypes.INTEGER,
     idChannel: DataTypes.INTEGER,
-    account: DataTypes.STRING
+    account: DataTypes.STRING,
+    prefference: DataTypes.STRING
 },{
     sequelize,
     modelName: 'ContactInfo'

@@ -945,6 +945,11 @@
   cursor: pointer;
 }
 
+.newContactCompany {
+  width: 160px;
+  z-index: 2;
+}
+
 .contactModalBtns div:first-child {
   background-color: #becde0;
   color: black;
@@ -958,5 +963,80 @@
 .saveNewUser:hover {
   background-color: #0D1321;
   font-weight: 500;
+}
+
+.createPrompt {
+  position: absolute;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 300px;
+  margin-top: 30px;
+  background-color: white;
+  border-radius: 10px;
+  -webkit-box-shadow: 5px 5px 15px rgba(48, 48, 48, 0.5);
+          box-shadow: 5px 5px 15px rgba(48, 48, 48, 0.5);
+  padding: 0 20px 0 20px;
+  font-family: "Raleway", sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  text-align: center;
+  z-index: 3;
+}
+
+.createPrompt img {
+  width: 150px;
+  -webkit-animation: Pop 0.5s;
+          animation: Pop 0.5s;
+  margin: 40px 0 45px 0;
+}
+
+.createPrompt p {
+  margin-bottom: 30px;
+}
+
+.companiesSugDiv {
+  position: absolute;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  width: 160px;
+  height: auto;
+  background-color: white;
+  margin-top: 43px;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  border: 1px solid #becde0;
+  border-top: none;
+  z-index: 1;
+}
+
+.companiesSugDiv p {
+  cursor: pointer;
+  margin: 5px 0 5px 7px;
+  color: rgba(48, 48, 48, 0.7);
+}
+
+.companiesSugDiv p:hover {
+  color: #303030;
+  font-weight: 400;
+}
+
+.companiesSugDiv p:first-child {
+  margin-top: 12px;
 }
 /*# sourceMappingURL=styles.css.map */

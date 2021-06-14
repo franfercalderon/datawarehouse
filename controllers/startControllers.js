@@ -401,7 +401,104 @@ router.post('/users', async (req, res)=>{
         res.status(200).json({message: 'Start Contact Channels created!'})
     })
 
-
+    .post('/companies', async (req, res)=>{
+        const startCompanies = [
+            {
+                id: 1,
+                name: "Air Canada",
+                email: "info@airline.com",
+                phone: "13502345098",
+                address: "432 Park Ave, 6th floor",
+                region: 2,
+                country: 19,
+                city: 45
+            },
+            {
+                id: 2,
+                name: "American Airlines",
+                email: "info@airline.com",
+                phone: "13502345098",
+                address: "432 Park Ave, 6th floor",
+                region: 2,
+                country: 19,
+                city: 45
+            },
+            {
+                id: 3,
+                name: "Delta Airlines",
+                email: "info@airline.com",
+                phone: "13502345098",
+                address: "432 Park Ave, 6th floor",
+                region: 2,
+                country: 19,
+                city: 45
+            },
+            {
+                id: 4,
+                name: "Blue",
+                email: "info@airline.com",
+                phone: "13502345098",
+                address: "432 Park Ave, 6th floor",
+                region: 2,
+                country: 19,
+                city: 45
+            },
+            {
+                id: 5,
+                name: "Oman Air",
+                email: "info@airline.com",
+                phone: "13502345098",
+                address: "432 Park Ave, 6th floor",
+                region: 5,
+                country: 13,
+                city: 23
+            },
+            {
+                id: 6,
+                name: "Alitalia",
+                email: "info@airline.com",
+                phone: "13502345098",
+                address: "432 Park Ave, 6th floor",
+                region: 3,
+                country: 11,
+                city: 34
+            },
+            {
+                id: 7,
+                name: "Air France",
+                email: "info@airline.com",
+                phone: "13502345098",
+                address: "432 Park Ave, 6th floor",
+                region: 3,
+                country: 10,
+                city: 30
+            },
+            {
+                id: 8,
+                name: "Aerolineas Argentinas",
+                email: "info@airline.com",
+                phone: "13502345098",
+                address: "432 Park Ave, 6th floor",
+                region: 1,
+                country: 1,
+                city: 7
+            },
+            {
+                id: 9,
+                name: "Qantas",
+                email: "info@airline.com",
+                phone: "13502345098",
+                address: "432 Park Ave, 6th floor",
+                region: 6,
+                country: 2,
+                city: 41
+            },
+        ];
+        startCompanies.forEach(e=>{
+            models.Company.create(e)
+        });
+        res.status(200).json({message: 'Start Companies created!'})
+    })
 
 module.exports = router
 

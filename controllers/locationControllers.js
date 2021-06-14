@@ -7,7 +7,6 @@ const {jwtValidation} = require('../scripts/middlewares');
 
 router.get('/regions', jwtValidation, async (req, res)=>{
         const allRegions = await models.Region.findAll();
-        // console.log(allRegions);
         if(allRegions){
             return res.status(200).json(allRegions)
         }
@@ -44,7 +43,7 @@ router.get('/regions', jwtValidation, async (req, res)=>{
             where: {name: countryName}
         })
         if (selectedCountry) return res.status(200).json(selectedCountry);
-        return res.status(400).json({message: 'No region found'})
+        return res.status(400).json({message: 'No country found'})
     })
 
     
@@ -81,6 +80,17 @@ router.get('/regions', jwtValidation, async (req, res)=>{
         });
         if(selectedCities.length>0) return res.status(200).json(selectedCities);
         return res.status(400).json({message:'No cities were found'})
+    })
+
+    //VER CIUDAD POR NOMBRE
+
+    .get('/cities/name_:name', jwtValidation, async (req, res)=>{
+        const name= req.params.name;
+        const city = await models.City.findOne({
+            where:{name: name}
+        });
+        if (city) return res.status(200).json(city);
+        return res.status(400).json({message: 'No city found'})
     })
 
 

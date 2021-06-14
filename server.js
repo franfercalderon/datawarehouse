@@ -9,6 +9,8 @@ const startControllers = require ('./controllers/startControllers');
 const userControllers = require('./controllers/usersControllers');
 const locationControllers = require('./controllers/locationControllers');
 const contactsControllers = require('./controllers/contactsControllers');
+const companyControllers = require('./controllers/companyControllers');
+
 
 // const countryControllers = require('./controllers/countryControllers');
 
@@ -19,6 +21,7 @@ app.use('/start', startControllers);
 app.use('/users', userControllers);
 app.use('/location', locationControllers);
 app.use('/contacts', contactsControllers);
+app.use('/companies', companyControllers);
 
 // app.use('/countries', countryControllers);
 

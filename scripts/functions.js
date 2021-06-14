@@ -1,26 +1,40 @@
 //API CALLS
 
+//CONTACTOS
+
+async function deleteContact(id){
+    const deletedContact = await fetchApi(url, '/contacts/'+id, 'DELETE');
+    return deletedContact
+}
+
 //REGIONES
 async function getallRegions(){
     const regions = await fetchApi(url, '/location/regions', 'GET');
     return regions
 }
 
+async function getRegionByName(reg){
+    const region = await fetchApi(url, '/location/regions/name_'+reg, 'GET');
+    return region.id;
+}
+
+//PAISES
+
 async function getallCountries(){
     const countries = await fetchApi(url, '/location/countries', 'GET');
     return countries
 }
 
-//PAISES
-
 async function getCountryByRegion(reg){
     const region = await fetchApi(url, '/location/regions/name_'+reg, 'GET');
     const regionId = region.id;
-    // console.log(regionId);
     const countries = await fetchApi(url, '/location/countries/region_'+regionId, 'GET');
-    // console.log(countries);
     return countries;
+}
 
+async function getCountryByName(country){
+    const searchedCountry = await fetchApi(url, '/location/countries/name_'+country, 'GET');
+    return searchedCountry.id;
 }
 
 //CIUDADES
@@ -38,11 +52,38 @@ async function getCitiesByCountry(ctry){
     return cities 
 }
 
+async function getCityByName(cty){
+    const city = await fetchApi(url, '/location/cities/name_'+cty, 'GET');
+    return city.id;
+}
+
 //CANALES DE CONTACTO
 
 async function getallChannels(){
     const channels = await fetchApi(url, '/contacts/channels', 'GET');
     return channels
+}
+
+async function createNewChannel(body){
+    const newContactChannel = await fetchApi(url, '/contacts/channels', 'POST', body);
+    return newContactChannel
+}
+
+async function getChannelByName(chan){
+    const channel= await fetchApi(url, '/contacts/channels/name_'+chan, 'GET');
+    return channel.id
+}
+
+//COMPANIAS
+
+async function searchCompany(input){
+    const companies = await fetchApi(url, '/companies/'+input, 'GET');
+    return companies
+}
+
+async function getCompanyByName(comp){
+    const company = await fetchApi(url, '/companies/name_'+comp, 'GET');
+    return company.id
 }
 
 //LLAMADA A API, FUNCION GENERAL:
@@ -205,23 +246,24 @@ async function openNewContact(){
         <div class="contactDataDiv level1">
             <div class="contactData">
                 <label for="newUserName" >Nombre<span>*</span></label>
-                <input name="newUserName" type="text" placeholder="Nombre">
+                <input name="newUserName" class= "newContactName" type="text" placeholder="Nombre">
             </div>
             <div class="contactData">
                 <label for="newUserLastname">Apellido<span>*</span></label>
-                <input name="newUserLastname" type="text" placeholder="Apellido">
+                <input name="newUserLastname" class= "newContactLastname" type="text" placeholder="Apellido">
             </div>
             <div class="contactData">
                 <label for="newUserEmail">Email<span>*</span></label>
-                <input name="newUserEmail" type="text" placeholder="Email">
+                <input name="newUserEmail" class= "newContactEmail" type="text" placeholder="Email">
             </div>
-            <div class="contactData">
+            <div class="contactData contactCompanyDiv">
                 <label for="newUserCompany">Compañía<span>*</span></label>
-                <input name="newUserCompany" type="text" placeholder="Compañía">
+                <input name="newUserCompany" class= "newContactCompany" type="text" placeholder="Compañía">
+                <div class="companiesSugDiv"></div>
             </div>
             <div class="contactData">
                 <label for="newUserRole">Cargo<span>*</span></label>
-                <input name="newUserRole" type="text" placeholder="Cargo">
+                <input name="newUserRole" class= "newContactRole" type="text" placeholder="Cargo">
             </div>
         </div>
         <div class="contactDataDiv level2">
@@ -291,11 +333,11 @@ async function openNewContact(){
         </div>
         <div class="contactData n3">
             <label for="newUserAccount">Cuenta</label>
-            <input name="newUserAccount" type="text" placeholder="@contact">
+            <input name="newUserAccount" type="text" placeholder="@contact" id="newUserAccount${i}">
         </div>
         <div class="contactData n3">
             <label for="newUserPrefference" >Preferencias</label>
-            <select name="newUserPrefference" id="newUserPrefference">
+            <select name="newUserPrefference" id="newUserPrefference${i}">
                 <option value="" disabled selected>Preferencias</option>
                 <option value="Nodisturb">No molestar</option>
                 <option value="Workingdays">Contactar días hábiles</option>
@@ -315,10 +357,7 @@ async function openNewContact(){
             e.appendChild(option);
         }
     })
-
-    //LLAMA A SELECT DINAMICO SEGUN REGION/PAIS 
-    dynamicLocation("contactModal");
-
+    
     //FUNIONES BOTONES
     document.querySelector(".cancelNewUser").addEventListener("click", ()=>{
         newContactDiv.remove();
@@ -326,10 +365,15 @@ async function openNewContact(){
     document.querySelector(".saveNewUser").addEventListener("click", ()=>{
         saveNewConact()
     });
+    
+    //LLAMA A SELECT DINAMICO SEGUN REGION/PAIS 
+    dynamicLocation("contactModal");
 
+    //LLAMA A FUNCION PREDICTIVA DE COMPANIAS
+    companyPrediction();
 }
 
-
+//FILLS COUNTRY/CITY SELECTS ACCORDING TO REGION/COUNTRY SELECTION
 
 function dynamicLocation(origin){
     if(origin == "contactModal"){
@@ -342,6 +386,10 @@ function dynamicLocation(origin){
         const region = regionSelect.value;
         const countries= await getCountryByRegion(region);
         
+        let nullOption = document.createElement("option");
+        nullOption.innerHTML= '<option value="" disabled selected></option>';
+        countrySelect.appendChild(nullOption);
+
         for(let i=0; i<countries.length; i++){
             const option = document.createElement("option");
             option.value= countries[i].name;
@@ -352,6 +400,9 @@ function dynamicLocation(origin){
     
         countrySelect.addEventListener("change", async () =>{
         citySelect.innerHTML="";
+        let nullOption = document.createElement("option");
+        nullOption.innerHTML= '<option value="" disabled selected></option>';
+        citySelect.appendChild(nullOption);
         const cities= await getCitiesByCountry(countrySelect.value);
     
         for(let i=0; i<cities.length; i++){
@@ -369,6 +420,9 @@ function dynamicLocation(origin){
 
         regionSelect.addEventListener("change", async ()=>{
             countrySelect.innerHTML="";
+            let nullOption = document.createElement("option");
+            nullOption.innerHTML= '<option value="" disabled selected></option>';
+            countrySelect.appendChild(nullOption);
             const region = regionSelect.value;
             const countries= await getCountryByRegion(region);
             
@@ -377,31 +431,164 @@ function dynamicLocation(origin){
                 option.value= countries[i].name;
                 option.innerHTML= countries[i].name;
                 countrySelect.appendChild(option);
-                }
-            });
-
+            }
+        });
     }
+}
+
+//
+function companyPrediction(){
+    const newContactCompany = document.querySelector(".newContactCompany");
+    const companiesSugDiv = document.querySelector(".companiesSugDiv");
+    companiesSugDiv.innerHTML = "";
+
+    newContactCompany.addEventListener("keyup", async ()=>{
+        companiesSugDiv.innerHTML = "";
+        const input = newContactCompany.value;
+        if(input.length>0){
+            const matches= await searchCompany(input);
+            if(matches.length>0){
+                companiesSugDiv.style.zIndex = "2";
+                for(let i=0; i<matches.length; i++){
+                    const sug = document.createElement("p");
+                    sug.innerHTML= `${matches[i].name}`;
+                    // console.log(matches[i].name);
+                    companiesSugDiv.appendChild(sug);
+                    sug.addEventListener("click", ()=>{
+                        newContactCompany.value= matches[i].name;
+                        companiesSugDiv.innerHTML = "";
+                        companiesSugDiv.style.zIndex = "1";
+
+                    })
+                }
+            }
+        }
+        if(input.length==0){
+            companiesSugDiv.style.zIndex = "1";
+        }
+    })
+    
 
 }
 
+//GUARDAR NUEVO CONTACTO
 
-function saveNewConact(){
-    const name = document.querySelector(".newUserName").value;
-    const lastname = document.querySelector(".newUserLastname").value;
-    const email = document.querySelector(".newUserEmail").value;
-    const company = document.querySelector(".newUserCompany").value;
-    const role = document.querySelector(".newUserRole").value;
-    // const imgurl = document.querySelector(".")
+async function saveNewConact(){
 
+    const name = document.querySelector(".newContactName").value;
+    const lastname = document.querySelector(".newContactLastname").value;
+    const email = document.querySelector(".newContactEmail").value;
+    const company = document.querySelector(".newContactCompany").value;
+    const role = document.querySelector(".newContactRole").value;
     const region = document.querySelector("#newUserRegion").value;
     const country = document.querySelector("#newUserCountry").value;
     const city = document.querySelector("#newUserCity").value;
     const interest = document.querySelector("#newUserInterest").value;
-    const channel = document.querySelector("#newUserChannel").value;
-    const prefference = document.querySelector("#newUserPrefference").value;
 
-    console.log(
-        name+lastname+email+company+role+region+country+city+interest+channel+prefference
-    )
+    //GET IDS
+    const regionId= await getRegionByName(region);
+    const countryId = await getCountryByName(country);
+    const cityId = await getCityByName(city);
+    const companyId = await getCompanyByName(company);
+
+    if(name=="" || lastname== "" || email=="" || company=="" || role== ""){
+        return prompt("mandatory","Faltan datos obligatorios")
+    }
+
+    const body ={
+        name: name,
+        lastname: lastname,
+        email: email,
+        company: companyId,
+        role: role,
+        region: regionId,
+        country: countryId,
+        city: cityId,
+        interest: interest
+    }
+
+    const newContact = await fetchApi(url, '/contacts', 'POST', body);
+
+    if(newContact){
+
+         //GUARDA CANALES DE CONTACTO SELECCIONADOS
+
+        const savechannel= await saveContactChannel(newContact);
+        //SI SE CREA AL MENOS UN CONTACTO
+        if(savechannel){
+            return prompt("success","Contacto creado con éxito")
+        }
+        //SI NO SE CREO NINGUN CANAL DE CONTACTO BORRA AL USUARIO PARA CREARLO NUEVAMENTE CON CANAL DE CONTACTO
+        else{
+            await deleteContact(newContact.id);
+        }
+    }
 }
+
+//ERROR AND SUCCESS MESSAGES:
+
+function prompt(status, message){
+    const contactMainDiv = document.querySelector(".contactMainDiv");
+    const createPrompt = document.createElement("div");
+    createPrompt.classList.add("createPrompt");
+
+    if(status=="mandatory"){
+        createPrompt.innerHTML=`
+        <img src="./styles/assets/error.png" alt="error">
+        <p>${message}</p>`;
+        contactMainDiv.appendChild(createPrompt)
+        setTimeout(()=>{
+            createPrompt.remove()}, 2000
+        );
+    }
+
+    if(status=="success"){
+        createPrompt.innerHTML=`
+        <img src="./styles/assets/success.png" alt="exito">
+        <p>${message}</p>`;
+        contactMainDiv.appendChild(createPrompt)
+        setTimeout(()=>{
+            document.querySelector(".contactModal").remove()}, 2000
+        );
+    }
+}
+
+//
+async function saveContactChannel(contact){
+
+    const channels = await getallChannels();
+    let contactInfos = [];
+
+    for(let i=0; i<channels.length; i++){
+        const thischannel = document.querySelector(`#newUserChannel${i}`).value;
+        if(thischannel!=""){
+            const thisaccount = document.querySelector(`#newUserAccount${i}`).value;
+            const thisprefference = document.querySelector(`#newUserPrefference${i}`).value;
+
+            //CHEQUEA QUE LOS CAMPOS SE HAYAN COMPLETADO
+            if(thisaccount!="" && thisprefference!=""){
+
+                //OBTIENE ID DE CANAL
+                const channelId = await getChannelByName(thischannel);
+
+                //BODY PARA CREAR CONTACT INFO
+                const body= {
+                    idUser: contact.id,
+                    idChannel: channelId,
+                    account: thisaccount,
+                    prefference: thisprefference
+                }
+                const newChannel = await createNewChannel(body);
+                contactInfos.push(newChannel);
+            }
+            else{
+                //faltan campos
+            }
+        }
+    }
+    if(contactInfos.length>0) return contactInfos;
+    return prompt("mandatory", "Se requiere al menos un canal de contacto")
+
+}
+
 
