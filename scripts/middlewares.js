@@ -10,6 +10,17 @@ function emailValidation(email) {
     return re.test(email);
 };
 
+const emailValid = async (req, res, next) => {
+    const {email} = req.body;
+    var re = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,7}$/;
+    if(re.test(email)){
+        next();
+    }
+    else{
+        res.status(400).json({error: 'Email format incorrect'})
+    }
+}
+
 //VALIDACION DE CONTRASEÑA
 
 function passwordValidation(pass){
@@ -93,4 +104,4 @@ function newToken (email, isAdmin){
 
 
 
-module.exports = {loginValidation, jwtValidation }
+module.exports = {loginValidation, jwtValidation, emailValid }

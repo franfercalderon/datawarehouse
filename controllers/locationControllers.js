@@ -24,6 +24,17 @@ router.get('/regions', jwtValidation, async (req, res)=>{
         return res.status(400).json({message: 'No region found'})
     })
 
+    //VER REGION POR ID
+
+    .get('/regions/:id', jwtValidation, async (req, res)=>{
+        const id = req.params.id;
+        const region = await models.Region.findOne({
+            where: {id: id}
+        })
+        if (region) return res.status(200).json(region);
+        return res.status(400).json({message: 'No region found'})
+    })
+
     //VER TODOS LOS PAISES
 
     .get('/countries', jwtValidation, async (req, res)=>{
@@ -46,7 +57,17 @@ router.get('/regions', jwtValidation, async (req, res)=>{
         return res.status(400).json({message: 'No country found'})
     })
 
-    
+    //VER PAIS POR ID
+
+    .get('/countries/:id', jwtValidation, async (req, res)=>{
+        const id = req.params.id;
+        const selectedCountry = await models.Country.findOne({
+            where: {id: id}
+        })
+        if (selectedCountry) return res.status(200).json(selectedCountry);
+        return res.status(400).json({message: 'No country found'})
+    })
+
 
     //OBTENER PAIS POR ID DE REGION
 
@@ -60,6 +81,7 @@ router.get('/regions', jwtValidation, async (req, res)=>{
         if(selectedCountries.length>0) return res.status(200).json(selectedCountries);
         return res.status(400).json({message:'No countries were found on that region'})
     })  
+
 
     //VER TODAS LAS CIUDADES
 

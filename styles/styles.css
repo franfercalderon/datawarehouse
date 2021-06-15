@@ -111,7 +111,7 @@
   margin-top: 70px;
   width: 140px;
   height: 62px;
-  background-color: #f1f1f1;
+  background-color: white;
   -webkit-box-shadow: 2px 2px 8px #d3d1d1;
           box-shadow: 2px 2px 8px #d3d1d1;
   border-bottom-left-radius: 8px;
@@ -581,6 +581,7 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  text-align: center;
 }
 
 .tableColumn img {

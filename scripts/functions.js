@@ -2,6 +2,11 @@
 
 //CONTACTOS
 
+async function getLimitedContacts(offset){
+    const contacts = await fetchApi(url, `/contacts/${offset}`, 'GET');
+    return contacts
+}
+
 async function deleteContact(id){
     const deletedContact = await fetchApi(url, '/contacts/'+id, 'DELETE');
     return deletedContact
@@ -16,6 +21,11 @@ async function getallRegions(){
 async function getRegionByName(reg){
     const region = await fetchApi(url, '/location/regions/name_'+reg, 'GET');
     return region.id;
+}
+
+async function getRegionById(id){
+    const region = await fetchApi(url, '/location/regions/'+id, 'GET');
+    return region.name
 }
 
 //PAISES
@@ -35,6 +45,11 @@ async function getCountryByRegion(reg){
 async function getCountryByName(country){
     const searchedCountry = await fetchApi(url, '/location/countries/name_'+country, 'GET');
     return searchedCountry.id;
+}
+
+async function getCountryById(id){
+    const country = await fetchApi(url, '/location/countries/'+id, 'GET');
+    return country.name
 }
 
 //CIUDADES
@@ -85,6 +100,13 @@ async function getCompanyByName(comp){
     const company = await fetchApi(url, '/companies/name_'+comp, 'GET');
     return company.id
 }
+
+async function getCompanyById(id){
+    const company = await fetchApi(url, '/companies/'+id, 'GET');
+    return company.name
+}
+
+
 
 //LLAMADA A API, FUNCION GENERAL:
 
@@ -173,7 +195,107 @@ async function openContacts(){
         document.querySelector("#contactChannel").appendChild(option) 
     }
 
+    fillContactTable()
+
 }
+
+async function fillContactTable(){
+    let offset = 0;
+    const mainDiv= document.createElement("div");
+    mainDiv.classList.add("contactsTable");
+    mainDiv.innerHTML= `
+        <div class="tableRow tableHeader">
+            <div class="tableColumn column1">
+                <input type="checkbox" name="selectall" id="selectall">
+            </div>
+            <div class="tableColumn">
+                <p>Contacto</p> 
+                <img src="./styles/assets/order_unsel.png" alt="ordenar">
+            </div>
+            <div class="tableColumn">
+                <p>País/Región</p> 
+                <img src="./styles/assets/order_unsel.png" alt="ordenar">
+            </div>
+            <div class="tableColumn">
+                <p>Compañía</p> 
+                <img src="./styles/assets/order_unsel.png" alt="ordenar">
+            </div>
+            <div class="tableColumn">
+                <p>Cargo</p> 
+                <img src="./styles/assets/order_unsel.png" alt="ordenar">
+            </div>
+            <div class="tableColumn">Canal preferido</div>
+            <div class="tableColumn">
+                <p>Interés</p> 
+                <img src="./styles/assets/order_unsel.png" alt="ordenar">
+            </div>
+            <div class="tableColumn column8">Opciones</div>
+        </div>
+        <div class="headerDivider"></div>
+        <div class="tableRows"></div>
+        <div class="headerDivider"></div>
+        <div class="indexBtns">
+            <div class="indexContainer">
+                <p><span class="showingContacts">1-10</span> de <span class="totalContacts">10</span> contactos</p>
+            </div>
+            <div class="backContainer arrowContainer">
+                <img src="./styles/assets/back.png" alt="back" class="indexArrow">
+            </div>
+            <div class="indexContainer">
+            </div>
+            <div class="forwardContainer arrowContainer">
+                <img src="./styles/assets/forward.png" alt="forward" class="indexArrow">
+            </div>
+        </div>`
+        document.querySelector(".contactsSection").appendChild(mainDiv);
+
+        const contacts = await getLimitedContacts(offset)
+        for(let i=0; i<contacts.length; i++){
+
+            const countryName= await getCountryById(contacts[i].country);
+            const regionName= await getRegionById(contacts[i].region);
+            const companyName= await getCompanyById(contacts[i].company);
+
+            const thisContact= document.createElement("div");
+            thisContact.classList.add("tableRow");
+            thisContact.classList.add("itemRow");
+            thisContact.innerHTML=`
+            <div class="tableColumn column1">
+                <input type="checkbox" name="select">
+            </div>
+            <div class="tableColumn">${contacts[i].name} ${contacts[i].lastname}</div>
+            <div class="tableColumn">${countryName} / ${regionName}</div>
+            <div class="tableColumn">${companyName}</div>
+            <div class="tableColumn">${contacts[i].role}</div>
+            <div class="tableColumn">Telegram</div>
+            <div class="tableColumn column7">
+                <p>${contacts[i].interest}%</p>
+                <img src="./styles/assets/load${contacts[i].interest}.png" alt="interest">
+            </div>
+            <div class="tableColumn column8">...</div>`
+            document.querySelector(".tableRows").appendChild(thisContact);
+        }
+}
+
+
+{/* <div class="tableRow itemRow">
+                    <div class="tableColumn column1">
+                        <input type="checkbox" name="select">
+                    </div>
+                    <div class="tableColumn">Franco Fernandez</div>
+                    <div class="tableColumn">Argentina / Latin America</div>
+                    <div class="tableColumn">Saenz Global</div>
+                    <div class="tableColumn">Operations Manager</div>
+                    <div class="tableColumn">Telegram</div>
+                    <div class="tableColumn column7">
+                        <p>25%</p>
+                        <img src="./styles/assets/load25.png" alt="interest">
+                    </div>
+                    <div class="tableColumn column8">...</div>
+                </div> */}
+
+
+
 
 
 //FUNCIONES LOGIN
@@ -289,11 +411,11 @@ async function openNewContact(){
                 <label for="newUserInterest" >Interés</label>
                 <select name="newUserInterest" id="newUserInterest">
                     <option value="" disabled selected>Interés</option>
-                    <option value="0">0%</option>
-                    <option value="25">25%</option>
-                    <option value="50">50%</option>
-                    <option value="75">75%</option>
-                    <option value="100">100%</option>
+                    <option value=0>0%</option>
+                    <option value=25>25%</option>
+                    <option value=50>50%</option>
+                    <option value=75>75%</option>
+                    <option value=100>100%</option>
                 </select>
             </div>
         </div>
@@ -508,8 +630,9 @@ async function saveNewConact(){
     }
 
     const newContact = await fetchApi(url, '/contacts', 'POST', body);
-
-    if(newContact){
+    // console.log(newContact)
+    if(newContact.error) return prompt("mandatory","Formato de email incorrecto")
+    else{
 
          //GUARDA CANALES DE CONTACTO SELECCIONADOS
 
@@ -582,7 +705,7 @@ async function saveContactChannel(contact){
                 contactInfos.push(newChannel);
             }
             else{
-                //faltan campos
+                return prompt("mandatory", "Canal de contacto incompleto")
             }
         }
     }

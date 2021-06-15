@@ -13,6 +13,17 @@ router.get('/name_:name',jwtValidation, async (req, res)=>{
         return res.status(400).json({message: 'No company was found'})
     })
 
+    //VER COMPANIA POR ID
+    
+    .get('/:id', jwtValidation, async (req, res)=>{
+        const id = req.params.id;
+        const company = await models.Company.findOne({
+            where: {id: id}
+        })
+        if (company) return res.status(200).json(company);
+        return res.status(400).json({message: 'No company found'})
+    })
+
     .get('/:input', jwtValidation, async (req, res)=>{
         const input = req.params.input;
         const companies = await models.Company.findAll({

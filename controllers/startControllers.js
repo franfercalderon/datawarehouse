@@ -36,6 +36,148 @@ router.post('/users', async (req, res)=>{
         res.status(200).json({message:'Starting users created!'})
     })
 
+    //START CONTACTS
+    .post('/contacts', async (req, res)=>{
+        const startContacts = [
+            {
+                name: "Franco",
+                lastname: "Fernandez",
+                role: "Cabin Crew",
+                email: "franco@mail.com",
+                company: 2,
+                region: 1,
+                country: 1,
+                city: 7,
+                interest: 25
+            },
+            {
+                name: "Bonzo",
+                lastname: "Momazo",
+                role: "CEO",
+                email: "momo@mail.com",
+                company: 1,
+                region: 2,
+                country: 19,
+                city: 47,
+                interest: 75
+            },
+            {
+                name: "Federico",
+                lastname: "Rodriguez",
+                role: "Recruiter",
+                email: "fede@mail.com",
+                company: 3,
+                region: 4,
+                country: 12,
+                city: 37,
+                interest: 100
+            },
+            {
+                name: "Rosario",
+                lastname: "Moroni",
+                role: "Instructor",
+                email: "rochi@mail.com",
+                company: 8,
+                region: 1,
+                country: 1,
+                city: 7,
+                interest: 0
+            },
+            {
+                name: "Sofia",
+                lastname: "Barressi",
+                role: "Pilot",
+                email: "sofi@mail.com",
+                company: 9,
+                region: 6,
+                country: 2,
+                city: 41,
+                interest: 50
+            },
+            {
+                name: "Renata",
+                lastname: "Calderon",
+                role: "Agent",
+                email: "rena@mail.com",
+                company: 6,
+                region: 3,
+                country: 11,
+                city: 34,
+                interest: 75
+            },
+            {
+                name: "Franco",
+                lastname: "Fernandez",
+                role: "Cabin Crew",
+                email: "francoo@mail.com",
+                company: 2,
+                region: 1,
+                country: 1,
+                city: 7,
+                interest: 25
+            },
+            {
+                name: "Bonzo",
+                lastname: "Momazo",
+                role: "CEO",
+                email: "momoo@mail.com",
+                company: 1,
+                region: 2,
+                country: 19,
+                city: 47,
+                interest: 75
+            },
+            {
+                name: "Federico",
+                lastname: "Rodriguez",
+                role: "Recruiter",
+                email: "fedee@mail.com",
+                company: 3,
+                region: 4,
+                country: 12,
+                city: 37,
+                interest: 100
+            },
+            {
+                name: "Rosario",
+                lastname: "Moroni",
+                role: "Instructor",
+                email: "rochii@mail.com",
+                company: 8,
+                region: 1,
+                country: 1,
+                city: 7,
+                interest: 0
+            },
+            {
+                name: "Sofia",
+                lastname: "Barressi",
+                role: "Pilot",
+                email: "sofii@mail.com",
+                company: 9,
+                region: 6,
+                country: 2,
+                city: 41,
+                interest: 50
+            },
+            {
+                name: "Renata",
+                lastname: "Calderon",
+                role: "Agent",
+                email: "renaa@mail.com",
+                company: 6,
+                region: 3,
+                country: 11,
+                city: 34,
+                interest: 75
+            }
+        ];
+        startContacts.forEach(e=>{
+            models.Contact.create(e)
+        });
+        res.status(200).json({message:'Starting contacts created!'})
+    })
+
     //START REGIONS
 
     .post('/regions', async (req, res)=>{
