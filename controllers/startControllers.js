@@ -1,4 +1,5 @@
 const express = require('express');
+const { ContactInfo } = require('../models');
 // const { Model } = require('sequelize/types');
 // const { User } = require('../models');
 const router = express.Router();
@@ -640,6 +641,34 @@ router.post('/users', async (req, res)=>{
             models.Company.create(e)
         });
         res.status(200).json({message: 'Start Companies created!'})
+    })
+
+    .post('/contactInfo', async (req, res)=>{
+        const contactCards = [
+            {
+                idUser: 1,
+                idChannel: 3,
+                account: "5491130989087",
+                prefference: "Nodisturb"
+            },
+            {
+                idUser: 1,
+                idChannel: 2,
+                account: "momoelgato",
+                prefference: "Always"
+            },
+            {
+                idUser: 2,
+                idChannel: 1,
+                account: "fede.knoll",
+                prefference: "Workingdays"
+            },
+
+        ];
+        contactCards.forEach(e=>{
+            models.ContactInfo.create(e)
+        });
+        res.status(200).json({message: 'Start Contact Cards created!'});
     })
 
 module.exports = router

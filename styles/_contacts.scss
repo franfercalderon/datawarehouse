@@ -124,7 +124,7 @@
 
 .tableColumn{
     display: flex;
-    width: 15%;
+    width: 20%;
     justify-content: center;
     align-items: center;
     text-align: center;
@@ -152,7 +152,15 @@
     font-weight: 500;
 }
 
-.column7 img{
+.locationColumn{
+    width: 350px;
+}
+
+// .column7{
+//     column7
+// }
+
+.interestColumn img{
     height: 45px;
     width: auto;
     margin-left: 15px;
@@ -277,4 +285,17 @@
     background-color:white;
     box-shadow: 2px 2px 2px rgb(146, 146, 146);
 }
+
+.optionsContainer{
+    display: flex;
+    justify-content: space-between;
+    width: 750px;
+    padding-right: 6px;
+}
+
+.optionHoverBtns img{
+    width: 26px;
+    height: auto;
+}
+
 

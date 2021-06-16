@@ -96,6 +96,11 @@ async function getChannelByName(chan){
     return channel.id
 }
 
+async function getContactInfo(id){
+    const channels= await fetchApi(url, '/contacts/contactChannel/'+id, 'GET');
+    return channels
+}
+
 //COMPANIAS
 
 async function searchCompany(input){
@@ -219,7 +224,7 @@ async function fillContactTable(){
                 <p>Contacto</p> 
                 <img src="./styles/assets/order_unsel.png" alt="ordenar">
             </div>
-            <div class="tableColumn">
+            <div class="tableColumn locationColumn">
                 <p>País/Región</p> 
                 <img src="./styles/assets/order_unsel.png" alt="ordenar">
             </div>
@@ -231,8 +236,7 @@ async function fillContactTable(){
                 <p>Cargo</p> 
                 <img src="./styles/assets/order_unsel.png" alt="ordenar">
             </div>
-            <div class="tableColumn">Canal preferido</div>
-            <div class="tableColumn">
+            <div class="tableColumn column7">
                 <p>Interés</p> 
                 <img src="./styles/assets/order_unsel.png" alt="ordenar">
             </div>
@@ -268,11 +272,10 @@ async function fillContactTable(){
                 <input type="checkbox" name="select">
             </div>
             <div class="tableColumn">${contacts[i].name} ${contacts[i].lastname}</div>
-            <div class="tableColumn">${contacts[i].contactCity.cityCountry.name} / ${contacts[i].contactCity.cityCountry.countryRegion.name}</div>
+            <div class="tableColumn locationColumn">${contacts[i].contactCity.cityCountry.name} / ${contacts[i].contactCity.cityCountry.countryRegion.name}</div>
             <div class="tableColumn">${contacts[i].contactCompany.name}</div>
             <div class="tableColumn">${contacts[i].role}</div>
-            <div class="tableColumn">Telegram</div>
-            <div class="tableColumn column7">
+            <div class="tableColumn interestColumn">
                 <p>${contacts[i].interest}%</p>
                 <img src="./styles/assets/load${contacts[i].interest}.png" alt="interest">
             </div>
@@ -280,30 +283,49 @@ async function fillContactTable(){
 
         document.querySelector(".tableRows").appendChild(thisContact);
 
-        thisContact.addEventListener("mouseover", ()=>{
+        const options = document.querySelectorAll(".contactOptions");
+
+
+        thisContact.addEventListener("mouseenter", ()=>{
+            options[i].innerHTML="";
             thisContact.classList.add("contactHover");
+            const optionsDiv= document.createElement("div");
+            optionsDiv.classList.add("optionsContainer");
+            
+            optionsDiv.innerHTML=`
+                <div class="optionHoverBtns optionEdit" ">
+                    <img src="./styles/assets/edit.png" alt="editar contacto" id="optionEdit">
+                </div>
+                <div class="optionHoverBtns optionDelete">
+                    <img src="./styles/assets/delete.png" alt="eliminar contacto" id="optionDelete">
+                </div>`;
+            options[i].appendChild(optionsDiv);
+            
+            
         });
 
         thisContact.addEventListener("mouseleave", ()=>{
-            thisContact.classList.remove("contactHover")
+            thisContact.classList.remove("contactHover");
+            options[i].innerHTML="...";
         });
 
-        const options = document.querySelectorAll(".contactOptions");
-
-        options[i].addEventListener("click", ()=>{
-            editContact(contacts[i].id)
-        })
         
+        thisContact.addEventListener("click", (e)=>{
+            if(e.target.id == "optionEdit"){
+                editContact(contacts[i].id)
+            }
+        })
     }
+      
 }
 
 async function editContact(id){
 
     const regions= await getallRegions();
     const channels = await getallChannels(); 
+    const contactCards= await getContactInfo(id);
+    const contact =  await getContactById(id);
 
-    let contact =  await getContactById(id)
-    // console.log(contact)
     let newContactDiv = document.createElement("div");
     newContactDiv.classList.add("contactModal");
     newContactDiv.innerHTML= `
@@ -372,7 +394,7 @@ async function editContact(id){
             <div class="cancelNewUser">
                 <p>Cancelar</p>
             </div>
-            <div class="saveNewUser">
+            <div class="saveContactEdition">
                 <p>Guardar</p>
             </div>
         </div>
@@ -416,6 +438,8 @@ async function editContact(id){
 
     }
 
+
+
     //AGREGA CANALES DISPONIBLES A SELECT 
     document.querySelectorAll(".newUserChannel").forEach(e=>{
         for(let i=0; i<channels.length; i++){
@@ -425,13 +449,25 @@ async function editContact(id){
             e.appendChild(option);
         }
     })
+
+    //FILL VALUES WITH EXISTING CONTACT CARDS
+
+    for(let i =0; i<contactCards.length; i++){
+        document.querySelector(`#newUserChannel${i}`).value = contactCards[i].ContactChannel.name;
+        document.querySelector(`#newUserAccount${i}`).value = contactCards[i].account;
+        document.querySelector(`#newUserPrefference${i}`).value = contactCards[i].prefference;
+    }
+
+
+
     
     //FUNCIONES BOTONES
     document.querySelector(".cancelNewUser").addEventListener("click", ()=>{
         newContactDiv.remove();
     })
-    document.querySelector(".saveNewUser").addEventListener("click", ()=>{
-        saveNewConact()
+    document.querySelector(".saveContactEdition").addEventListener("click", ()=>{
+        // saveNewConact()
+        console.log("caca")
     });
     
     //LLAMA A SELECT DINAMICO SEGUN REGION/PAIS 

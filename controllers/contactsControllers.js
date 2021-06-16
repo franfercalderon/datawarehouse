@@ -1,6 +1,6 @@
 // const { parse } = require('dotenv');
 const express = require('express');
-const { Region, City, Country, Company } = require('../models');
+const { Region, City, Country, Company, ContactChannel } = require('../models');
 const router = express.Router();
 const models = require('../models');
 const { jwtValidation, emailValid} = require('../scripts/middlewares');
@@ -166,6 +166,18 @@ router.get('/channels', jwtValidation, async (req, res)=>{
             where: {name: name}
         })
         if(channel) return res.status(200).json(channel)
+    })
+
+    .get('/contactChannel/:id', jwtValidation, async(req, res)=>{
+        const contactId = req.params.id;
+        const channels= await models.ContactInfo.findAll({
+            include:{
+                model: ContactChannel,
+                attributes: ['name']
+            },
+            where:{idUser: contactId}
+        })
+        if(channels) return res.status(200).json(channels)
     })
 
 module.exports = router

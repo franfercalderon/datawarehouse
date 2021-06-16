@@ -71,10 +71,7 @@ router.get('/countries/name_:name', jwtValidation, async (req, res)=>{
             //OBTENER PAIS POR ID DE REGION
             
             router.get('/countries/region_:reg', jwtValidation, async(req, res)=>{
-                console.log("llega")
-                // const reg = JSON.stringify(req.params.reg); 
                 const region= req.params.reg;
-                // console.log(reg);
                 const selectedCountries = await models.Country.findAll({
                     where:{region: region}
                 });

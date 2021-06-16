@@ -90,6 +90,12 @@ searchBtn.addEventListener("mouseleave", ()=>{
 
 newContactBtn.addEventListener("click", ()=> {openNewContact()})
 
+// document.body.addEventListener("click", (e)=> {
+//     console.log(e)
+//     // if( e.target.id == 'optionEdit' ) {
+//     //   console.log("caca")
+//     // }
+// });
 
 
 // function closeDetail(){

@@ -580,7 +580,7 @@
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  width: 15%;
+  width: 20%;
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
@@ -612,7 +612,11 @@
   font-weight: 500;
 }
 
-.column7 img {
+.locationColumn {
+  width: 350px;
+}
+
+.interestColumn img {
   height: 45px;
   width: auto;
   margin-left: 15px;
@@ -759,6 +763,22 @@
   background-color: white;
   -webkit-box-shadow: 2px 2px 2px #929292;
           box-shadow: 2px 2px 2px #929292;
+}
+
+.optionsContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  width: 750px;
+  padding-right: 6px;
+}
+
+.optionHoverBtns img {
+  width: 26px;
+  height: auto;
 }
 
 .contactModal {
