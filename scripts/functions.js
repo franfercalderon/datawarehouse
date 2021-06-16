@@ -3,13 +3,18 @@
 //CONTACTOS
 
 async function getLimitedContacts(offset){
-    const contacts = await fetchApi(url, `/contacts/${offset}`, 'GET');
+    const contacts = await fetchApi(url, '/contacts/offset_'+offset, 'GET');
     return contacts
 }
 
 async function deleteContact(id){
     const deletedContact = await fetchApi(url, '/contacts/'+id, 'DELETE');
     return deletedContact
+}
+
+async function getContactById(id){
+    const contact = await fetchApi(url, '/contacts/'+id, 'GET');
+    return contact
 }
 
 //REGIONES
@@ -36,8 +41,10 @@ async function getallCountries(){
 }
 
 async function getCountryByRegion(reg){
+    console.log("llega")
     const region = await fetchApi(url, '/location/regions/name_'+reg, 'GET');
     const regionId = region.id;
+    console.log(regionId)
     const countries = await fetchApi(url, '/location/countries/region_'+regionId, 'GET');
     return countries;
 }
@@ -247,55 +254,192 @@ async function fillContactTable(){
                 <img src="./styles/assets/forward.png" alt="forward" class="indexArrow">
             </div>
         </div>`
-        document.querySelector(".contactsSection").appendChild(mainDiv);
+    document.querySelector(".contactsSection").appendChild(mainDiv);
 
-        const contacts = await getLimitedContacts(offset)
-        for(let i=0; i<contacts.length; i++){
-
-            const countryName= await getCountryById(contacts[i].country);
-            const regionName= await getRegionById(contacts[i].region);
-            const companyName= await getCompanyById(contacts[i].company);
-
-            const thisContact= document.createElement("div");
-            thisContact.classList.add("tableRow");
-            thisContact.classList.add("itemRow");
-            thisContact.innerHTML=`
+    const contacts = await getLimitedContacts(offset)
+    
+    for(let i=0; i<contacts.length; i++){
+        
+        const thisContact= document.createElement("div");
+        thisContact.classList.add("tableRow");
+        thisContact.classList.add("itemRow");
+        thisContact.innerHTML=`
             <div class="tableColumn column1">
                 <input type="checkbox" name="select">
             </div>
             <div class="tableColumn">${contacts[i].name} ${contacts[i].lastname}</div>
-            <div class="tableColumn">${countryName} / ${regionName}</div>
-            <div class="tableColumn">${companyName}</div>
+            <div class="tableColumn">${contacts[i].contactCity.cityCountry.name} / ${contacts[i].contactCity.cityCountry.countryRegion.name}</div>
+            <div class="tableColumn">${contacts[i].contactCompany.name}</div>
             <div class="tableColumn">${contacts[i].role}</div>
             <div class="tableColumn">Telegram</div>
             <div class="tableColumn column7">
                 <p>${contacts[i].interest}%</p>
                 <img src="./styles/assets/load${contacts[i].interest}.png" alt="interest">
             </div>
-            <div class="tableColumn column8">...</div>`
-            document.querySelector(".tableRows").appendChild(thisContact);
-        }
+            <div class="tableColumn column8 contactOptions">...</div>`
+
+        document.querySelector(".tableRows").appendChild(thisContact);
+
+        thisContact.addEventListener("mouseover", ()=>{
+            thisContact.classList.add("contactHover");
+        });
+
+        thisContact.addEventListener("mouseleave", ()=>{
+            thisContact.classList.remove("contactHover")
+        });
+
+        const options = document.querySelectorAll(".contactOptions");
+
+        options[i].addEventListener("click", ()=>{
+            editContact(contacts[i].id)
+        })
+        
+    }
 }
 
+async function editContact(id){
 
-{/* <div class="tableRow itemRow">
-                    <div class="tableColumn column1">
-                        <input type="checkbox" name="select">
-                    </div>
-                    <div class="tableColumn">Franco Fernandez</div>
-                    <div class="tableColumn">Argentina / Latin America</div>
-                    <div class="tableColumn">Saenz Global</div>
-                    <div class="tableColumn">Operations Manager</div>
-                    <div class="tableColumn">Telegram</div>
-                    <div class="tableColumn column7">
-                        <p>25%</p>
-                        <img src="./styles/assets/load25.png" alt="interest">
-                    </div>
-                    <div class="tableColumn column8">...</div>
-                </div> */}
+    const regions= await getallRegions();
+    const channels = await getallChannels(); 
 
+    let contact =  await getContactById(id)
+    // console.log(contact)
+    let newContactDiv = document.createElement("div");
+    newContactDiv.classList.add("contactModal");
+    newContactDiv.innerHTML= `
+    <div class="contactMainDiv">
+        <div class="title">
+            <p>Editar contacto</p>
+        </div>
+        <div class="contactDataDiv level1">
+            <div class="contactData">
+                <label for="newUserName">Nombre<span>*</span></label>
+                <input name="newUserName" class= "newContactName" type="text" placeholder="Nombre" value='${contact.name}'>
+            </div>
+            <div class="contactData">
+                <label for="newUserLastname">Apellido<span>*</span></label>
+                <input name="newUserLastname" class= "newContactLastname" type="text" placeholder="Apellido" value='${contact.lastname}'>
+            </div>
+            <div class="contactData">
+                <label for="newUserEmail">Email<span>*</span></label>
+                <input name="newUserEmail" class= "newContactEmail" type="text" placeholder="Email" value='${contact.email}'>
+            </div>
+            <div class="contactData contactCompanyDiv">
+                <label for="newUserCompany">Compañía<span>*</span></label>
+                <input name="newUserCompany" class= "newContactCompany" type="text" placeholder="Compañía" value='${contact.contactCompany.name}'>
+                <div class="companiesSugDiv"></div>
+            </div>
+            <div class="contactData">
+                <label for="newUserRole">Cargo<span>*</span></label>
+                <input name="newUserRole" class= "newContactRole" type="text" placeholder="Cargo" value='${contact.role}'>
+            </div>
+        </div>
+        <div class="contactDataDiv level2">
+            <div class="contactData n2">
+                <label for="newUserRegion" >Region</label>
+                <select name="newUserRegion" id="newUserRegion">
+                    <option value="" disabled selected>Región</option>
+                </select>
+            </div>
+            <div class="contactData n2">
+                <label for="newUserCountry" >País</label>
+                <select name="newUserCountry" id="newUserCountry">
+                    <option value="" disabled selected>Pais</option>
+                </select>
+            </div>
+            <div class="contactData n2">
+                <label for="newUserCity" >Ciudad</label>
+                <select name="newUserCity" id="newUserCity">
+                    <option value="" disabled selected>Ciudad</option>
+                </select>
+            </div>
+            <div class="contactData n2">
+                <label for="newUserInterest" >Interés</label>
+                <select name="newUserInterest" id="newUserInterest">
+                    <option value="" disabled selected>Interés</option>
+                    <option value=0>0%</option>
+                    <option value=25>25%</option>
+                    <option value=50>50%</option>
+                    <option value=75>75%</option>
+                    <option value=100>100%</option>
+                </select>
+            </div>
+        </div>
+        <div class="contactDataDiv level3">
+          
+        </div>
+        <div class="contactModalBtns">
+            <div class="cancelNewUser">
+                <p>Cancelar</p>
+            </div>
+            <div class="saveNewUser">
+                <p>Guardar</p>
+            </div>
+        </div>
+    </div>`
+    document.querySelector(".main").appendChild(newContactDiv);
 
+    for(let i=0; i<regions.length; i++){
+        const option = document.createElement("option");
+        option.value= regions[i].name;
+        option.innerHTML= regions[i].name;
+        document.querySelector("#newUserRegion").appendChild(option);
+    }
 
+    //CREA CANALES DE CONTACTO
+
+    for(let i=0; i<channels.length; i++){
+        const channelDiv = document.createElement("div");
+        channelDiv.classList.add("channelDiv");
+        channelDiv.classList.add(`n${i}`);
+        channelDiv.innerHTML= `
+        <div class="contactData n3">
+            <label for="newUserChannel" >Canal de contacto</label>
+            <select name="newUserChannel" id="newUserChannel${i}" class= "newUserChannel">
+                <option value="" disabled selected>Canal</option>
+            </select>
+        </div>
+        <div class="contactData n3">
+            <label for="newUserAccount">Cuenta</label>
+            <input name="newUserAccount" type="text" placeholder="@contact" id="newUserAccount${i}">
+        </div>
+        <div class="contactData n3">
+            <label for="newUserPrefference" >Preferencias</label>
+            <select name="newUserPrefference" id="newUserPrefference${i}">
+                <option value="" disabled selected>Preferencias</option>
+                <option value="Nodisturb">No molestar</option>
+                <option value="Workingdays">Contactar días hábiles</option>
+                <option value="Always">Contactar siempre</option>
+            </select>
+        </div>`
+        document.querySelector(".contactDataDiv.level3").appendChild(channelDiv);
+
+    }
+
+    //AGREGA CANALES DISPONIBLES A SELECT 
+    document.querySelectorAll(".newUserChannel").forEach(e=>{
+        for(let i=0; i<channels.length; i++){
+            const option = document.createElement("option");
+            option.value= channels[i].name;
+            option.innerHTML= channels[i].name;
+            e.appendChild(option);
+        }
+    })
+    
+    //FUNCIONES BOTONES
+    document.querySelector(".cancelNewUser").addEventListener("click", ()=>{
+        newContactDiv.remove();
+    })
+    document.querySelector(".saveNewUser").addEventListener("click", ()=>{
+        saveNewConact()
+    });
+    
+    //LLAMA A SELECT DINAMICO SEGUN REGION/PAIS 
+    dynamicLocation("contactModal");
+
+    //LLAMA A FUNCION PREDICTIVA DE COMPANIAS
+    companyPrediction();
+}
 
 
 //FUNCIONES LOGIN
@@ -363,7 +507,7 @@ async function openNewContact(){
     newContactDiv.innerHTML= `
     <div class="contactMainDiv">
         <div class="title">
-            <p>Crear nuevo usuario</p>
+            <p>Crear nuevo contacto</p>
         </div>
         <div class="contactDataDiv level1">
             <div class="contactData">
@@ -480,7 +624,7 @@ async function openNewContact(){
         }
     })
     
-    //FUNIONES BOTONES
+    //FUNCIONES BOTONES
     document.querySelector(".cancelNewUser").addEventListener("click", ()=>{
         newContactDiv.remove();
     })
@@ -574,7 +718,6 @@ function companyPrediction(){
                 for(let i=0; i<matches.length; i++){
                     const sug = document.createElement("p");
                     sug.innerHTML= `${matches[i].name}`;
-                    // console.log(matches[i].name);
                     companiesSugDiv.appendChild(sug);
                     sug.addEventListener("click", ()=>{
                         newContactCompany.value= matches[i].name;

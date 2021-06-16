@@ -133,23 +133,27 @@ Company.init({
 })
 
 Region.hasMany(Country,{
+    as:'countryRegion',
     foreignKey: 'region',
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
 });
 Country.belongsTo(Region, {
+    as:'countryRegion',
     foreignKey: 'region',
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
 });
 
 Country.hasMany(City,{
+    as:'cityCountry',
     foreignKey: 'country',
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
 });
 
 City.belongsTo(Country, {
+    as:'cityCountry',
     foreignKey: 'country',
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
@@ -191,29 +195,62 @@ Contact.belongsTo(Region, {
     onUpdate: 'CASCADE'
 });
 
+// City.hasMany(Contact, {
+//     as:'contactCity',
+//     foreignKey:'city',
+//     onDelete: 'CASCADE',
+//     onUpdate: 'CASCADE'
+// });
+
+// Contact.belongsTo(City, {
+//     as:'contactCity',
+//     foreignKey:'city',
+//     onDelete: 'CASCADE',
+//     onUpdate: 'CASCADE'
+// });
+
 Country.hasMany(Contact, {
+    as:'contactCountry',
     foreignKey:'country',
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
 });
 
 Contact.belongsTo(Country, {
+    as:'contactCountry',
     foreignKey:'country',
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
 });
 
 City.hasMany(Contact, {
+    as: 'contactCity',
     foreignKey:'city',
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
 });
 
 Contact.belongsTo(City, {
+    as: 'contactCity',
     foreignKey:'city',
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
 });
+
+Company.hasMany(Contact, {
+    as:'contactCompany',
+    foreignKey:'company',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+});
+
+Contact.belongsTo(Company, {
+    as:'contactCompany',
+    foreignKey:'company',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+});
+
 
 Region.hasMany(Company, {
     foreignKey:'region',

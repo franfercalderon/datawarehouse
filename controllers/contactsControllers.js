@@ -1,5 +1,6 @@
-const { parse } = require('dotenv');
+// const { parse } = require('dotenv');
 const express = require('express');
+const { Region, City, Country, Company } = require('../models');
 const router = express.Router();
 const models = require('../models');
 const { jwtValidation, emailValid} = require('../scripts/middlewares');
@@ -41,23 +42,103 @@ router.get('/channels', jwtValidation, async (req, res)=>{
         return res.status(400).json({message: 'Contact not deleted'})
     })
 
-    .get('/:offset', jwtValidation, async (req, res)=>{
-
+    .get('/offset_:off', jwtValidation, async (req, res)=>{
+    
         try{
-            const off= parseInt(req.params.offset)
-            // const lim= parseInt(req.params.limit)
-    
-            // const off= +req.params.offset;
-            // const lim= +req.params.limit;
-    
-            // const off= req.params.offset;
-            // const lim= req.params.limit;
+            const off= parseInt(req.params.off)
+            const contacts= await models.Contact.findAll({
+                include: [{
+                    model: City,
+                    as:'contactCity',
+                    attributes: ['name'],
+                    include:{
+                        model: Country,
+                        as:'cityCountry',
+                        attributes: ['name'],
+                        include:{
+                            model: Region,
+                            as:'countryRegion',
+                            attributes:['name']
+                        }
+                    }},
+                    {
+                        model: Company,
+                        as:'contactCompany',
+                        attributes: ['name'],
+                }],
+                offset: off, 
+                limit: 10
 
-            console.log(typeof(off)+'offset');
-            // console.log(typeof(lim)+'limit');
+              });
+            // console.log(contacts)
+            if(contacts) return res.status(200).json(contacts);
+            return res.status(400).json({message: 'No contacts found'})
+        }
+        catch(err){
+            console.log(err)
+        }
+    })
 
-    
-            const contacts= await models.Contact.findAll({ offset: off, limit: 10});
+    .get('/:id', jwtValidation, async (req, res)=>{
+        try{
+            const id = req.params.id;
+            const contact= await models.Contact.findOne({
+                include: [{
+                    model: City,
+                    as:'contactCity',
+                    attributes: ['name'],
+                    include:{
+                        model: Country,
+                        as:'cityCountry',
+                        attributes: ['name'],
+                        include:{
+                            model: Region,
+                            as:'countryRegion',
+                            attributes:['name']
+                        }
+                    }},
+                    {
+                        model: Company,
+                        as:'contactCompany',
+                        attributes: ['name'],
+                }],
+                where:{id: id}
+              });
+            if(contact) return res.status(200).json(contact)
+            return res.status(400).json({message: 'Contact was not found'})
+
+        }
+        catch(err){
+            console.log(err)
+        }
+    })
+
+    .get('/offset_:off', jwtValidation, async (req, res)=>{
+        console.log("caca")
+        try{
+            const off= parseInt(req.params.off)
+            console.log(off)
+            const contacts= await models.Contact.findAll({
+                include: [
+                    {
+                        model: Country,
+                        as:'contactCountry',
+                        attributes: ['name'],
+                        include:{
+                            model: Region,
+                            as:'countryRegion',
+                            attributes:['name']
+                        }
+                    },
+                    {
+                        model: Company,
+                        as:'contactCompany',
+                        attributes: ['name'],
+                    }],
+                offset: off, 
+                limit: 10
+
+              });
     
             if(contacts) return res.status(200).json(contacts);
             return res.status(400).json({message: 'No contacts found'})

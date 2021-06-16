@@ -555,6 +555,12 @@
 
 .itemRow {
   font-weight: 300;
+  cursor: pointer;
+}
+
+.itemRow.contactHover {
+  background-color: #f1f1f1;
+  font-weight: 400;
 }
 
 .tableRow {

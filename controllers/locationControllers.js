@@ -15,7 +15,7 @@ router.get('/regions', jwtValidation, async (req, res)=>{
 
     //VER REGION POR NOMBRE
 
-    .get('/regions/name_:name', jwtValidation, async (req, res)=>{
+router.get('/regions/name_:name', jwtValidation, async (req, res)=>{
         const regionName = req.params.name;
         const selectedRegion = await models.Region.findOne({
             where: {name: regionName}
@@ -26,7 +26,7 @@ router.get('/regions', jwtValidation, async (req, res)=>{
 
     //VER REGION POR ID
 
-    .get('/regions/:id', jwtValidation, async (req, res)=>{
+router.get('/regions/:id', jwtValidation, async (req, res)=>{
         const id = req.params.id;
         const region = await models.Region.findOne({
             where: {id: id}
@@ -37,7 +37,7 @@ router.get('/regions', jwtValidation, async (req, res)=>{
 
     //VER TODOS LOS PAISES
 
-    .get('/countries', jwtValidation, async (req, res)=>{
+router.get('/countries', jwtValidation, async (req, res)=>{
         const allCountries = await models.Country.findAll();
         // console.log(allRegions);
         if(allCountries){
@@ -48,7 +48,7 @@ router.get('/regions', jwtValidation, async (req, res)=>{
 
     //VER PAIS POR NOMBRE
 
-    .get('/countries/name_:name', jwtValidation, async (req, res)=>{
+router.get('/countries/name_:name', jwtValidation, async (req, res)=>{
         const countryName = req.params.name;
         const selectedCountry = await models.Country.findOne({
             where: {name: countryName}
@@ -57,9 +57,33 @@ router.get('/regions', jwtValidation, async (req, res)=>{
         return res.status(400).json({message: 'No country found'})
     })
 
-    //VER PAIS POR ID
-
-    .get('/countries/:id', jwtValidation, async (req, res)=>{
+    
+    // router.get('/countries/:id', jwtValidation, async (req, res)=>{
+        //         const id = req.params.id;
+        //         const selectedCountry = await models.Country.findOne({
+            //             where: {id: id}
+            //         })
+            //         if (selectedCountry) return res.status(200).json(selectedCountry);
+            //         return res.status(400).json({message: 'No country found'})
+            //     })
+            
+            
+            //OBTENER PAIS POR ID DE REGION
+            
+            router.get('/countries/region_:reg', jwtValidation, async(req, res)=>{
+                console.log("llega")
+                // const reg = JSON.stringify(req.params.reg); 
+                const region= req.params.reg;
+                // console.log(reg);
+                const selectedCountries = await models.Country.findAll({
+                    where:{region: region}
+                });
+                if(selectedCountries.length>0) return res.status(200).json(selectedCountries);
+                return res.status(400).json({message:'No countries were found on that region'})
+            })  
+            
+            //VER PAIS POR ID
+    router.get('/countries/:id', jwtValidation, async (req, res)=>{
         const id = req.params.id;
         const selectedCountry = await models.Country.findOne({
             where: {id: id}
@@ -69,33 +93,19 @@ router.get('/regions', jwtValidation, async (req, res)=>{
     })
 
 
-    //OBTENER PAIS POR ID DE REGION
-
-    .get('/countries/region_:reg', jwtValidation, async(req, res)=>{
-        // const reg = JSON.stringify(req.params.reg); 
-        const region= req.params.reg;
-        // console.log(reg);
-        const selectedCountries = await models.Country.findAll({
-            where:{region: region}
-        });
-        if(selectedCountries.length>0) return res.status(200).json(selectedCountries);
-        return res.status(400).json({message:'No countries were found on that region'})
-    })  
-
-
     //VER TODAS LAS CIUDADES
 
-    .get ('/cities', jwtValidation, async (req, res)=>{
-        const allCities = await models.City.findAll();
-        if (allCities){
-            return res.status(200).json(allCities)
-        }
-        return res.status(400).json({message: 'No cities were found'})
-    })
+// router.get ('/cities', jwtValidation, async (req, res)=>{
+//         const allCities = await models.City.findAll();
+//         if (allCities){
+//             return res.status(200).json(allCities)
+//         }
+//         return res.status(400).json({message: 'No cities were found'})
+//     })
 
     //VER CIUDADES POR ID PAIS
 
-    .get('/cities/country_:ctry', jwtValidation, async (req, res)=>{
+router.get('/cities/country_:ctry', jwtValidation, async (req, res)=>{
         const ctry= req.params.ctry;
         const selectedCities = await models.City.findAll({
             where:{country: ctry}
@@ -106,7 +116,7 @@ router.get('/regions', jwtValidation, async (req, res)=>{
 
     //VER CIUDAD POR NOMBRE
 
-    .get('/cities/name_:name', jwtValidation, async (req, res)=>{
+router.get('/cities/name_:name', jwtValidation, async (req, res)=>{
         const name= req.params.name;
         const city = await models.City.findOne({
             where:{name: name}

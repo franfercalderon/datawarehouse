@@ -12,7 +12,15 @@ router.get('/name_:name',jwtValidation, async (req, res)=>{
         if(company) return res.status(200).json(company)
         return res.status(400).json({message: 'No company was found'})
     })
-
+    
+    .get('/:input', jwtValidation, async (req, res)=>{
+        const input = req.params.input;
+        const companies = await models.Company.findAll({
+            limit: 5,
+            where:{name: {[Op.startsWith]: input}}
+        })
+        if(companies.length>0) return res.status(200).json(companies);
+    })
     //VER COMPANIA POR ID
     
     .get('/:id', jwtValidation, async (req, res)=>{
@@ -24,14 +32,7 @@ router.get('/name_:name',jwtValidation, async (req, res)=>{
         return res.status(400).json({message: 'No company found'})
     })
 
-    .get('/:input', jwtValidation, async (req, res)=>{
-        const input = req.params.input;
-        const companies = await models.Company.findAll({
-            limit: 5,
-            where:{name: {[Op.startsWith]: input}}
-        })
-        if(companies.length>0) return res.status(200).json(companies);
-    })
+    
 
 
 

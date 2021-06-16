@@ -106,6 +106,12 @@
 
 .itemRow{
     font-weight: 300;
+    cursor: pointer;
+}
+
+.itemRow.contactHover{
+    background-color: $lightgray;
+    font-weight: 400;
 }
 
 
