@@ -52,7 +52,7 @@ loggedusercontainer.addEventListener("mouseover", ()=>{
     loggeduseroptions.classList.remove("hidden")
 })
 
-let opened= false;
+// let opened= false;
 
 loggedusercontainer.addEventListener("mouseleave", ()=>{
     setTimeout(()=>{
@@ -89,18 +89,4 @@ searchBtn.addEventListener("mouseleave", ()=>{
 })
 
 newContactBtn.addEventListener("click", ()=> {openNewContact()})
-
-// document.body.addEventListener("click", (e)=> {
-//     console.log(e)
-//     // if( e.target.id == 'optionEdit' ) {
-//     //   console.log("caca")
-//     // }
-// });
-
-
-// function closeDetail(){
-//     console.log('caca')
-//     loggeduseroptions.classList.add("hidden")
-// }
-
 

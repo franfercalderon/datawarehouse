@@ -274,7 +274,7 @@ async function fillContactTable(offset){
         thisContact.classList.add("itemRow");
         thisContact.innerHTML=`
             <div class="tableColumn column1">
-                <input type="checkbox" name="select">
+                <input type="checkbox" name="select" id="checkbox${i}" class="contactCheckbox">
             </div>
             <div class="tableColumn">${contacts[i].name} ${contacts[i].lastname}</div>
             <div class="tableColumn locationColumn">${contacts[i].contactCity.cityCountry.name} / ${contacts[i].contactCity.cityCountry.countryRegion.name}</div>
@@ -807,8 +807,6 @@ function companyPrediction(){
             companiesSugDiv.style.zIndex = "1";
         }
     })
-    
-
 }
 
 //GUARDAR NUEVO CONTACTO
@@ -1018,7 +1016,20 @@ async function saveContactChannel(contact){
     }
     if(contactInfos.length>0) return contactInfos;
     return prompt("mandatory", "Se requiere al menos un canal de contacto")
-
 }
 
+//SELECT ALL CHECKBOXES
+// const selectAllBoxes = document.querySelector("#selectall");
+// const boxes = document.querySelectorAll(".contactCheckbox");
+document.body.addEventListener("click", (e)=>{
+    
+    if(e.target.id== "selectall"){
+        // console.log(e)
+        const boxes = Array.apply(null,document.querySelectorAll(".contactCheckbox"));
+        // console.log(boxes)
+        boxes.forEach(e=>{
+            e.checked=true
+        })
+    }
+})
 
