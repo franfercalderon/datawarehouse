@@ -41,7 +41,6 @@ async function getallCountries(){
 }
 
 async function getCountryByRegion(reg){
-    console.log("llega")
     const region = await fetchApi(url, '/location/regions/name_'+reg, 'GET');
     const regionId = region.id;
     console.log(regionId)
@@ -99,6 +98,11 @@ async function getChannelByName(chan){
 async function getContactInfo(id){
     const channels= await fetchApi(url, '/contacts/contactChannel/'+id, 'GET');
     return channels
+}
+
+async function deleteContactCards(id){
+    const deletedCards = await fetchApi(url, '/contacts/contactChannel/'+id, 'DELETE');
+    return deletedCards
 }
 
 //COMPANIAS
@@ -207,12 +211,13 @@ async function openContacts(){
         document.querySelector("#contactChannel").appendChild(option) 
     }
 
-    fillContactTable()
+    fillContactTable(0)
 
 }
 
-async function fillContactTable(){
-    let offset = 0;
+async function fillContactTable(offset){
+    // let offset = 0;
+    // document.querySelector(".contactsSection").innerHTML="";
     const mainDiv= document.createElement("div");
     mainDiv.classList.add("contactsTable");
     mainDiv.innerHTML= `
@@ -314,7 +319,17 @@ async function fillContactTable(){
             if(e.target.id == "optionEdit"){
                 editContact(contacts[i].id)
             }
-        })
+        });
+        
+        thisContact.addEventListener("click", (e)=>{
+
+            if(e.target.id == "optionDelete"){
+                // console.log("llega")
+                prompt("confirmation", "Está seguro que desea borrar el contacto?", contacts[i].id , offset)
+
+                // deleteContact(contacts[i].id)
+            }
+        });
     }
       
 }
@@ -325,6 +340,10 @@ async function editContact(id){
     const channels = await getallChannels(); 
     const contactCards= await getContactInfo(id);
     const contact =  await getContactById(id);
+    // console.log(contact)
+    // console.log(contact.contactCity.name);
+    // console.log(contact.contactCity.cityCountry.countryRegion.name);
+
 
     let newContactDiv = document.createElement("div");
     newContactDiv.classList.add("contactModal");
@@ -408,6 +427,24 @@ async function editContact(id){
         document.querySelector("#newUserRegion").appendChild(option);
     }
 
+    const countries = await getCountryByRegion(contact.contactCity.cityCountry.countryRegion.name);
+
+    for(let i=0; i<countries.length; i++){
+        const option = document.createElement("option");
+        option.value= countries[i].name;
+        option.innerHTML= countries[i].name;
+        document.querySelector("#newUserCountry").appendChild(option);
+    }
+
+    const cities = await getCitiesByCountry(contact.contactCity.cityCountry.name);
+
+    for(let i=0; i<cities.length; i++){
+        const option = document.createElement("option");
+        option.value= cities[i].name;
+        option.innerHTML= cities[i].name;
+        document.querySelector("#newUserCity").appendChild(option);
+    }
+
     //CREA CANALES DE CONTACTO
 
     for(let i=0; i<channels.length; i++){
@@ -438,8 +475,6 @@ async function editContact(id){
 
     }
 
-
-
     //AGREGA CANALES DISPONIBLES A SELECT 
     document.querySelectorAll(".newUserChannel").forEach(e=>{
         for(let i=0; i<channels.length; i++){
@@ -450,6 +485,20 @@ async function editContact(id){
         }
     })
 
+    //LLAMA A SELECT DINAMICO SEGUN REGION/PAIS 
+    dynamicLocation("contactModal");
+    
+    //LLAMA A FUNCION PREDICTIVA DE COMPANIAS
+    companyPrediction();
+    
+    //FILL VALUES WITH LOCATION DATA
+    document.querySelector("#newUserRegion").value= contact.contactCity.cityCountry.countryRegion.name;
+    document.querySelector("#newUserCountry").value= contact.contactCity.cityCountry.name;
+    document.querySelector("#newUserCity").value= contact.contactCity.name;
+
+    //FILL INTEREST VALUE
+    document.querySelector("#newUserInterest").value= contact.interest;
+
     //FILL VALUES WITH EXISTING CONTACT CARDS
 
     for(let i =0; i<contactCards.length; i++){
@@ -457,24 +506,14 @@ async function editContact(id){
         document.querySelector(`#newUserAccount${i}`).value = contactCards[i].account;
         document.querySelector(`#newUserPrefference${i}`).value = contactCards[i].prefference;
     }
-
-
-
     
     //FUNCIONES BOTONES
     document.querySelector(".cancelNewUser").addEventListener("click", ()=>{
         newContactDiv.remove();
     })
     document.querySelector(".saveContactEdition").addEventListener("click", ()=>{
-        // saveNewConact()
-        console.log("caca")
+        updateContact(contact.id)
     });
-    
-    //LLAMA A SELECT DINAMICO SEGUN REGION/PAIS 
-    dynamicLocation("contactModal");
-
-    //LLAMA A FUNCION PREDICTIVA DE COMPANIAS
-    companyPrediction();
 }
 
 
@@ -809,11 +848,10 @@ async function saveNewConact(){
     }
 
     const newContact = await fetchApi(url, '/contacts', 'POST', body);
-    // console.log(newContact)
     if(newContact.error) return prompt("mandatory","Formato de email incorrecto")
     else{
 
-         //GUARDA CANALES DE CONTACTO SELECCIONADOS
+        //GUARDA CANALES DE CONTACTO SELECCIONADOS
 
         const savechannel= await saveContactChannel(newContact);
         //SI SE CREA AL MENOS UN CONTACTO
@@ -826,13 +864,65 @@ async function saveNewConact(){
         }
     }
 }
+//UPDATE CONTACT
+async function updateContact(id){
+    
+    const name = document.querySelector(".newContactName").value;
+    const lastname = document.querySelector(".newContactLastname").value;
+    const email = document.querySelector(".newContactEmail").value;
+    const company = document.querySelector(".newContactCompany").value;
+    const role = document.querySelector(".newContactRole").value;
+    const region = document.querySelector("#newUserRegion").value;
+    const country = document.querySelector("#newUserCountry").value;
+    const city = document.querySelector("#newUserCity").value;
+    const interest = document.querySelector("#newUserInterest").value;
 
-//ERROR AND SUCCESS MESSAGES:
+    //GET IDS
+    const regionId= await getRegionByName(region);
+    const countryId = await getCountryByName(country);
+    const cityId = await getCityByName(city);
+    const companyId = await getCompanyByName(company);
 
-function prompt(status, message){
+    if(name=="" || lastname== "" || email=="" || company=="" || role== ""){
+        return prompt("mandatory","Faltan datos obligatorios")
+    }
+
+    const body ={
+        name: name,
+        lastname: lastname,
+        email: email,
+        company: companyId,
+        role: role,
+        region: regionId,
+        country: countryId,
+        city: cityId,
+        interest: interest
+    }
+
+    const updatedContact = await fetchApi(url, '/contacts/'+id, 'PUT', body);
+    if(updatedContact.error) return prompt("mandatory","Formato de email incorrecto")
+    else{
+        //BORRA CANALES PREEXISTENTES
+        await deleteContactCards(id);
+        //GUARDA CANALES DE CONTACTO ACTUALES
+        const contact= {id:id}
+        const savechannel= await saveContactChannel(contact);
+        //DEVUELVE MENSAJE DE ÉXITO
+        if(savechannel){
+            
+            return prompt("success","Contacto actualizado")
+        }
+    }
+}
+
+//PROMPTS:
+
+function prompt(status, message, id, offset){
     const contactMainDiv = document.querySelector(".contactMainDiv");
     const createPrompt = document.createElement("div");
     createPrompt.classList.add("createPrompt");
+
+    //ALERTA DE CAMPOS FALTANTES
 
     if(status=="mandatory"){
         createPrompt.innerHTML=`
@@ -844,6 +934,8 @@ function prompt(status, message){
         );
     }
 
+    //MENSAJE DE EXITO
+
     if(status=="success"){
         createPrompt.innerHTML=`
         <img src="./styles/assets/success.png" alt="exito">
@@ -853,11 +945,47 @@ function prompt(status, message){
             document.querySelector(".contactModal").remove()}, 2000
         );
     }
+
+    //CONFIRMACION DELETE CONTACT
+
+    if(status=="confirmation"){
+        createPrompt.innerHTML=`
+        <img src="./styles/assets/error.png" alt="exito">
+        <p>${message}</p>
+        <div class="promptBtns">
+            <div id="promptCancelBtn">Cancelar</div>
+            <div id="promptConfirmBtn">Eliminar</div>
+        </div>`;
+        document.querySelector(".contactsSection").appendChild(createPrompt);
+        createPrompt.addEventListener("click",  (e)=>{  
+            //SI HACE CLICK EN CANCELAR, BORRA EL PROMPT
+            if(e.target.id=="promptCancelBtn"){
+                createPrompt.remove()
+            }
+            //SI HACE CLICK EN ELIMINAR
+            if(e.target.id=="promptConfirmBtn"){
+                //ELIMINA CONTACT POR ID
+                deleteContact(id);
+
+                createPrompt.innerHTML=`
+                <img src="./styles/assets/success.png" alt="exito">
+                 <p>Contacto eliminado!</p>`
+                
+                setTimeout(()=>{
+                    //RENDERIZA NUEVAMENTE LISTA DE CONTACTOS Y BORRA PROMPT
+                    document.querySelector(".contactsTable").remove();
+                    fillContactTable(offset)
+                    createPrompt.remove()
+                }, 2000);
+            }
+        })
+
+    }
 }
 
 //
 async function saveContactChannel(contact){
-
+    console.log(contact)
     const channels = await getallChannels();
     let contactInfos = [];
 

@@ -305,6 +305,7 @@
           box-shadow: inset 1px -1px 4px #0D1321;
   background-color: #3E5C76;
   color: white;
+  cursor: pointer;
 }
 
 .logincontainer button:hover {
@@ -420,6 +421,12 @@
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
 .contactsBar {
@@ -772,13 +779,57 @@
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
-  width: 750px;
+  width: 70px;
   padding-right: 6px;
 }
 
 .optionHoverBtns img {
   width: 26px;
   height: auto;
+}
+
+.promptBtns {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 95%;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  margin-bottom: 35px;
+}
+
+.promptBtns div {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  color: white;
+  font-weight: 400;
+  width: auto;
+  height: 35px;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  -webkit-box-shadow: 2px 2px 3px #d3d1d1;
+          box-shadow: 2px 2px 3px #d3d1d1;
+}
+
+#promptCancelBtn {
+  background-color: rgba(116, 140, 171, 0.8);
+}
+
+#promptConfirmBtn {
+  background-color: rgba(232, 65, 56, 0.8);
+}
+
+#promptCancelBtn:hover {
+  background-color: #748CAB;
+}
+
+#promptConfirmBtn:hover {
+  background-color: #e84138;
 }
 
 .contactModal {

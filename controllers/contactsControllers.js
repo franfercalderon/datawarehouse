@@ -180,4 +180,38 @@ router.get('/channels', jwtValidation, async (req, res)=>{
         if(channels) return res.status(200).json(channels)
     })
 
+    .put('/:id', jwtValidation, async (req, res)=>{
+        const contactId = req.params.id;
+        const {name, lastname, email, company, role, region, country, city, interest}=req.body;
+        const updatedContact = await models.Contact.update({
+            name,
+            lastname,
+            role,
+            email,
+            company,
+            region,
+            country,
+            city,
+            interest
+        },
+        {
+            where:{id: contactId}
+        });
+        if(updatedContact) return res.status(200).json(updatedContact);
+        return res.status(400).json({message: 'Contact was not updated'})
+    })
+
+    .delete('/contactChannel/:id', jwtValidation, async (req, res)=>{
+        const id = req.params.id;
+        const deletedContactCards= await models.ContactInfo.destroy({
+            where:{idUser: id}
+        });
+        if(deletedContactCards) return res.status(200).json(deletedContactCards);
+        console.log(deletedContactCards)
+        return res.status(400).json({message: 'ContactCards not deleted'})
+
+    })
+
+
+
 module.exports = router

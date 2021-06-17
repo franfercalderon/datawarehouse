@@ -3,6 +3,8 @@
     position: relative;
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 .contactsBar{
     display: flex;
@@ -25,7 +27,6 @@
     border-radius: 8px;
     box-shadow: 2px 2px 8px rgb(211, 209, 209);
 }
-
 
 .searchBar{
     display: flex;
@@ -156,9 +157,6 @@
     width: 350px;
 }
 
-// .column7{
-//     column7
-// }
 
 .interestColumn img{
     height: 45px;
@@ -289,7 +287,7 @@
 .optionsContainer{
     display: flex;
     justify-content: space-between;
-    width: 750px;
+    width: 70px;
     padding-right: 6px;
 }
 
@@ -297,5 +295,42 @@
     width: 26px;
     height: auto;
 }
+
+.promptBtns{
+    display: flex;
+    width: 95%;
+    justify-content: space-around;
+    margin-bottom: 35px;
+}
+
+.promptBtns div{
+    display: flex;
+    align-items: center;
+    color: white;
+    font-weight: 400;
+    width: auto;
+    height: 35px;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    box-shadow: 2px 2px 3px rgb(211, 209, 209)
+}
+
+#promptCancelBtn{
+    background-color: rgba($blue4, $alpha: 0.8);
+}
+
+#promptConfirmBtn{
+    background-color: rgba($orange, $alpha: 0.8);
+}
+
+#promptCancelBtn:hover{
+    background-color:$blue4;
+}
+
+#promptConfirmBtn:hover{
+    background-color: $orange;
+}
+
 
 

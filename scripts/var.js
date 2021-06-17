@@ -41,4 +41,6 @@ let companyOpen = false;
 let usersOpen = false;
 let regionOpen = false;
 
+let offset = 0;
+
 
