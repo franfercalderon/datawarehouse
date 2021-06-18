@@ -6,26 +6,35 @@
     justify-content: center;
     align-items: center;
 }
+
 .contactsBar{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 35px;
     width: 100%;
-    height: 82px;
+    height: 72px;
     background-color: white;
     padding: 0 25px 0 25px;
     border-radius: 8px;
+    // z-index: -2;
     box-shadow: 2px 2px 8px rgb(211, 209, 209);
+}
+
+.contactsBar.moved{
+    margin-bottom: 48px;
+    transition: margin 0.2s ease-in-out;
 }
 
 .contactsTable{
     width: 100%;
-    height: 600px;
+    height: 590px;
     background-color: white;
     padding: 0 25px 0 25px;
     border-radius: 8px;
     box-shadow: 2px 2px 8px rgb(211, 209, 209);
+    z-index: 1;
+
 }
 
 .searchBar{
@@ -187,6 +196,7 @@
     border-bottom-left-radius: 8px;
     border-bottom-right-radius: 8px;
     box-shadow: 2px 6px 6px rgb(211, 209, 209);
+    z-index: 2;
 
 }
 
@@ -254,7 +264,7 @@
     align-items: center;
     bottom: 0;
     right: 0;
-    margin: 0 55px 20px 0;
+    margin: 0 55px 18px 0;
 }
 
 .indexContainer  {
@@ -332,5 +342,60 @@
     background-color: $orange;
 }
 
+.qtySelected{
+    font-family: $raleway;
+    font-size: 14px;
+    font-family: $raleway;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 84px;
+    left: 25px;
+    background-color: white;
+    box-shadow: 2px 2px 4px rgb(211, 209, 209);
+    z-index: 0;
+    height: 36px;
+    width: 220px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    animation: Slide 0.2s;
+}
+
+.deleteTag{
+    font-family: $raleway;
+    font-size: 14px;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    margin-top: 0;
+    top: 84px;
+    right: 25px;
+    background-color: rgba($orange, $alpha: 0.3);
+    z-index: 0;
+    color: rgba($color: #740808, $alpha: 1.0);
+    font-weight: 500;
+    height: 36px;
+    width: 280px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    cursor: pointer;
+    transition: margin 0.2s ease-in-out;
+    animation: Slide 0.2s;
+}
+
+.deleteTag img{
+    height: 18px;
+}
+
+@keyframes Slide {
+    0% {
+      margin-top: 40px;
+    }
+    100% {
+        margin-top: 0;
+    }
+}
 
 

@@ -43,6 +43,7 @@ let regionOpen = false;
 
 let offset = 0;
 let opened= false;
+let selectedArray= [];
 
 
 

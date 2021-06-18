@@ -210,14 +210,13 @@ async function openContacts(){
         option.innerHTML= channels[i].name;
         document.querySelector("#contactChannel").appendChild(option) 
     }
-
+    //FUNCION RENDERIZAR CONTACTOS
     fillContactTable(0)
 
 }
 
 async function fillContactTable(offset){
-    // let offset = 0;
-    // document.querySelector(".contactsSection").innerHTML="";
+    //CREA DIV Y TABLA CON CONTACTOS DE DB
     const mainDiv= document.createElement("div");
     mainDiv.classList.add("contactsTable");
     mainDiv.innerHTML= `
@@ -265,16 +264,61 @@ async function fillContactTable(offset){
         </div>`
     document.querySelector(".contactsSection").appendChild(mainDiv);
 
+    //IF HEADER CHECHBOX IS SELECTED:
+    const selectAll = document.querySelector("#selectall");
+    selectAll.addEventListener("click",()=>{
+        const boxes = Array.apply(null,document.querySelectorAll(".contactCheckbox"));
+        const contacts = Array.apply(null, document.querySelectorAll(".itemRow"));
+
+        if(selectAll.checked==true){
+            //VACIA DATOS ANTERIORES DE ARRAY
+            selectedArray=[]
+
+            boxes.forEach(e=>{
+                //SETEA CADA CHECKBOX A CHECKED
+                e.checked=true
+                //ENVIA ID DE CONTACTOS A ARRAY
+                selectedArray.push(parseInt(e.id))
+            });
+
+            contacts.forEach(e=>{
+                //AGREGA CLASE HOVER PARA BACKGROUND COLOR DE SELECCIONADO
+                e.classList.add("contactHover");
+            });
+
+            //ENVIA ARRAY PARA FUNCION CONTADOR DE SELECCIONADOS
+            selectedContactsOptions(selectedArray);
+        }
+        
+        else{
+            boxes.forEach(e=>{
+                //SETEA CADA CHECKBOX A UNCHECKED
+                e.checked=false;
+                //VACIA ARRAY DE CONTACTOS SELECCIONADOS
+                selectedArray=[]
+            });
+
+            contacts.forEach(e=>{
+                //QUITA CLASE HOVER
+                e.classList.remove("contactHover");
+            });
+
+            //ELIMINA CONTADOR DE SELECCIONADOS
+            document.querySelector(".qtySelected").remove();
+        }
+    })
+
+    //OBTIENE CONTACTOS SEGUN OFFSET
     const contacts = await getLimitedContacts(offset)
     
     for(let i=0; i<contacts.length; i++){
-        
+        //CREA DIV POR CADA CONTACTO Y COMLPETA CON DATOS EXISTENTES
         const thisContact= document.createElement("div");
         thisContact.classList.add("tableRow");
         thisContact.classList.add("itemRow");
         thisContact.innerHTML=`
             <div class="tableColumn column1">
-                <input type="checkbox" name="select" id="checkbox${i}" class="contactCheckbox">
+                <input type="checkbox" name="select" id="${contacts[i].id}" class="contactCheckbox">
             </div>
             <div class="tableColumn">${contacts[i].name} ${contacts[i].lastname}</div>
             <div class="tableColumn locationColumn">${contacts[i].contactCity.cityCountry.name} / ${contacts[i].contactCity.cityCountry.countryRegion.name}</div>
@@ -289,14 +333,15 @@ async function fillContactTable(offset){
         document.querySelector(".tableRows").appendChild(thisContact);
 
         const options = document.querySelectorAll(".contactOptions");
-
-
+        
+        //HOVER SOBRE CONTACTO 
         thisContact.addEventListener("mouseenter", ()=>{
             options[i].innerHTML="";
             thisContact.classList.add("contactHover");
             const optionsDiv= document.createElement("div");
             optionsDiv.classList.add("optionsContainer");
             
+            //MUESTRA OPCIONES DE EDITAR Y ELIMINAR CUANDO HOVER
             optionsDiv.innerHTML=`
                 <div class="optionHoverBtns optionEdit" ">
                     <img src="./styles/assets/edit.png" alt="editar contacto" id="optionEdit">
@@ -305,17 +350,22 @@ async function fillContactTable(offset){
                     <img src="./styles/assets/delete.png" alt="eliminar contacto" id="optionDelete">
                 </div>`;
             options[i].appendChild(optionsDiv);
-            
-            
         });
 
+
         thisContact.addEventListener("mouseleave", ()=>{
-            thisContact.classList.remove("contactHover");
+
+            //QUITA CLASE HOVER Y DEVUELVE ESTILO ORIGINAL
+            if(thisContact.querySelector(".contactCheckbox").checked==false){
+                thisContact.classList.remove("contactHover");        
+            }
             options[i].innerHTML="...";
         });
 
         
         thisContact.addEventListener("click", (e)=>{
+
+            //SI SE CLICKEA ICONO EDITAR, LLAMA OPCION EDITAR CON ID CONTACTO
             if(e.target.id == "optionEdit"){
                 editContact(contacts[i].id)
             }
@@ -323,28 +373,51 @@ async function fillContactTable(offset){
         
         thisContact.addEventListener("click", (e)=>{
 
+            //SI SE CLICKEA ICONO EDITAR, LLAMA OPCION ELIMINAR CON ID CONTACTO Y OFFTET PARA RENDERIZAR NUEVAMENTE CONTACTOS
             if(e.target.id == "optionDelete"){
-                // console.log("llega")
                 prompt("confirmation", "Está seguro que desea borrar el contacto?", contacts[i].id , offset)
-
-                // deleteContact(contacts[i].id)
             }
-        });
+        });      
+
+        thisContact.addEventListener("click", (e)=>{
+            
+            //SI SE CLICKEA CHECKBOX
+            if(e.target.classList=="contactCheckbox"){
+
+                //SI SE ENCUENTRA CHEQUEADO
+                if(e.target.checked){
+
+                    //SE AGREGA CLASE CON ESTILO HOVER
+                    thisContact.classList.add("contactHover");
+
+                    //ENVIA ID USUARIO A ARRAY DE SELECCIONADO
+                    selectedArray.push(contacts[i].id);
+
+                    //ACTUALIZA TAG CONTADOR USUARIOS SELECCIONADOS
+                    selectedContactsOptions(selectedArray);
+                }
+                else{
+                    
+                    //SI CHACKEBOX SE DESELECCIONA, BUSCA INDEX DEL ID Y LO QUITA DEL ARRAY 
+                    const index = selectedArray.indexOf(contacts[i].id);
+                    selectedArray.splice(index, 1);
+                    //ACTUALIZA TAG CONTADOR USUARIOS SELECCIONADOS 
+                    selectedContactsOptions(selectedArray);
+                }
+            }
+        })
     }
-      
 }
 
 async function editContact(id){
 
+    //OBTIENE DATOS DE DB
     const regions= await getallRegions();
     const channels = await getallChannels(); 
     const contactCards= await getContactInfo(id);
     const contact =  await getContactById(id);
-    // console.log(contact)
-    // console.log(contact.contactCity.name);
-    // console.log(contact.contactCity.cityCountry.countryRegion.name);
 
-
+    //CREA DIV
     let newContactDiv = document.createElement("div");
     newContactDiv.classList.add("contactModal");
     newContactDiv.innerHTML= `
@@ -420,6 +493,7 @@ async function editContact(id){
     </div>`
     document.querySelector(".main").appendChild(newContactDiv);
 
+    //INYECTA REGIONES A SELECT
     for(let i=0; i<regions.length; i++){
         const option = document.createElement("option");
         option.value= regions[i].name;
@@ -427,8 +501,8 @@ async function editContact(id){
         document.querySelector("#newUserRegion").appendChild(option);
     }
 
+    //OBTIENE PAISES DE LA REGION SELECCIONADA
     const countries = await getCountryByRegion(contact.contactCity.cityCountry.countryRegion.name);
-
     for(let i=0; i<countries.length; i++){
         const option = document.createElement("option");
         option.value= countries[i].name;
@@ -436,8 +510,8 @@ async function editContact(id){
         document.querySelector("#newUserCountry").appendChild(option);
     }
 
+    //OBTIENE CIUDADES DEL PAIS SELECCIONADO
     const cities = await getCitiesByCountry(contact.contactCity.cityCountry.name);
-
     for(let i=0; i<cities.length; i++){
         const option = document.createElement("option");
         option.value= cities[i].name;
@@ -446,7 +520,6 @@ async function editContact(id){
     }
 
     //CREA CANALES DE CONTACTO
-
     for(let i=0; i<channels.length; i++){
         const channelDiv = document.createElement("div");
         channelDiv.classList.add("channelDiv");
@@ -500,7 +573,6 @@ async function editContact(id){
     document.querySelector("#newUserInterest").value= contact.interest;
 
     //FILL VALUES WITH EXISTING CONTACT CARDS
-
     for(let i =0; i<contactCards.length; i++){
         document.querySelector(`#newUserChannel${i}`).value = contactCards[i].ContactChannel.name;
         document.querySelector(`#newUserAccount${i}`).value = contactCards[i].account;
@@ -518,7 +590,6 @@ async function editContact(id){
 
 
 //FUNCIONES LOGIN
-
 async function loginLoad(){
     const body = {
         "email": emailInput.value,
@@ -572,11 +643,13 @@ function loginError(){
     );
 }
 
-
+//ABRE MODAL PARA NUEVO CONTACTO
 async function openNewContact(){
+    //OBTIENE REGIONES Y CANALES DE CONTACTO DESDE DB
     const regions= await getallRegions();
     const channels = await getallChannels(); 
 
+    //CREA DIV 
     let newContactDiv = document.createElement("div");
     newContactDiv.classList.add("contactModal");
     newContactDiv.innerHTML= `
@@ -652,6 +725,7 @@ async function openNewContact(){
     </div>`
     document.querySelector(".main").appendChild(newContactDiv);
 
+    //INYECTA REGIONES A SELECT
     for(let i=0; i<regions.length; i++){
         const option = document.createElement("option");
         option.value= regions[i].name;
@@ -660,7 +734,6 @@ async function openNewContact(){
     }
 
     //CREA CANALES DE CONTACTO
-
     for(let i=0; i<channels.length; i++){
         const channelDiv = document.createElement("div");
         channelDiv.classList.add("channelDiv");
@@ -686,7 +759,6 @@ async function openNewContact(){
             </select>
         </div>`
         document.querySelector(".contactDataDiv.level3").appendChild(channelDiv);
-
     }
 
     //AGREGA CANALES DISPONIBLES A SELECT 
@@ -715,59 +787,77 @@ async function openNewContact(){
 }
 
 //FILLS COUNTRY/CITY SELECTS ACCORDING TO REGION/COUNTRY SELECTION
-
 function dynamicLocation(origin){
+    //SI ES LLAMADA DESDE EL MODAL DE CREAR/EDITAR CONTACTO
     if(origin == "contactModal"){
         const regionSelect = document.querySelector("#newUserRegion");
         const countrySelect = document.querySelector("#newUserCountry");
         const citySelect = document.querySelector("#newUserCity");
     
         regionSelect.addEventListener("change", async ()=>{
-        countrySelect.innerHTML="";
-        const region = regionSelect.value;
-        const countries= await getCountryByRegion(region);
-        
-        let nullOption = document.createElement("option");
-        nullOption.innerHTML= '<option value="" disabled selected></option>';
-        countrySelect.appendChild(nullOption);
+            //LIMPIA RESULTADOS ANTERIORES
+            countrySelect.innerHTML="";
 
-        for(let i=0; i<countries.length; i++){
-            const option = document.createElement("option");
-            option.value= countries[i].name;
-            option.innerHTML= countries[i].name;
-            countrySelect.appendChild(option);
-            }
+            //OBTIENE PAISES POR NOMBRE DE REGION
+            const region = regionSelect.value;
+            const countries= await getCountryByRegion(region);
+            
+            //CREA UNA PRIMERA OPCION "NULA"
+            let nullOption = document.createElement("option");
+            nullOption.innerHTML= '<option value="" disabled selected></option>';
+            countrySelect.appendChild(nullOption);
+
+            for(let i=0; i<countries.length; i++){
+                //CREA OPCIONES EN SELECT DE PAISES
+                const option = document.createElement("option");
+                option.value= countries[i].name;
+                option.innerHTML= countries[i].name;
+                countrySelect.appendChild(option);
+                }
         });
     
         countrySelect.addEventListener("change", async () =>{
-        citySelect.innerHTML="";
-        let nullOption = document.createElement("option");
-        nullOption.innerHTML= '<option value="" disabled selected></option>';
-        citySelect.appendChild(nullOption);
-        const cities= await getCitiesByCountry(countrySelect.value);
-    
-        for(let i=0; i<cities.length; i++){
-            const option = document.createElement("option");
-            option.value= cities[i].name;
-            option.innerHTML= cities[i].name;
-            citySelect.appendChild(option);
-            }
+            //LIMPIA RESULTADOS ANTERIORES
+            citySelect.innerHTML="";
+
+            //CREA UNA PRIMERA OPCION "NULA"
+            let nullOption = document.createElement("option");
+            nullOption.innerHTML= '<option value="" disabled selected></option>';
+            citySelect.appendChild(nullOption);
+
+            //OBTIENE CIUDADES POR NOMBRE DE PAIS
+            const cities= await getCitiesByCountry(countrySelect.value);
+        
+            for(let i=0; i<cities.length; i++){
+                //CREA OPCIONES EN SELECT DE CIUDADES
+                const option = document.createElement("option");
+                option.value= cities[i].name;
+                option.innerHTML= cities[i].name;
+                citySelect.appendChild(option);
+                }
         });
     }
-
+    //SI ES LLAMADA DESDE LAS OPCIONES DE BUSQUEDA
     if(origin == "contactSearch"){
         const regionSelect = document.querySelector("#contactRegion");
         const countrySelect = document.querySelector("#contactCountry");
 
         regionSelect.addEventListener("change", async ()=>{
+            //LIMPIA RESULTADOS ANTERIORES
             countrySelect.innerHTML="";
+
+            //CREA UNA PRIMERA OPCION "NULA"
             let nullOption = document.createElement("option");
             nullOption.innerHTML= '<option value="" disabled selected></option>';
             countrySelect.appendChild(nullOption);
+
+            //OBTIENE PAISES POR NOMBRE DE REGION
             const region = regionSelect.value;
             const countries= await getCountryByRegion(region);
             
             for(let i=0; i<countries.length; i++){
+
+                //CREA OPCIONES EN SELECT DE PAISES
                 const option = document.createElement("option");
                 option.value= countries[i].name;
                 option.innerHTML= countries[i].name;
@@ -777,24 +867,83 @@ function dynamicLocation(origin){
     }
 }
 
-//
+//FUNCION CONTADOR CONACS SELECCIONADOS
+function selectedContactsOptions(selected){
+
+    if(document.querySelector(".qtySelected")){
+        //ELIMINA ETIQUETAS EXISTENTES
+        const counterTags = Array.apply(null, document.querySelectorAll(".qtySelected"));
+        counterTags.forEach(e=>{
+            e.remove()
+        })
+        const deleteTags = Array.apply(null, document.querySelectorAll(".deleteTag"));
+        deleteTags.forEach(e=>{
+            e.remove()
+        })
+    }
+    
+    if(selected.length>0){
+
+        //CREA ESPACIO PARA TAGS, MUEVE MARGEN DE BARRA SUPERIOR
+        document.querySelector(".contactsBar").classList.add("moved");
+
+        //CREA DIV CONTADOR
+        const qtySelected = document.createElement("div");
+        qtySelected.classList.add("qtySelected");
+        const p = document.createElement("p");
+
+        //MUESTRA LARGO DE ARRAY RECIBIDO (CONTACTOS SELECCIONADOS)
+        p.innerHTML=`${selected.length} contactos seleccionados`
+        qtySelected.appendChild(p);
+        document.querySelector(".contactsSection").appendChild(qtySelected)
+
+        //CREA DIV ELIMINAR
+        const deleteTag = document.createElement("div");
+        deleteTag.classList.add("deleteTag");
+        deleteTag.innerHTML=`
+            <img src="./styles/assets/delete.png" alt="eliminar">
+            <p>Eliminar contactos seleccionados</p>`
+        
+        document.querySelector(".contactsSection").appendChild(deleteTag)
+
+        deleteTag.addEventListener("click", ()=>{
+            deleteSelectedContacts(selected)
+        })
+    }
+    else{
+        //RESTABLECE MARGEN DE BARRA SUPERIOR
+        document.querySelector(".contactsBar").classList.remove("moved");
+    }
+
+}
+
+async function deleteSelectedContacts(selected){
+    console.log(selected)
+}
+
+//INYECTA A SELECT PAIS SEGUN REGION Y CIUDAD SEGUN PAIS
 function companyPrediction(){
     const newContactCompany = document.querySelector(".newContactCompany");
     const companiesSugDiv = document.querySelector(".companiesSugDiv");
     companiesSugDiv.innerHTML = "";
 
+    //AL RECIBIR INPUT
     newContactCompany.addEventListener("keyup", async ()=>{
+        //LIMPIA RESUTADOS VIEJOS
         companiesSugDiv.innerHTML = "";
         const input = newContactCompany.value;
         if(input.length>0){
+            //BUSCA COINCIDENCIAS CON NOMBRES DE COMPANIA
             const matches= await searchCompany(input);
             if(matches.length>0){
+                //SI ENCUENTRA AL MENOS UNA COINCIDENCIA, ENVIA DIV DE SUGERENCIAS POR DELANTE E INYECTA RESULTADOS
                 companiesSugDiv.style.zIndex = "2";
                 for(let i=0; i<matches.length; i++){
                     const sug = document.createElement("p");
                     sug.innerHTML= `${matches[i].name}`;
                     companiesSugDiv.appendChild(sug);
                     sug.addEventListener("click", ()=>{
+                        //AL CLICKEAR RESULTADOS LOS ENVIA AL INPUT Y BORRA SUGERENCIAS
                         newContactCompany.value= matches[i].name;
                         companiesSugDiv.innerHTML = "";
                         companiesSugDiv.style.zIndex = "1";
@@ -803,6 +952,7 @@ function companyPrediction(){
                 }
             }
         }
+        //SI INPUT VACIO, ENVIA DIV POR DETRÁS
         if(input.length==0){
             companiesSugDiv.style.zIndex = "1";
         }
@@ -810,7 +960,6 @@ function companyPrediction(){
 }
 
 //GUARDAR NUEVO CONTACTO
-
 async function saveNewConact(){
 
     const name = document.querySelector(".newContactName").value;
@@ -829,6 +978,7 @@ async function saveNewConact(){
     const cityId = await getCityByName(city);
     const companyId = await getCompanyByName(company);
 
+    //CORROBORA DATOS OBLIGATORIOS 
     if(name=="" || lastname== "" || email=="" || company=="" || role== ""){
         return prompt("mandatory","Faltan datos obligatorios")
     }
@@ -845,6 +995,7 @@ async function saveNewConact(){
         interest: interest
     }
 
+    //ENVIA POST A API
     const newContact = await fetchApi(url, '/contacts', 'POST', body);
     if(newContact.error) return prompt("mandatory","Formato de email incorrecto")
     else{
@@ -881,6 +1032,7 @@ async function updateContact(id){
     const cityId = await getCityByName(city);
     const companyId = await getCompanyByName(company);
 
+    //CORROBORA DATOS OBLIGATORIOS 
     if(name=="" || lastname== "" || email=="" || company=="" || role== ""){
         return prompt("mandatory","Faltan datos obligatorios")
     }
@@ -897,6 +1049,7 @@ async function updateContact(id){
         interest: interest
     }
 
+    //ENVIA PUT A API
     const updatedContact = await fetchApi(url, '/contacts/'+id, 'PUT', body);
     if(updatedContact.error) return prompt("mandatory","Formato de email incorrecto")
     else{
@@ -905,16 +1058,14 @@ async function updateContact(id){
         //GUARDA CANALES DE CONTACTO ACTUALES
         const contact= {id:id}
         const savechannel= await saveContactChannel(contact);
-        //DEVUELVE MENSAJE DE ÉXITO
         if(savechannel){
-            
+            //DEVUELVE MENSAJE DE ÉXITO
             return prompt("success","Contacto actualizado")
         }
     }
 }
 
 //PROMPTS:
-
 function prompt(status, message, id, offset){
     const contactMainDiv = document.querySelector(".contactMainDiv");
     const createPrompt = document.createElement("div");
@@ -981,9 +1132,8 @@ function prompt(status, message, id, offset){
     }
 }
 
-//
+//GUARDAR INFORMACION DE CONTACTO
 async function saveContactChannel(contact){
-    console.log(contact)
     const channels = await getallChannels();
     let contactInfos = [];
 
@@ -1015,21 +1165,10 @@ async function saveContactChannel(contact){
         }
     }
     if(contactInfos.length>0) return contactInfos;
+
+    //SI NO RECIBE NINGUN CANAL DE CONTACTO
     return prompt("mandatory", "Se requiere al menos un canal de contacto")
 }
 
-//SELECT ALL CHECKBOXES
-// const selectAllBoxes = document.querySelector("#selectall");
-// const boxes = document.querySelectorAll(".contactCheckbox");
-document.body.addEventListener("click", (e)=>{
-    
-    if(e.target.id== "selectall"){
-        // console.log(e)
-        const boxes = Array.apply(null,document.querySelectorAll(".contactCheckbox"));
-        // console.log(boxes)
-        boxes.forEach(e=>{
-            e.checked=true
-        })
-    }
-})
+
 
