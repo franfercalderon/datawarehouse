@@ -45,6 +45,7 @@ router.get('/channels', jwtValidation, async (req, res)=>{
                 model: City,
                 as:'contactCity',
                 attributes: ['name'],
+                required: true,
                 include:{
                     model: Country,
                     as:'cityCountry',

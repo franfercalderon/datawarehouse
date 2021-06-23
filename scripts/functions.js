@@ -200,6 +200,7 @@ function addHidden(x){
 
 
 async function openContacts(contacts){
+    console.log(contacts)
 
     //LIMPIA TABLA SI YA ESTABA ABIERTA
     const table = document.querySelector(".contactsTable");
@@ -1426,6 +1427,7 @@ async function searchContact(){
     }
 
     //LLAMA A FUNCION DE BUSQUEDA
+    console.log(obj)
     const searchedContacts= await getContactSearch(obj);
 
     //SI RECIBE AL MENOS UN RESULTADO
@@ -1435,9 +1437,9 @@ async function searchContact(){
         document.querySelector(".searchByName input").value = "";
         document.querySelector(".searchByCompany input").value = "";
         document.querySelector(".searchByRole input").value = "";
-        document.querySelector(".searchByRegion select").innerHTML = "";
-        document.querySelector(".searchByCountry select").innerHTML= "";
-        document.querySelector(".searchByInterest select").innerHTML= "";
+        // document.querySelector(".searchByRegion select").innerHTML = "";
+        // document.querySelector(".searchByCountry select").innerHTML= "";
+        // document.querySelector(".searchByInterest select").innerHTML= "";
 
 
         //RENDERIZA RESULTADOS
