@@ -40,6 +40,12 @@ let contactsOpen = false;
 let companyOpen = false;
 let usersOpen = false;
 let regionOpen = false;
+let orderName= false;
+let orderCountry= false;
+let orderCompany= false;
+let orderRole= false;
+let orderInterest= false;
+
 
 let offset = 0;
 let opened= false;

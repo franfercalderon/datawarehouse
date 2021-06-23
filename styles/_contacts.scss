@@ -72,11 +72,6 @@
     transition: background-color 0s
 }
 
-.contactsBar-btns img{
-    width: 22px;
-    height:auto;
-    margin-left: 10px;
-}
 
 .contactsBar-btns.new{
     width: 47px;
@@ -176,11 +171,16 @@
 
 .contactsBar-btns.search{
     margin-left: 28px;
+    background-color: $blue4;
 }
 
-.searchOptions:hover{
-    background-color: white;
+.contactsBar-btns.search.hidden{
+    display: none;
 }
+
+// .searchOptions:hover{
+//     background-color: white;
+// }
 
 .searchDetail{
     position: absolute;
@@ -230,6 +230,7 @@
     height: 28px;
     background-color: white;
     border-radius: 4px;
+    cursor: pointer;
 }
 
 .searchOptions img{
@@ -255,7 +256,7 @@
 }
 
 .contactsBar-btns.search:hover{
-    background-color: $blue4;
+    background-color: $blue3;
 }
 
 .indexBtns{
@@ -287,6 +288,7 @@
     background-color: whitesmoke;
     box-shadow: 2px 2px 2px rgb(211, 209, 209);
     border-radius: 5px;
+    cursor: pointer;
 }
 
 .arrowContainer:hover{

@@ -1,5 +1,6 @@
 //API CALLS
 
+
 //CONTACTOS
 
 async function getLimitedContacts(offset){
@@ -8,9 +9,30 @@ async function getLimitedContacts(offset){
 }
 
 async function deleteContact(id){
-    const deletedContact = await fetchApi(url, '/contacts/'+id, 'DELETE');
-    return deletedContact
+    //RECEIBE ARRAY DE IDS A ELIMINAR
+    id.forEach(async(e)=>{
+        const deletedContact = await fetchApi(url, '/contacts/'+e, 'DELETE');
+        return deletedContact
+    })
 }
+
+// async function getAllContacts(offset, sort, way){
+//     const contacts = await fetchApi(url, '/contacts/?offset='+offset+'&sort='+sort+'&way='+way, 'GET');
+//     return contacts
+// }
+
+async function getAllContacts(){
+    const contacts = await fetchApi(url, '/contacts', 'GET');
+    return contacts
+}
+
+async function getContactSearch(obj){
+    const searchedContacts = await fetchApi(url, `/contacts/search?name=${obj.name}&company=${obj.company}&role=${obj.role}&region=${obj.region}&country=${obj.country}&interest=${obj.interest}`, 'GET');
+    // console.log(searchedContacts)
+    return searchedContacts
+}
+
+
 
 async function getContactById(id){
     const contact = await fetchApi(url, '/contacts/'+id, 'GET');
@@ -43,7 +65,6 @@ async function getallCountries(){
 async function getCountryByRegion(reg){
     const region = await fetchApi(url, '/location/regions/name_'+reg, 'GET');
     const regionId = region.id;
-    console.log(regionId)
     const countries = await fetchApi(url, '/location/countries/region_'+regionId, 'GET');
     return countries;
 }
@@ -178,18 +199,19 @@ function addHidden(x){
 }
 
 
-async function openContacts(){
+async function openContacts(contacts){
+
+    //LIMPIA TABLA SI YA ESTABA ABIERTA
+    const table = document.querySelector(".contactsTable");
+    if(table) table.remove()
 
     //MUESTRA SEECION
-    
     contactsSection.classList.remove("hidden");
     contactsBtn.src="./styles/assets/contacts_hover.png";
     contactsOpen= true;
     const regions= await getallRegions();
-    const channels = await getallChannels();
 
-    // //COMPLETA SELECT REGIONES DESDE DB
-    
+    //COMPLETA SELECT REGIONES DESDE DB
     for(let i= 0; i<regions.length; i++){
         const option= document.createElement("option");
         option.value=regions[i].name;
@@ -198,24 +220,178 @@ async function openContacts(){
     }
     
     //COMPLETA SELECT PAISES SEGUN REGION:
-
     dynamicLocation("contactSearch");
 
-
-    //COMPLETA CANALES DE CONTACTO
-
-    for(let i= 0; i<channels.length; i++){
-        const option= document.createElement("option");
-        option.value=channels[i].name;
-        option.innerHTML= channels[i].name;
-        document.querySelector("#contactChannel").appendChild(option) 
-    }
     //FUNCION RENDERIZAR CONTACTOS
-    fillContactTable(0)
-
+    if(contacts){
+        fillContactTable(contacts, 0);
+    }
+    else{
+        const contactList = await getAllContacts();
+        fillContactTable(contactList, 0)
+    }
 }
 
-async function fillContactTable(offset){
+async function pagination(contactList, offset, sort, way){
+    
+    //VARIABLES
+    const next= document.querySelector(".forwardContainer");
+    const prev= document.querySelector(".backContainer");
+    const showingContacts = document.querySelector(".showingContacts");
+    const totalContacts = document.querySelector(".totalContacts");
+
+    //OBTIENE INFORMACIOÓN DE CONTACTOS TOTALES Y USA EL LARGO PARA MOSTRARLO EN INDEX
+    const contacts = await getAllContacts();
+    // totalContacts.innerHTML=`${contacts.length}`
+    totalContacts.innerHTML=`${contactList.length}`
+    showingContacts.innerHTML=`${offset+1} - ${offset+10}`;
+
+    //MOSTRAR MÁS CONTACTOS
+    next.addEventListener("click", ()=>{
+        if(contactList.length> offset+10){
+            offset=offset+10;
+            document.querySelector(".contactsTable").remove();
+            fillContactTable(contactList, offset);
+        }
+    })  
+
+    //MOSTRAR CONTACTOS ANTERIORES
+    prev.addEventListener("click", ()=>{
+
+        //SI LLEGA A LA PRIMERA PÁGINA
+        if(offset>=0 && offset<10){
+            offset=0;
+            document.querySelector(".contactsTable").remove();
+            fillContactTable(contactList, offset);
+        }
+
+        else{
+            offset=offset-10;
+            document.querySelector(".contactsTable").remove();
+            fillContactTable(contactList, offset);
+        }
+    })
+}
+
+function sortAlpha(contactList, attribute){
+    //RESETEA SRC DE TODAS LAS FLECHAS
+    document.querySelector(".column2 img").src="./styles/assets/order_unsel.png"
+    document.querySelector(".locationColumn img").src="./styles/assets/order_unsel.png"
+    document.querySelector(".column4 img").src="./styles/assets/order_unsel.png"
+    document.querySelector(".column5 img").src="./styles/assets/order_unsel.png"
+    document.querySelector(".column7 img").src="./styles/assets/order_unsel.png"
+
+    //ENTRA SEGUN LA COLUMNA A ORDENAR
+    if(attribute=="name"){
+
+        //ORDENA USANDO EL METODO SRC
+        contactList.sort((a,b)=>{
+            if(orderName==false){
+                if(a.name.toLowerCase() < b.name.toLowerCase()) return -1;
+                if(a.name.toLowerCase() > b.name.toLowerCase()) return 1;
+            }
+            else{
+                if(a.name.toLowerCase() < b.name.toLowerCase()) return 1;
+                if(a.name.toLowerCase() > b.name.toLowerCase()) return -1;
+            }
+            return 0;
+        })
+
+        //TOGGLE DE VARIABLE DE ESTADO PARA ITERAR ENTRE ASC Y DESC
+        if(orderName==false) orderName=true;
+        else orderName=false;
+    }
+    if(attribute=="country"){
+        
+        //ORDENA USANDO EL METODO SRC
+        contactList.sort((a,b)=>{
+            if(orderCountry==false){
+                if(a.contactCity.cityCountry.name.toLowerCase() < b.contactCity.cityCountry.name.toLowerCase()) return -1;
+                if(a.contactCity.cityCountry.name.toLowerCase() > b.contactCity.cityCountry.name.toLowerCase()) return 1;
+            }
+            else{
+                if(a.contactCity.cityCountry.name.toLowerCase() < b.contactCity.cityCountry.name.toLowerCase()) return 1;
+                if(a.contactCity.cityCountry.name.toLowerCase() > b.contactCity.cityCountry.name.toLowerCase()) return -1;
+            }
+            return 0;
+        })
+
+        //TOGGLE DE VARIABLE DE ESTADO PARA ITERAR ENTRE ASC Y DESC
+        if(orderCountry==false) orderCountry=true;
+        else orderCountry=false;
+    }
+    if(attribute=="company"){
+        
+        //ORDENA USANDO EL METODO SRC
+        console.log(contactList[0])
+        contactList.sort((a,b)=>{
+            if(orderCompany==false){
+                if(a.contactCompany.name.toLowerCase() < b.contactCompany.name.toLowerCase()) return -1;
+                if(a.contactCompany.name.toLowerCase() > b.contactCompany.name.toLowerCase()) return 1;
+            }
+            else{
+                if(a.contactCompany.name.toLowerCase() < b.contactCompany.name.toLowerCase()) return 1;
+                if(a.contactCompany.name.toLowerCase() > b.contactCompany.name.toLowerCase()) return -1;
+            }
+            return 0;
+        })
+
+        //TOGGLE DE VARIABLE DE ESTADO PARA ITERAR ENTRE ASC Y DESC
+        if(orderCompany==false) orderCompany=true
+        else orderCompany=false
+    }
+    if(attribute=="role"){
+        
+        //ORDENA USANDO EL METODO SRC
+        console.log(contactList[0])
+        contactList.sort((a,b)=>{
+            if(orderRole==false){
+                if(a.role.toLowerCase() < b.role.toLowerCase()) return -1;
+                if(a.role.toLowerCase() > b.role.toLowerCase()) return 1;
+            }
+            else{
+                if(a.role.toLowerCase() < b.role.toLowerCase()) return 1;
+                if(a.role.toLowerCase() > b.role.toLowerCase()) return -1;
+            }
+            return 0;
+        })
+
+        //TOGGLE DE VARIABLE DE ESTADO PARA ITERAR ENTRE ASC Y DESC
+        if(orderRole==false) orderRole=true
+        else orderRole=false
+    }
+    if(attribute=="interest"){
+        
+        //ORDENA USANDO EL METODO SRC
+        console.log(contactList[0])
+        contactList.sort((a,b)=>{
+            if(orderInterest==false){
+                if(a.interest < b.interest) return -1;
+                if(a.interest > b.interest) return 1;
+            }
+            else{
+                if(a.interest < b.interest) return 1;
+                if(a.interest > b.interest) return -1;
+            }
+            return 0;
+        })
+
+        //TOGGLE DE VARIABLE DE ESTADO PARA ITERAR ENTRE ASC Y DESC
+        if(orderInterest==false) orderInterest=true
+        else orderInterest=false
+    }
+
+    //LIMPIA RESULTADOS DE LA TABLA Y MUESTRA LOS NUEVOS, SEGUN ORDEN
+    document.querySelector(".contactsTable").remove();
+    fillContactTable(contactList, 0);
+}
+
+async function fillContactTable(contactList, offset, sort){
+
+    //OBTIENE CONTACTOS SEGUN OFFSET
+    // const contactList = await getAllContacts();
+    const contacts = contactList.slice(offset, offset+10)
+
     //CREA DIV Y TABLA CON CONTACTOS DE DB
     const mainDiv= document.createElement("div");
     mainDiv.classList.add("contactsTable");
@@ -224,7 +400,7 @@ async function fillContactTable(offset){
             <div class="tableColumn column1">
                 <input type="checkbox" name="selectall" id="selectall">
             </div>
-            <div class="tableColumn">
+            <div class="tableColumn column2">
                 <p>Contacto</p> 
                 <img src="./styles/assets/order_unsel.png" alt="ordenar">
             </div>
@@ -232,11 +408,11 @@ async function fillContactTable(offset){
                 <p>País/Región</p> 
                 <img src="./styles/assets/order_unsel.png" alt="ordenar">
             </div>
-            <div class="tableColumn">
+            <div class="tableColumn column4">
                 <p>Compañía</p> 
                 <img src="./styles/assets/order_unsel.png" alt="ordenar">
             </div>
-            <div class="tableColumn">
+            <div class="tableColumn column5">
                 <p>Cargo</p> 
                 <img src="./styles/assets/order_unsel.png" alt="ordenar">
             </div>
@@ -251,18 +427,42 @@ async function fillContactTable(offset){
         <div class="headerDivider"></div>
         <div class="indexBtns">
             <div class="indexContainer">
-                <p><span class="showingContacts">1-10</span> de <span class="totalContacts">10</span> contactos</p>
+                <p><span class="showingContacts"></span> de <span class="totalContacts"></span> contactos</p>
             </div>
             <div class="backContainer arrowContainer">
                 <img src="./styles/assets/back.png" alt="back" class="indexArrow">
-            </div>
-            <div class="indexContainer">
             </div>
             <div class="forwardContainer arrowContainer">
                 <img src="./styles/assets/forward.png" alt="forward" class="indexArrow">
             </div>
         </div>`
     document.querySelector(".contactsSection").appendChild(mainDiv);
+
+    //AGREGA EVENTLISTENERS A SORT ARROWS
+    document.querySelector(".column2 img").addEventListener("click", ()=>{
+        sortAlpha(contactList, "name");
+        document.querySelector(".column2 img").src="./styles/assets/order_sel.png"
+
+    });
+    document.querySelector(".locationColumn img").addEventListener("click", ()=>{
+        sortAlpha(contactList, "country");
+        document.querySelector(".locationColumn img").src="./styles/assets/order_sel.png"
+    });
+    document.querySelector(".column4 img").addEventListener("click", ()=>{
+        sortAlpha(contactList, "company");
+        document.querySelector(".column4 img").src="./styles/assets/order_sel.png"
+    });
+    document.querySelector(".column5 img").addEventListener("click", ()=>{
+        sortAlpha(contactList, "role");
+        document.querySelector(".column5 img").src="./styles/assets/order_sel.png"
+    });
+    document.querySelector(".column7 img").addEventListener("click", ()=>{
+        sortAlpha(contactList, "interest");
+        document.querySelector(".column7 img").src="./styles/assets/order_sel.png"
+    });
+
+    //LLAMA A FUNCION DE PAGINACIÓN/INDEX
+    pagination(contactList, offset);
 
     //IF HEADER CHECHBOX IS SELECTED:
     const selectAll = document.querySelector("#selectall");
@@ -303,13 +503,14 @@ async function fillContactTable(offset){
                 e.classList.remove("contactHover");
             });
 
-            //ELIMINA CONTADOR DE SELECCIONADOS
+            //ELIMINA CONTADOR DE SELECCIONADOS Y OPCION DELETE
             document.querySelector(".qtySelected").remove();
+            document.querySelector(".deleteTag").remove();
+
+            //RESTABLECE MARGEN DE BARRA SUPERIOR
+            document.querySelector(".contactsBar").classList.remove("moved");
         }
     })
-
-    //OBTIENE CONTACTOS SEGUN OFFSET
-    const contacts = await getLimitedContacts(offset)
     
     for(let i=0; i<contacts.length; i++){
         //CREA DIV POR CADA CONTACTO Y COMLPETA CON DATOS EXISTENTES
@@ -375,7 +576,8 @@ async function fillContactTable(offset){
 
             //SI SE CLICKEA ICONO EDITAR, LLAMA OPCION ELIMINAR CON ID CONTACTO Y OFFTET PARA RENDERIZAR NUEVAMENTE CONTACTOS
             if(e.target.id == "optionDelete"){
-                prompt("confirmation", "Está seguro que desea borrar el contacto?", contacts[i].id , offset)
+                selectedArray.push(contacts[i].id);
+                prompt("confirmation", "Está seguro que desea borrar el contacto?", selectedArray, offset)
             }
         });      
 
@@ -839,8 +1041,11 @@ function dynamicLocation(origin){
     }
     //SI ES LLAMADA DESDE LAS OPCIONES DE BUSQUEDA
     if(origin == "contactSearch"){
+
         const regionSelect = document.querySelector("#contactRegion");
         const countrySelect = document.querySelector("#contactCountry");
+        // regionSelect.innerHTML="";
+        // countrySelect.innerHTML="";
 
         regionSelect.addEventListener("change", async ()=>{
             //LIMPIA RESULTADOS ANTERIORES
@@ -907,18 +1112,17 @@ function selectedContactsOptions(selected){
         document.querySelector(".contactsSection").appendChild(deleteTag)
 
         deleteTag.addEventListener("click", ()=>{
-            deleteSelectedContacts(selected)
-        })
+
+            //GENERA PROMPT DE CONFIRMACION Y LUEGO ELIMINA
+            prompt("confirmation", "Desea eliminar los contactos seleccionados?", selected, 0)
+            
+        });
     }
     else{
         //RESTABLECE MARGEN DE BARRA SUPERIOR
         document.querySelector(".contactsBar").classList.remove("moved");
     }
 
-}
-
-async function deleteSelectedContacts(selected){
-    console.log(selected)
 }
 
 //INYECTA A SELECT PAIS SEGUN REGION Y CIUDAD SEGUN PAIS
@@ -1005,11 +1209,14 @@ async function saveNewConact(){
         const savechannel= await saveContactChannel(newContact);
         //SI SE CREA AL MENOS UN CONTACTO
         if(savechannel){
-            return prompt("success","Contacto creado con éxito")
+            openContacts()
+            return prompt("success","Contacto creado con éxito");
+            
         }
         //SI NO SE CREO NINGUN CANAL DE CONTACTO BORRA AL USUARIO PARA CREARLO NUEVAMENTE CON CANAL DE CONTACTO
         else{
-            await deleteContact(newContact.id);
+            selectedArray.push(newContact.id);
+            await deleteContact(selectedArray);
         }
     }
 }
@@ -1072,7 +1279,6 @@ function prompt(status, message, id, offset){
     createPrompt.classList.add("createPrompt");
 
     //ALERTA DE CAMPOS FALTANTES
-
     if(status=="mandatory"){
         createPrompt.innerHTML=`
         <img src="./styles/assets/error.png" alt="error">
@@ -1084,7 +1290,6 @@ function prompt(status, message, id, offset){
     }
 
     //MENSAJE DE EXITO
-
     if(status=="success"){
         createPrompt.innerHTML=`
         <img src="./styles/assets/success.png" alt="exito">
@@ -1096,7 +1301,17 @@ function prompt(status, message, id, offset){
     }
 
     //CONFIRMACION DELETE CONTACT
+    if(status=="search"){
+        createPrompt.innerHTML=`
+        <img src="./styles/assets/error.png" alt="error">
+        <p>${message}</p>`;
+        document.querySelector(".contactsSection").appendChild(createPrompt);
+        setTimeout(()=>{
+            createPrompt.remove()}, 2000
+        );
+    }
 
+    //CONFIRMACION DELETE CONTACT
     if(status=="confirmation"){
         createPrompt.innerHTML=`
         <img src="./styles/assets/error.png" alt="exito">
@@ -1106,7 +1321,7 @@ function prompt(status, message, id, offset){
             <div id="promptConfirmBtn">Eliminar</div>
         </div>`;
         document.querySelector(".contactsSection").appendChild(createPrompt);
-        createPrompt.addEventListener("click",  (e)=>{  
+        createPrompt.addEventListener("click",  async (e)=>{  
             //SI HACE CLICK EN CANCELAR, BORRA EL PROMPT
             if(e.target.id=="promptCancelBtn"){
                 createPrompt.remove()
@@ -1114,18 +1329,31 @@ function prompt(status, message, id, offset){
             //SI HACE CLICK EN ELIMINAR
             if(e.target.id=="promptConfirmBtn"){
                 //ELIMINA CONTACT POR ID
-                deleteContact(id);
+                await deleteContact(id);
 
-                createPrompt.innerHTML=`
-                <img src="./styles/assets/success.png" alt="exito">
-                 <p>Contacto eliminado!</p>`
-                
-                setTimeout(()=>{
-                    //RENDERIZA NUEVAMENTE LISTA DE CONTACTOS Y BORRA PROMPT
-                    document.querySelector(".contactsTable").remove();
-                    fillContactTable(offset)
-                    createPrompt.remove()
-                }, 2000);
+                //ELIMINA TAGS DE OPCIONES SELECCIONADOS
+                if(document.querySelector(".qtySelected")){
+                    document.querySelector(".deleteTag").remove();
+                    document.querySelector(".qtySelected").remove();
+                }
+
+                //RESTABLECE MARGEN DE BARRA SUPERIOR
+                document.querySelector(".contactsBar").classList.remove("moved");
+
+                if(deleteContact){
+                    selectedArray=[];
+
+                    createPrompt.innerHTML=`
+                    <img src="./styles/assets/success.png" alt="exito">
+                     <p>Contacto eliminado!</p>`
+                    
+                    setTimeout(()=>{
+                        //RENDERIZA NUEVAMENTE LISTA DE CONTACTOS Y BORRA PROMPT
+                        openContacts()
+                        createPrompt.remove()
+                    }, 2000);
+                }
+
             }
         })
 
@@ -1168,6 +1396,60 @@ async function saveContactChannel(contact){
 
     //SI NO RECIBE NINGUN CANAL DE CONTACTO
     return prompt("mandatory", "Se requiere al menos un canal de contacto")
+}
+
+//BUSQUEDA DE CONTACTOS
+
+async function searchContact(){
+
+    const name= document.querySelector(".searchByName input").value;
+    const company= document.querySelector(".searchByCompany input").value;
+    const role= document.querySelector(".searchByRole input").value;
+    const region= document.querySelector(".searchByRegion select").value;
+    const country= document.querySelector(".searchByCountry select").value;
+    const interest= document.querySelector(".searchByInterest select").value;
+    
+    if(!name && !company && !role && !region&& !country&& !interest){
+
+        //SI NO RECIBE AL MENOS UN PARAMETRO DE BUSQUEDA
+        prompt("search", "Ingrese al menos un valor de búsqueda")
+    }
+
+    //OBJETO CON VALORES PARA BUSQUEDA
+    const obj={
+        name, 
+        company,
+        role,
+        region,
+        country,
+        interest
+    }
+
+    //LLAMA A FUNCION DE BUSQUEDA
+    const searchedContacts= await getContactSearch(obj);
+
+    //SI RECIBE AL MENOS UN RESULTADO
+    if(searchedContacts.length>0){
+
+        //RESETEA INPUTS
+        document.querySelector(".searchByName input").value = "";
+        document.querySelector(".searchByCompany input").value = "";
+        document.querySelector(".searchByRole input").value = "";
+        document.querySelector(".searchByRegion select").innerHTML = "";
+        document.querySelector(".searchByCountry select").innerHTML= "";
+        document.querySelector(".searchByInterest select").innerHTML= "";
+
+
+        //RENDERIZA RESULTADOS
+        openContacts(searchedContacts);
+
+        //ESCONDE SECCIÓN DE BUSQUEDA Y BOTON BUSQUEDA
+        searchDetail.classList.add("hidden");
+        searchBtn.classList.add("hidden");
+    }
+    else{
+
+    }
 }
 
 

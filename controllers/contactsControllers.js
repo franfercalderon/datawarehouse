@@ -3,6 +3,7 @@ const express = require('express');
 const { Region, City, Country, Company, ContactChannel } = require('../models');
 const router = express.Router();
 const models = require('../models');
+const { Op } = require("sequelize");
 const { jwtValidation, emailValid} = require('../scripts/middlewares');
 // const { route } = require('./locationControllers');
 
@@ -14,6 +15,211 @@ router.get('/channels', jwtValidation, async (req, res)=>{
             return res.status(200).json(contactchannels)
         }
         return res.status(400).json({message: 'No channels were found'})
+    })
+
+    .get('/search', jwtValidation, async (req, res)=>{
+
+        let whereMain={};
+        let whereCompany={};
+        let whereRegion={};
+        let whereCountry={};
+        
+
+        const name = req.query.name;
+        const company= req.query.company;
+        const role= req.query.role;
+        const region = req.query.region;
+        const country = req.query.country;
+        const interest = req.query.interest;
+
+        if(name) whereMain.name = name;
+        if(company) whereCompany.name = company;
+        if(role) whereMain.role = role;
+        if(region) whereRegion.name = region;
+        if(country) whereCountry.name = country;
+        if(interest) whereMain.interest = interest;
+        
+        
+        const allContacts= await models.Contact.findAll({
+            include: [{
+                model: City,
+                as:'contactCity',
+                attributes: ['name'],
+                include:{
+                    model: Country,
+                    as:'cityCountry',
+                    attributes: ['name'],
+                    where: whereCountry,
+                    include:{
+                        model: Region,
+                        as:'countryRegion',
+                        attributes:['name'],
+                        where: whereRegion
+                    }
+                }},
+                {
+                    model: Company,
+                    as:'contactCompany',
+                    attributes: ['name'],
+                    where: whereCompany
+            }],
+            where: whereMain
+        });
+
+        // console.log(whereCompany)
+        // return res.status(200).json(allContacts);
+        if(allContacts.length>0) return res.status(200).json(allContacts);
+        return res.status(400).json({message: 'No contacts found'})
+        
+        
+        // res.send(whereStatement)
+    })
+
+    .get('/', jwtValidation, async(req, res)=>{
+        const allContacts= await models.Contact.findAll({
+            include: [{
+                model: City,
+                as:'contactCity',
+                attributes: ['name'],
+                include:{
+                    model: Country,
+                    as:'cityCountry',
+                    attributes: ['name'],
+                    include:{
+                        model: Region,
+                        as:'countryRegion',
+                        attributes:['name']
+                    }
+                }},
+                {
+                    model: Company,
+                    as:'contactCompany',
+                    attributes: ['name'],
+            }],
+            // order: [
+            //     [`${sort}`, `${way}`],
+            //     // ['name', 'ASC'],
+            // ],
+            // offset: off, 
+            // limit: 10
+
+        });
+        if(allContacts) return res.status(200).json(allContacts);
+        return res.status(400).json({message: 'No contacts found'})
+        // const off= parseInt(req.query.offset);
+        // const sort= req.query.sort;
+        // const way= req.query.way;
+        // console.log(off+ sort+way);
+        // const allContacts = await models.Contact.findAll()
+        // if(allContacts.length>0){
+        //     return res.status(200).json(allContacts)
+        // }
+        // return res.status(400).json({message: 'No contacts were found'})
+        // try{
+            // const off= parseInt(req.params.off)
+            // const allContacts= await models.Contact.findAll({
+            //     include: [{
+            //         model: City,
+            //         as:'contactCity',
+            //         attributes: ['name'],
+            //         include:{
+            //             model: Country,
+            //             as:'cityCountry',
+            //             attributes: ['name'],
+            //             include:{
+            //                 model: Region,
+            //                 as:'countryRegion',
+            //                 attributes:['name']
+            //             }
+            //         }},
+            //         {
+            //             model: Company,
+            //             as:'contactCompany',
+            //             attributes: ['name'],
+            //     }],
+            //     order: [
+            //         [`${sort}`, `${way}`],
+            //         // ['name', 'ASC'],
+            //     ],
+            //     offset: off, 
+            //     limit: 10
+
+            // });
+        //     if(sort!= null){
+        //         console.log("caca")
+        //         const allContacts= await models.Contact.findAll({
+        //             include: [{
+        //                 model: City,
+        //                 as:'contactCity',
+        //                 attributes: ['name'],
+        //                 include:{
+        //                     model: Country,
+        //                     as:'cityCountry',
+        //                     attributes: ['name'],
+        //                     include:{
+        //                         model: Region,
+        //                         as:'countryRegion',
+        //                         attributes:['name']
+        //                     }
+        //                 }},
+        //                 {
+        //                     model: Company,
+        //                     as:'contactCompany',
+        //                     attributes: ['name'],
+        //             }],
+        //             order: [
+        //                 [`${sort}`, `${way}`],
+        //                 // ['name', 'ASC'],
+        //             ],
+        //             offset: off, 
+        //             limit: 10
+    
+        //         });
+        //         if(allContacts) return res.status(200).json(allContacts);
+        //         return res.status(400).json({message: 'No contacts found'})
+        //     }
+        //     else{
+        //         console.log("sin caca")
+        //         const allContacts= await models.Contact.findAll({
+        //             include: [{
+        //                 model: City,
+        //                 as:'contactCity',
+        //                 attributes: ['name'],
+        //                 include:{
+        //                     model: Country,
+        //                     as:'cityCountry',
+        //                     attributes: ['name'],
+        //                     include:{
+        //                         model: Region,
+        //                         as:'countryRegion',
+        //                         attributes:['name']
+        //                     }
+        //                 }},
+        //                 {
+        //                     model: Company,
+        //                     as:'contactCompany',
+        //                     attributes: ['name'],
+        //             }],
+        //             offset: off, 
+        //             limit: 10
+    
+        //         });
+        //         if(allContacts) return res.status(200).json(allContacts);
+        //         return res.status(400).json({message: 'No contacts found'})
+        //     }
+
+        //     // if(!)
+
+        //     // if(allContacts) return res.status(200).json(allContacts);
+        //     // return res.status(400).json({message: 'No contacts found'})
+        // }
+        // catch(err){
+        //     console.log(err)
+        // }
+        // if(contacts.length>0){
+        //     return res.status(200).json(contacts)
+        // }
+        // return res.status(400).json({message: 'No contacts were found'})
     })
 
     .post('/', jwtValidation, emailValid, async (req, res)=>{
@@ -34,6 +240,7 @@ router.get('/channels', jwtValidation, async (req, res)=>{
     })
 
     .delete('/:id', jwtValidation, async (req, res)=>{
+
         const id = req.params.id;
         const deletedContact = await models.Contact.destroy({
             where:{id: id}
@@ -70,7 +277,6 @@ router.get('/channels', jwtValidation, async (req, res)=>{
                 limit: 10
 
               });
-            // console.log(contacts)
             if(contacts) return res.status(200).json(contacts);
             return res.status(400).json({message: 'No contacts found'})
         }
@@ -114,10 +320,8 @@ router.get('/channels', jwtValidation, async (req, res)=>{
     })
 
     .get('/offset_:off', jwtValidation, async (req, res)=>{
-        console.log("caca")
         try{
             const off= parseInt(req.params.off)
-            console.log(off)
             const contacts= await models.Contact.findAll({
                 include: [
                     {
@@ -207,10 +411,15 @@ router.get('/channels', jwtValidation, async (req, res)=>{
             where:{idUser: id}
         });
         if(deletedContactCards) return res.status(200).json(deletedContactCards);
-        console.log(deletedContactCards)
         return res.status(400).json({message: 'ContactCards not deleted'})
 
     })
+    
+    // .get('/search', jwtValidation, async (req, res)=>{
+    //     const name = req.query.name;
+    //     const role= req.query.role
+    //     console.log(name+role)
+    // })
 
 
 

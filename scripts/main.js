@@ -5,6 +5,10 @@ contactsBtn.addEventListener("mouseover", ()=>{
     contactsBtn.src="./styles/assets/contacts_hover.png"
 });
 
+contactsBtn.addEventListener("click", ()=>{
+    openContacts()
+});
+
 companyBtn.addEventListener("mouseover", ()=>{
     removeHidden(companyLabel)
     companyBtn.src="./styles/assets/company_hover.png"
@@ -52,7 +56,6 @@ loggedusercontainer.addEventListener("mouseover", ()=>{
     loggeduseroptions.classList.remove("hidden")
 })
 
-// let opened= false;
 
 loggedusercontainer.addEventListener("mouseleave", ()=>{
     setTimeout(()=>{
@@ -74,18 +77,24 @@ loggeduseroptions.addEventListener("mouseleave", ()=>{
 
 searchOptions.addEventListener("click", ()=>{
     searchDetail.classList.toggle("hidden")
+    document.querySelector(".contactsBar-btns.search").classList.toggle("hidden")
 })
 
-searchDetail.addEventListener("mouseleave", ()=>{
-    searchDetail.classList.add("hidden")
+
+searchBtn.addEventListener("click", ()=>{
+    searchContact()
 })
 
-searchBtn.addEventListener("mouseover", ()=>{
-    document.querySelector(".search img").src="./styles/assets/magnifier_hover.png"
-})
+document.querySelector(".searchByName input").addEventListener("keyup", (e)=>{
+    if(e.keyCode===13) searchContact()
+});
 
-searchBtn.addEventListener("mouseleave", ()=>{
-    document.querySelector(".search img").src="./styles/assets/magnifier.png"
+document.querySelector(".searchByCompany input").addEventListener("keyup", (e)=>{
+    if(e.keyCode===13) searchContact()
+});
+
+document.querySelector(".searchByRole input").addEventListener("keyup", (e)=>{
+    if(e.keyCode===13) searchContact()
 })
 
 newContactBtn.addEventListener("click", ()=> {openNewContact()})

@@ -515,12 +515,6 @@
   transition: background-color 0s;
 }
 
-.contactsBar-btns img {
-  width: 22px;
-  height: auto;
-  margin-left: 10px;
-}
-
 .contactsBar-btns.new {
   width: 47px;
   font-size: 30px;
@@ -638,10 +632,11 @@
 
 .contactsBar-btns.search {
   margin-left: 28px;
+  background-color: #748CAB;
 }
 
-.searchOptions:hover {
-  background-color: white;
+.contactsBar-btns.search.hidden {
+  display: none;
 }
 
 .searchDetail {
@@ -704,6 +699,7 @@
   height: 28px;
   background-color: white;
   border-radius: 4px;
+  cursor: pointer;
 }
 
 .searchOptions img {
@@ -729,7 +725,7 @@
 }
 
 .contactsBar-btns.search:hover {
-  background-color: #748CAB;
+  background-color: #3E5C76;
 }
 
 .indexBtns {
@@ -772,6 +768,7 @@
   -webkit-box-shadow: 2px 2px 2px #d3d1d1;
           box-shadow: 2px 2px 2px #d3d1d1;
   border-radius: 5px;
+  cursor: pointer;
 }
 
 .arrowContainer:hover {

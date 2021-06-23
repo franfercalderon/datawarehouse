@@ -69,19 +69,11 @@
                     <div class="searchOptions ">
                         <img src="./styles/assets/search_options.png" alt="opciones de búsqueda">
                     </div>
-                    <div class="contactsBar-btns search">
-                        <img src="./styles/assets/magnifier.png" alt="buscar">
+                    <div class="contactsBar-btns search hidden">
+                        <img src="./styles/assets/magnifier_hover.png" alt="buscar">
                     </div>
                 </div>
                 <div class="contactsBar-btns-div">
-                    <div class="contactsBar-btns upload">
-                        <p>Subir</p>
-                        <img src="./styles/assets/upload.png" alt="subir">
-                    </div>
-                    <div class="contactsBar-btns download">
-                        <p>Descargar</p>
-                        <img src="./styles/assets/download.png" alt="descargar">
-                    </div>
                     <div class="contactsBar-btns new">
                         <p>+</p>
                     </div>
@@ -91,6 +83,10 @@
                 <div class="searchByName">
                     <label for="contactName">Nombre</label>
                     <input type="text" name="contactName" class= "searchInput" placeholder="Nombre del contacto">
+                </div>
+                <div class="searchByCompany">
+                    <label for="contactCompany">Compañía</label>
+                    <input type="text" name="contactCompany" class= "searchInput"  placeholder="Compañía del contacto">
                 </div>
                 <div class="searchByRole">
                     <label for="contactRole">Cargo</label>
@@ -106,12 +102,6 @@
                     <label for="contactCountry">País</label>
                     <select name="contactCountry" class= "searchInput"  id="contactCountry">
                         <option value="" disabled selected>País del contacto</option>
-                    </select>
-                </div>
-                <div class="searchByChannel">
-                    <label for="contactChannel">Canal preferido</label>
-                    <select name="contactChannel"  class= "searchInput" id="contactChannel">
-                        <option value="" disabled selected>Canal favorito</option>
                     </select>
                 </div>
                 <div class="searchByInterest">
