@@ -122,5 +122,22 @@ router.get('/cities/name_:name', jwtValidation, async (req, res)=>{
         return res.status(400).json({message: 'No city found'})
     })
 
+    .get('/all', jwtValidation, async (req,res)=>{
+        const locations = await models.City.findAll({
+            include: [{
+                model: models.Country,
+                as:'cityCountry',
+                attributes: ['name'],
+                include:{
+                    model: models.Region,
+                    as:'countryRegion',
+                    attributes:['name']
+                }}]
+            });
+            
+        if(locations.length>0)return res.status(200).json(locations);
+        return res.status(400).json({message: 'No locations found'})
+    })
+
 
 module.exports = router

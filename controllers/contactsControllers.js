@@ -97,130 +97,10 @@ router.get('/channels', jwtValidation, async (req, res)=>{
                     as:'contactCompany',
                     attributes: ['name'],
             }],
-            // order: [
-            //     [`${sort}`, `${way}`],
-            //     // ['name', 'ASC'],
-            // ],
-            // offset: off, 
-            // limit: 10
-
         });
+
         if(allContacts) return res.status(200).json(allContacts);
         return res.status(400).json({message: 'No contacts found'})
-        // const off= parseInt(req.query.offset);
-        // const sort= req.query.sort;
-        // const way= req.query.way;
-        // console.log(off+ sort+way);
-        // const allContacts = await models.Contact.findAll()
-        // if(allContacts.length>0){
-        //     return res.status(200).json(allContacts)
-        // }
-        // return res.status(400).json({message: 'No contacts were found'})
-        // try{
-            // const off= parseInt(req.params.off)
-            // const allContacts= await models.Contact.findAll({
-            //     include: [{
-            //         model: City,
-            //         as:'contactCity',
-            //         attributes: ['name'],
-            //         include:{
-            //             model: Country,
-            //             as:'cityCountry',
-            //             attributes: ['name'],
-            //             include:{
-            //                 model: Region,
-            //                 as:'countryRegion',
-            //                 attributes:['name']
-            //             }
-            //         }},
-            //         {
-            //             model: Company,
-            //             as:'contactCompany',
-            //             attributes: ['name'],
-            //     }],
-            //     order: [
-            //         [`${sort}`, `${way}`],
-            //         // ['name', 'ASC'],
-            //     ],
-            //     offset: off, 
-            //     limit: 10
-
-            // });
-        //     if(sort!= null){
-        //         console.log("caca")
-        //         const allContacts= await models.Contact.findAll({
-        //             include: [{
-        //                 model: City,
-        //                 as:'contactCity',
-        //                 attributes: ['name'],
-        //                 include:{
-        //                     model: Country,
-        //                     as:'cityCountry',
-        //                     attributes: ['name'],
-        //                     include:{
-        //                         model: Region,
-        //                         as:'countryRegion',
-        //                         attributes:['name']
-        //                     }
-        //                 }},
-        //                 {
-        //                     model: Company,
-        //                     as:'contactCompany',
-        //                     attributes: ['name'],
-        //             }],
-        //             order: [
-        //                 [`${sort}`, `${way}`],
-        //                 // ['name', 'ASC'],
-        //             ],
-        //             offset: off, 
-        //             limit: 10
-    
-        //         });
-        //         if(allContacts) return res.status(200).json(allContacts);
-        //         return res.status(400).json({message: 'No contacts found'})
-        //     }
-        //     else{
-        //         console.log("sin caca")
-        //         const allContacts= await models.Contact.findAll({
-        //             include: [{
-        //                 model: City,
-        //                 as:'contactCity',
-        //                 attributes: ['name'],
-        //                 include:{
-        //                     model: Country,
-        //                     as:'cityCountry',
-        //                     attributes: ['name'],
-        //                     include:{
-        //                         model: Region,
-        //                         as:'countryRegion',
-        //                         attributes:['name']
-        //                     }
-        //                 }},
-        //                 {
-        //                     model: Company,
-        //                     as:'contactCompany',
-        //                     attributes: ['name'],
-        //             }],
-        //             offset: off, 
-        //             limit: 10
-    
-        //         });
-        //         if(allContacts) return res.status(200).json(allContacts);
-        //         return res.status(400).json({message: 'No contacts found'})
-        //     }
-
-        //     // if(!)
-
-        //     // if(allContacts) return res.status(200).json(allContacts);
-        //     // return res.status(400).json({message: 'No contacts found'})
-        // }
-        // catch(err){
-        //     console.log(err)
-        // }
-        // if(contacts.length>0){
-        //     return res.status(200).json(contacts)
-        // }
-        // return res.status(400).json({message: 'No contacts were found'})
     })
 
     .post('/', jwtValidation, emailValid, async (req, res)=>{
@@ -416,12 +296,5 @@ router.get('/channels', jwtValidation, async (req, res)=>{
 
     })
     
-    // .get('/search', jwtValidation, async (req, res)=>{
-    //     const name = req.query.name;
-    //     const role= req.query.role
-    //     console.log(name+role)
-    // })
-
-
 
 module.exports = router

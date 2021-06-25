@@ -1,194 +1,5 @@
-//API CALLS
+//FUNCIONES SECCION CONTACTOS
 
-
-//CONTACTOS
-
-async function getLimitedContacts(offset){
-    const contacts = await fetchApi(url, '/contacts/offset_'+offset, 'GET');
-    return contacts
-}
-
-async function deleteContact(id){
-    //RECEIBE ARRAY DE IDS A ELIMINAR
-    id.forEach(async(e)=>{
-        const deletedContact = await fetchApi(url, '/contacts/'+e, 'DELETE');
-        return deletedContact
-    })
-}
-
-// async function getAllContacts(offset, sort, way){
-//     const contacts = await fetchApi(url, '/contacts/?offset='+offset+'&sort='+sort+'&way='+way, 'GET');
-//     return contacts
-// }
-
-async function getAllContacts(){
-    const contacts = await fetchApi(url, '/contacts', 'GET');
-    return contacts
-}
-
-async function getContactSearch(obj){
-    const searchedContacts = await fetchApi(url, `/contacts/search?name=${obj.name}&company=${obj.company}&role=${obj.role}&region=${obj.region}&country=${obj.country}&interest=${obj.interest}`, 'GET');
-    // console.log(searchedContacts)
-    return searchedContacts
-}
-
-
-
-async function getContactById(id){
-    const contact = await fetchApi(url, '/contacts/'+id, 'GET');
-    return contact
-}
-
-//REGIONES
-async function getallRegions(){
-    const regions = await fetchApi(url, '/location/regions', 'GET');
-    return regions
-}
-
-async function getRegionByName(reg){
-    const region = await fetchApi(url, '/location/regions/name_'+reg, 'GET');
-    return region.id;
-}
-
-async function getRegionById(id){
-    const region = await fetchApi(url, '/location/regions/'+id, 'GET');
-    return region.name
-}
-
-//PAISES
-
-async function getallCountries(){
-    const countries = await fetchApi(url, '/location/countries', 'GET');
-    return countries
-}
-
-async function getCountryByRegion(reg){
-    const region = await fetchApi(url, '/location/regions/name_'+reg, 'GET');
-    const regionId = region.id;
-    const countries = await fetchApi(url, '/location/countries/region_'+regionId, 'GET');
-    return countries;
-}
-
-async function getCountryByName(country){
-    const searchedCountry = await fetchApi(url, '/location/countries/name_'+country, 'GET');
-    return searchedCountry.id;
-}
-
-async function getCountryById(id){
-    const country = await fetchApi(url, '/location/countries/'+id, 'GET');
-    return country.name
-}
-
-//CIUDADES
-
-async function getallCities(){
-    const cities = await fetchApi(url, '/location/cities', 'GET');
-    return cities
-}
-
-async function getCitiesByCountry(ctry){
-    const country = await fetchApi(url, '/location/countries/name_'+ctry, 'GET');
-    const countryId = country.id;
-
-    const cities = await fetchApi(url, '/location/cities/country_'+countryId, 'GET');
-    return cities 
-}
-
-async function getCityByName(cty){
-    const city = await fetchApi(url, '/location/cities/name_'+cty, 'GET');
-    return city.id;
-}
-
-//CANALES DE CONTACTO
-
-async function getallChannels(){
-    const channels = await fetchApi(url, '/contacts/channels', 'GET');
-    return channels
-}
-
-async function createNewChannel(body){
-    const newContactChannel = await fetchApi(url, '/contacts/channels', 'POST', body);
-    return newContactChannel
-}
-
-async function getChannelByName(chan){
-    const channel= await fetchApi(url, '/contacts/channels/name_'+chan, 'GET');
-    return channel.id
-}
-
-async function getContactInfo(id){
-    const channels= await fetchApi(url, '/contacts/contactChannel/'+id, 'GET');
-    return channels
-}
-
-async function deleteContactCards(id){
-    const deletedCards = await fetchApi(url, '/contacts/contactChannel/'+id, 'DELETE');
-    return deletedCards
-}
-
-//COMPANIAS
-
-async function searchCompany(input){
-    const companies = await fetchApi(url, '/companies/'+input, 'GET');
-    return companies
-}
-
-async function getCompanyByName(comp){
-    const company = await fetchApi(url, '/companies/name_'+comp, 'GET');
-    return company.id
-}
-
-async function getCompanyById(id){
-    const company = await fetchApi(url, '/companies/'+id, 'GET');
-    return company.name
-}
-
-
-
-//LLAMADA A API, FUNCION GENERAL:
-
-async function fetchApi(url, target, method, body){
-    if(method== 'GET'){
-        try{
-            const bearer = 'Bearer ' + JSON.parse(localStorage.getItem('token'));
-            const res = await fetch(url+target, {
-                method: method,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*',
-                    'Authorization': bearer
-                }
-            });
-            const data = res.json();
-            return await data;
-        }
-        catch(err){
-            console.log(err)
-        }
-    }
-    else{
-        try{
-            const bearer = 'Bearer ' + JSON.parse(localStorage.getItem('token'));
-            const res = await fetch(url+target, {
-                method: method,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*',
-                    'Authorization': bearer
-                },
-                body: JSON.stringify(body)
-            });
-            const data = res.json();
-            return await data;
-        }
-        catch(err){
-            console.log(err)
-        }
-    }
-}
-
-
-//FUNCIONES SECCION:
 
 function removeHidden(x){
     x.classList.remove("hidden")
@@ -198,9 +9,7 @@ function addHidden(x){
     x.classList.add("hidden")
 }
 
-
 async function openContacts(contacts){
-    console.log(contacts)
 
     //LIMPIA TABLA SI YA ESTABA ABIERTA
     const table = document.querySelector(".contactsTable");
@@ -208,8 +17,22 @@ async function openContacts(contacts){
 
     //MUESTRA SEECION
     contactsSection.classList.remove("hidden");
-    contactsBtn.src="./styles/assets/contacts_hover.png";
+
+    //ESCONDE OTRAS SECCIONES
+    if(regionOpen==true){
+        console.log("la saca")
+        document.querySelector(".regionsSection").remove()
+    }
+
+    //UPDATE ESTADO SECCIONES:
     contactsOpen= true;
+    regionOpen=false;
+
+    //SRC IMG BOTONES
+    regionBtn.src="./styles/assets/region.png"
+    contactsBtn.src="./styles/assets/contacts_hover.png";
+
+    //OBTIENE REGIONES DESDE DB
     const regions= await getallRegions();
 
     //COMPLETA SELECT REGIONES DESDE DB
@@ -243,7 +66,6 @@ async function pagination(contactList, offset, sort, way){
 
     //OBTIENE INFORMACIOÓN DE CONTACTOS TOTALES Y USA EL LARGO PARA MOSTRARLO EN INDEX
     const contacts = await getAllContacts();
-    // totalContacts.innerHTML=`${contacts.length}`
     totalContacts.innerHTML=`${contactList.length}`
     showingContacts.innerHTML=`${offset+1} - ${offset+10}`;
 
@@ -324,7 +146,6 @@ function sortAlpha(contactList, attribute){
     if(attribute=="company"){
         
         //ORDENA USANDO EL METODO SRC
-        console.log(contactList[0])
         contactList.sort((a,b)=>{
             if(orderCompany==false){
                 if(a.contactCompany.name.toLowerCase() < b.contactCompany.name.toLowerCase()) return -1;
@@ -344,7 +165,6 @@ function sortAlpha(contactList, attribute){
     if(attribute=="role"){
         
         //ORDENA USANDO EL METODO SRC
-        console.log(contactList[0])
         contactList.sort((a,b)=>{
             if(orderRole==false){
                 if(a.role.toLowerCase() < b.role.toLowerCase()) return -1;
@@ -364,7 +184,6 @@ function sortAlpha(contactList, attribute){
     if(attribute=="interest"){
         
         //ORDENA USANDO EL METODO SRC
-        console.log(contactList[0])
         contactList.sort((a,b)=>{
             if(orderInterest==false){
                 if(a.interest < b.interest) return -1;
@@ -793,43 +612,96 @@ async function editContact(id){
 
 
 //FUNCIONES LOGIN
+
+document.addEventListener("DOMContentLoaded", (e)=>{
+
+    //AL CARGARSE LA PÁGINA, CHEQUEA SI TENE TOKEN EN LOCALSTORAGE
+    if (localStorage.getItem("token") !== null) {
+
+        //SI ENCUENTRA TOKEN, REMUEVE PANTALLA LOGIN E INGRESA A LA APP
+        let userData={
+            token:JSON.parse(localStorage.getItem("token")),
+            name:JSON.parse(localStorage.getItem("username")),
+            isAdmin:localStorage.getItem("admin"),
+            photo:localStorage.getItem("photo")
+        }
+
+        //LLAMA A FUNCTION LOGIN CON DATA DESDE LOCALSTORAGE
+        loginSuccess(userData)
+    } 
+    else{
+
+        //SI NO, MUESTRA PANTALLA LOGIN
+        loginscreen.classList.remove("hidden");
+    }
+
+});
+
 async function loginLoad(){
+
+    //TOMA DATOS DE INPUT
     const body = {
         "email": emailInput.value,
         "password": passInput.value
     }
+
+    //LLAMA A API
     const res= await fetchApi(url, '/users/login', 'POST', body);
+
+    //SI ENCUENTRA EL USUARIO:
     if(res.success){
-        loginSuccess(res.success.userData);
-        console.log(res.success.token);
-        console.log(res.success.userData.name);
-        console.log(res.success.userData.isAdmin);
     
         localStorage.setItem("token", JSON.stringify(res.success.token));
         localStorage.setItem("username", JSON.stringify(res.success.userData.name));
         localStorage.setItem("admin", JSON.stringify(res.success.userData.isAdmin));
+        localStorage.setItem("photo", JSON.stringify(res.success.userData.photo));
+
+        loginSuccess(res.success.userData, "welcome");
 
     }
     else{
+        //PROMPT DE ERROR
         loginError();
     }
 }
 
-function loginSuccess(user){
-    logincontainer.innerHTML= "";
-    const welcomeMsg = document.createElement("div");
-    welcomeMsg.classList.add("welcomeMsg");
-    welcomeMsg.innerHTML=`
-    <img src="./styles/assets/success.png" alt="exito">
-    <p>Bienvenido ${user.name}</p>`;
-    logincontainer.appendChild(welcomeMsg);
-    setTimeout(()=>{
+function loginSuccess(user, welcome){
+
+    if(welcome=="welcome"){
+
+        //SI ESTÁ LOGGUEANDO POR PRIMERA VEZ
+        logincontainer.innerHTML= "";
+        const welcomeMsg = document.createElement("div");
+        welcomeMsg.classList.add("welcomeMsg");
+        welcomeMsg.innerHTML=`
+        <img src="./styles/assets/success.png" alt="exito">
+        <p>Bienvenido ${user.name}</p>`;
+        logincontainer.appendChild(welcomeMsg);
+        setTimeout(()=>{
+            loginscreen.classList.add("hidden");
+            openContacts();
+            document.querySelector(".loggedusercontainer").innerHTML=`
+            <p>${user.name}</p>
+            <img src=${user.photo} alt="foto usuario">`
+        }, 2000)
+    }
+    else{
+
+        //SI ESTÁ RECARGANDO LA VENTANA
         loginscreen.classList.add("hidden");
-        openContacts();
-        document.querySelector(".loggedusercontainer").innerHTML=`
-        <p>${user.name}</p>
-        <img src=${user.photo} alt="foto usuario">`
-    }, 2000)
+            openContacts();
+            document.querySelector(".loggedusercontainer").innerHTML=`
+            <p>${user.name}</p>
+            <img src=${user.photo} alt="foto usuario">`
+    }
+
+    if (localStorage.getItem("admin") == "true") {
+
+        //SI LA PROPIEDAD ADMIN ES TRUE, MUESTRA SECCIÓN DE USUARIOS
+        document.querySelector(".usersBtn").classList.remove("hidden");
+    }
+
+
 }
 
 function loginError(){
@@ -1427,7 +1299,6 @@ async function searchContact(){
     }
 
     //LLAMA A FUNCION DE BUSQUEDA
-    console.log(obj)
     const searchedContacts= await getContactSearch(obj);
 
     //SI RECIBE AL MENOS UN RESULTADO
@@ -1453,6 +1324,142 @@ async function searchContact(){
 
     }
 }
+
+//FUNCIONES SECCION REGIONES
+
+async function openRegions(){
+
+    //UPDATE ESTADO SECCIONES:
+    contactsOpen= false;
+    regionOpen=true;
+
+    //SRC IMG BOTONES
+    regionBtn.src="./styles/assets/region_hover.png"
+    contactsBtn.src="./styles/assets/contacts.png";
+
+    //ESCONDE SECCIONES:
+    contactsSection.classList.add("hidden");
+
+    //CREA DIV CONTENEDOR
+    const regionsSection = document.createElement("section");
+    regionsSection.classList.add("regionsSection");
+    document.querySelector(".main").appendChild(regionsSection);
+
+    //LLAMA A API PARA OBTENER TODAS LAS REGIONES/PAISES/CIUDADES
+    const regions= await getallRegions();
+
+    //RENDERIZA LOCACIONES
+    fillLocations(regions)
+}
+
+async function fillLocations(regions){
+    
+    //ORDENA REGIONES ALFABETICAMENTE
+    regions.sort((a,b)=>{
+        if(a.name>b.name) return 1;
+        if(a.name<b.name) return -1;
+        return 0
+    });
+    
+    regions.forEach(async region=>{
+
+        //CREA DIV PARA CADA REGION
+        const regionDiv = document.createElement("div");
+        regionDiv.classList.add(`regionDiv`);
+        regionDiv.innerHTML=`
+            <p class="regionTitle">${region.name}</p>`
+        document.querySelector(".regionsSection").appendChild(regionDiv);
+
+        //OBTIENE PAISES DE LA REGIÓN
+        const countries = await getCountryByRegion(region.name);
+
+        //ORDENA PAISES ALFABETICAMENTE
+        countries.sort((a,b)=>{
+        if(a.name>b.name) return 1;
+        if(a.name<b.name) return -1;
+        return 0
+        });
+
+        countries.forEach(async country=>{
+
+            //CREA DIV PARA CADA PAIS
+            const countryDiv= document.createElement("div");
+            countryDiv.classList.add("countryDiv");
+            countryDiv.innerHTML=`
+                <p class="countryName">${country.name}</p>`
+            regionDiv.appendChild(countryDiv);
+
+            //OBTIENE CIUDADES DEL PAIS
+            const cities= await getCitiesByCountry(country.name);
+    
+            cities.sort((a,b)=>{
+                if(a.name>b.name) return 1;
+                if(a.name<b.name) return -1;
+                return 0
+            });
+
+            for(let i=0; i<cities.length; i++){
+
+            
+            // cities.forEach(city=>{
+                //CREA DIV PARA CADA PAIS
+                const cityDiv= document.createElement("div");
+                cityDiv.classList.add("cityDiv");
+                cityDiv.classList.add("hidden");
+                cityDiv.innerHTML=`
+                    <p class="cityName">${cities[i].name}</p>
+                    <div class="cityOptions">...</div>`
+                countryDiv.appendChild(cityDiv);
+
+                const cityOptions= document.querySelectorAll(".cityOptions");
+
+                cityDiv.addEventListener("mouseenter", ()=>{
+                    cityOptions[i].innerHTML=`
+                        <div class="cityHoverBtns cityEdit" ">
+                            <img src="./styles/assets/edit.png" alt="editar ciudad" id="cityEdit">
+                        </div>
+                        <div class="cityHoverBtns cityDelete">
+                            <img src="./styles/assets/delete.png" alt="eliminar ciudad" id="cityDelete">
+                        </div>`
+                        
+                        
+                })
+
+                // cityDiv.addEventListener("mouseenter", ()=>{
+                //     cityOptions[i].innerHTML=`
+                //         <div class="cityHoverBtns cityEdit" ">
+                //             <img src="./styles/assets/edit.png" alt="editar ciudad" id="cityEdit">
+                //         </div>
+                //         <div class="cityHoverBtns cityDelete">
+                //             <img src="./styles/assets/delete.png" alt="eliminar ciudad" id="cityDelete">
+                //         </div>`
+                // })
+                // cityDiv.addEventListener("mouseleave", ()=>{
+
+                //     document.querySelector(".cityOptions").innerHTML="..."
+                // })
+
+
+
+            };
+
+            countryDiv.addEventListener("click", async ()=>{
+                const toHide= Array.apply(null, countryDiv.querySelectorAll(".cityDiv"));
+                
+                //MUESTRA/ESCONDE CIUDADES AL CLIQUEAR PAIS
+                toHide.forEach(e=>{
+                    e.classList.toggle("hidden")
+                })
+            })
+
+            
+        })
+    })
+}
+
+
+
+
 
 
 

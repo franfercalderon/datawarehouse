@@ -24,6 +24,10 @@ regionBtn.addEventListener("mouseover", ()=>{
     regionBtn.src="./styles/assets/region_hover.png"
 });
 
+regionBtn.addEventListener("click", ()=>{
+    openRegions();
+})
+
 contactsBtn.addEventListener("mouseleave", ()=>{
     addHidden(contactsLabel)
     if(contactsOpen==false){
@@ -43,7 +47,10 @@ usersBtn.addEventListener("mouseleave", ()=>{
 
 regionBtn.addEventListener("mouseleave", ()=>{
     addHidden(regionLabel)
-    regionBtn.src="./styles/assets/region.png"
+    if(regionOpen==false){
+        regionBtn.src="./styles/assets/region.png"
+    }
+    
 });
 
 
@@ -73,6 +80,15 @@ loggeduseroptions.addEventListener("mouseover", ()=>{
 loggeduseroptions.addEventListener("mouseleave", ()=>{
     opened= false;
     loggeduseroptions.classList.add("hidden")
+});
+
+loggeduseroptions.addEventListener("click", ()=>{
+
+    //BORRA DATOS DE LOCALSTORAGE
+    localStorage.clear();
+
+    //CARGA SITIO NUEVAMENTE
+    window.location.reload()
 })
 
 searchOptions.addEventListener("click", ()=>{
