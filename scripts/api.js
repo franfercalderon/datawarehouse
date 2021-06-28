@@ -52,7 +52,10 @@ async function deleteRegionById(id){
     return region
 }
 
-async function createRegion(name)
+async function createRegion(body){
+    const region = await fetchApi(url, '/location/regions', 'POST', body);
+    return region
+}
 
 //PAISES
 
@@ -81,6 +84,12 @@ async function getCountryById(id){
 async function deleteCountryById(id){
     const country = await fetchApi(url, '/location/countries/'+id, 'DELETE');
     return country
+}
+
+async function createCountry(body){
+    console.log(body)
+    const region = await fetchApi(url, '/location/countries', 'POST', body);
+    return region
 }
 
 //CIUDADES

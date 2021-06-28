@@ -3,6 +3,7 @@ const router = express.Router();
 const models = require('../models');
 const {jwtValidation} = require('../scripts/middlewares');
 
+
     // VER TODAS LAS REGIONES
 
 router.get('/regions', jwtValidation, async (req, res)=>{
@@ -28,6 +29,7 @@ router.get('/regions/name_:name', jwtValidation, async (req, res)=>{
 
 router.get('/regions/:id', jwtValidation, async (req, res)=>{
         const id = req.params.id;
+        console.log(id);
         const region = await models.Region.findOne({
             where: {id: id}
         })
@@ -164,6 +166,26 @@ router.get('/cities/name_:name', jwtValidation, async (req, res)=>{
         })
         if(deletedCity)return res.status(200).json(deletedCity);
         return res.status(400).json({message: 'No city found'})
+    })
+
+    .post('/regions', jwtValidation, async (req, res)=>{
+        const {name} = req.body;
+        const newRegion = await models.Region.create({
+            name:name
+        })
+        if(newRegion)return res.status(200).json(newRegion);
+        return res.status(400).json({message: 'Region was not created'})
+    })
+
+    .post('/countries', jwtValidation, async (req, res)=>{
+        const {name, region} = req.body;
+        console.log(name+region);
+        const newCountry = await models.Country.create({
+            name:name,
+            region: region
+        })
+        if(newCountry)return res.status(200).json(newCountry);
+        return res.status(400).json({message: 'Country was not created'})
     })
 
 

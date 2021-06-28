@@ -1,404 +1,4 @@
-//CONTACTOS
-
-// async function getLimitedContacts(offset){
-//     const contacts = await fetchApi(url, '/contacts/offset_'+offset, 'GET');
-//     return contacts
-// }
-
-// async function deleteContact(id){
-//     //RECEIVE ARRAY DE IDS A ELIMINAR
-//     id.forEach(async(e)=>{
-//         const deletedContact = await fetchApi(url, '/contacts/'+e, 'DELETE');
-//         return deletedContact
-//     })
-// }
-
-
-// async function getAllContacts(){
-//     const contacts = await fetchApi(url, '/contacts', 'GET');
-//     return contacts
-// }
-
-// async function getContactSearch(obj){
-//     const searchedContacts = await fetchApi(url, `/contacts/search?name=${obj.name}&company=${obj.company}&role=${obj.role}&region=${obj.region}&country=${obj.country}&interest=${obj.interest}`, 'GET');
-
-//     return searchedContacts
-// }
-
-
-
-// async function getContactById(id){
-//     const contact = await fetchApi(url, '/contacts/'+id, 'GET');
-//     return contact
-// }
-
-// //REGIONES
-// async function getallRegions(){
-//     const regions = await fetchApi(url, '/location/regions', 'GET');
-//     return regions
-// }
-
-// async function getRegionByName(reg){
-//     const region = await fetchApi(url, '/location/regions/name_'+reg, 'GET');
-//     return region.id;
-// }
-
-// async function getRegionById(id){
-//     const region = await fetchApi(url, '/location/regions/'+id, 'GET');
-//     return region.name
-// }
-
-// async function deleteRegionById(id){
-//     const region = await fetchApi(url, '/location/regions/'+id, 'DELETE');
-//     return region
-// }
-
-// async function createRegion(name)
-
-// //PAISES
-
-// async function getallCountries(){
-//     const countries = await fetchApi(url, '/location/countries', 'GET');
-//     return countries
-// }
-
-// async function getCountryByRegion(reg){
-//     const region = await fetchApi(url, '/location/regions/name_'+reg, 'GET');
-//     const regionId = region.id;
-//     const countries = await fetchApi(url, '/location/countries/region_'+regionId, 'GET');
-//     return countries;
-// }
-
-// async function getCountryByName(country){
-//     const searchedCountry = await fetchApi(url, '/location/countries/name_'+country, 'GET');
-//     return searchedCountry.id;
-// }
-
-// async function getCountryById(id){
-//     const country = await fetchApi(url, '/location/countries/'+id, 'GET');
-//     return country.name
-// }
-
-// async function deleteCountryById(id){
-//     const country = await fetchApi(url, '/location/countries/'+id, 'DELETE');
-//     return country
-// }
-
-// //CIUDADES
-
-// async function getallCities(){
-//     const cities = await fetchApi(url, '/location/cities', 'GET');
-//     return cities
-// }
-
-// async function getCitiesByCountry(ctry){
-//     const country = await fetchApi(url, '/location/countries/name_'+ctry, 'GET');
-//     const countryId = country.id;
-
-//     const cities = await fetchApi(url, '/location/cities/country_'+countryId, 'GET');
-//     return cities 
-// }
-
-// async function getCityByName(cty){
-//     const city = await fetchApi(url, '/location/cities/name_'+cty, 'GET');
-//     return city.id;
-// }
-
-// async function deleteCityById(id){
-//     const city = await fetchApi(url, '/location/cities/'+id, 'DELETE');
-//     return city
-
-// }
-// //CANALES DE CONTACTO
-
-// async function getallChannels(){
-//     const channels = await fetchApi(url, '/contacts/channels', 'GET');
-//     return channels
-// }
-
-// async function createNewChannel(body){
-//     const newContactChannel = await fetchApi(url, '/contacts/channels', 'POST', body);
-//     return newContactChannel
-// }
-
-// async function getChannelByName(chan){
-//     const channel= await fetchApi(url, '/contacts/channels/name_'+chan, 'GET');
-//     return channel.id
-// }
-
-// async function getContactInfo(id){
-//     const channels= await fetchApi(url, '/contacts/contactChannel/'+id, 'GET');
-//     return channels
-// }
-
-// async function deleteContactCards(id){
-//     const deletedCards = await fetchApi(url, '/contacts/contactChannel/'+id, 'DELETE');
-//     return deletedCards
-// }
-
-// //COMPANIAS
-
-// async function searchCompany(input){
-//     const companies = await fetchApi(url, '/companies/'+input, 'GET');
-//     return companies
-// }
-
-// async function getCompanyByName(comp){
-//     const company = await fetchApi(url, '/companies/name_'+comp, 'GET');
-//     return company.id
-// }
-
-// async function getCompanyById(id){
-//     const company = await fetchApi(url, '/companies/'+id, 'GET');
-//     return company.name
-// }
-
-
-
-// //LLAMADA A API, FUNCION GENERAL:
-
-// async function fetchApi(url, target, method, body){
-//     if(method== 'GET'){
-//         try{
-//             const bearer = 'Bearer ' + JSON.parse(localStorage.getItem('token'));
-//             const res = await fetch(url+target, {
-//                 method: method,
-//                 headers: {
-//                     'Content-Type': 'application/json',
-//                     'Access-Control-Allow-Origin': '*',
-//                     'Authorization': bearer
-//                 }
-//             });
-//             const data = res.json();
-//             return await data;
-//         }
-//         catch(err){
-//             console.log(err)
-//         }
-//     }
-//     else{
-//         try{
-//             const bearer = 'Bearer ' + JSON.parse(localStorage.getItem('token'));
-//             const res = await fetch(url+target, {
-//                 method: method,
-//                 headers: {
-//                     'Content-Type': 'application/json',
-//                     'Access-Control-Allow-Origin': '*',
-//                     'Authorization': bearer
-//                 },
-//                 body: JSON.stringify(body)
-//             });
-//             const data = res.json();
-//             return await data;
-//         }
-//         catch(err){
-//             console.log(err)
-//         }
-//     }
-// }
-
-// //CONTACTOS
-
-// async function getLimitedContacts(offset){
-//     const contacts = await fetchApi(url, '/contacts/offset_'+offset, 'GET');
-//     return contacts
-// }
-
-// async function deleteContact(id){
-//     //RECEIVE ARRAY DE IDS A ELIMINAR
-//     id.forEach(async(e)=>{
-//         const deletedContact = await fetchApi(url, '/contacts/'+e, 'DELETE');
-//         return deletedContact
-//     })
-// }
-
-
-// async function getAllContacts(){
-//     const contacts = await fetchApi(url, '/contacts', 'GET');
-//     return contacts
-// }
-
-// async function getContactSearch(obj){
-//     const searchedContacts = await fetchApi(url, `/contacts/search?name=${obj.name}&company=${obj.company}&role=${obj.role}&region=${obj.region}&country=${obj.country}&interest=${obj.interest}`, 'GET');
-
-//     return searchedContacts
-// }
-
-
-
-// async function getContactById(id){
-//     const contact = await fetchApi(url, '/contacts/'+id, 'GET');
-//     return contact
-// }
-
-// //REGIONES
-// async function getallRegions(){
-//     const regions = await fetchApi(url, '/location/regions', 'GET');
-//     return regions
-// }
-
-// async function getRegionByName(reg){
-//     const region = await fetchApi(url, '/location/regions/name_'+reg, 'GET');
-//     return region.id;
-// }
-
-// async function getRegionById(id){
-//     const region = await fetchApi(url, '/location/regions/'+id, 'GET');
-//     return region.name
-// }
-
-// async function deleteRegionById(id){
-//     const region = await fetchApi(url, '/location/regions/'+id, 'DELETE');
-//     return region
-// }
-
-// async function createRegion(name)
-
-// //PAISES
-
-// async function getallCountries(){
-//     const countries = await fetchApi(url, '/location/countries', 'GET');
-//     return countries
-// }
-
-// async function getCountryByRegion(reg){
-//     const region = await fetchApi(url, '/location/regions/name_'+reg, 'GET');
-//     const regionId = region.id;
-//     const countries = await fetchApi(url, '/location/countries/region_'+regionId, 'GET');
-//     return countries;
-// }
-
-// async function getCountryByName(country){
-//     const searchedCountry = await fetchApi(url, '/location/countries/name_'+country, 'GET');
-//     return searchedCountry.id;
-// }
-
-// async function getCountryById(id){
-//     const country = await fetchApi(url, '/location/countries/'+id, 'GET');
-//     return country.name
-// }
-
-// async function deleteCountryById(id){
-//     const country = await fetchApi(url, '/location/countries/'+id, 'DELETE');
-//     return country
-// }
-
-// //CIUDADES
-
-// async function getallCities(){
-//     const cities = await fetchApi(url, '/location/cities', 'GET');
-//     return cities
-// }
-
-// async function getCitiesByCountry(ctry){
-//     const country = await fetchApi(url, '/location/countries/name_'+ctry, 'GET');
-//     const countryId = country.id;
-
-//     const cities = await fetchApi(url, '/location/cities/country_'+countryId, 'GET');
-//     return cities 
-// }
-
-// async function getCityByName(cty){
-//     const city = await fetchApi(url, '/location/cities/name_'+cty, 'GET');
-//     return city.id;
-// }
-
-// async function deleteCityById(id){
-//     const city = await fetchApi(url, '/location/cities/'+id, 'DELETE');
-//     return city
-
-// }
-// //CANALES DE CONTACTO
-
-// async function getallChannels(){
-//     const channels = await fetchApi(url, '/contacts/channels', 'GET');
-//     return channels
-// }
-
-// async function createNewChannel(body){
-//     const newContactChannel = await fetchApi(url, '/contacts/channels', 'POST', body);
-//     return newContactChannel
-// }
-
-// async function getChannelByName(chan){
-//     const channel= await fetchApi(url, '/contacts/channels/name_'+chan, 'GET');
-//     return channel.id
-// }
-
-// async function getContactInfo(id){
-//     const channels= await fetchApi(url, '/contacts/contactChannel/'+id, 'GET');
-//     return channels
-// }
-
-// async function deleteContactCards(id){
-//     const deletedCards = await fetchApi(url, '/contacts/contactChannel/'+id, 'DELETE');
-//     return deletedCards
-// }
-
-// //COMPANIAS
-
-// async function searchCompany(input){
-//     const companies = await fetchApi(url, '/companies/'+input, 'GET');
-//     return companies
-// }
-
-// async function getCompanyByName(comp){
-//     const company = await fetchApi(url, '/companies/name_'+comp, 'GET');
-//     return company.id
-// }
-
-// async function getCompanyById(id){
-//     const company = await fetchApi(url, '/companies/'+id, 'GET');
-//     return company.name
-// }
-
-
-
-// //LLAMADA A API, FUNCION GENERAL:
-
-// async function fetchApi(url, target, method, body){
-//     if(method== 'GET'){
-//         try{
-//             const bearer = 'Bearer ' + JSON.parse(localStorage.getItem('token'));
-//             const res = await fetch(url+target, {
-//                 method: method,
-//                 headers: {
-//                     'Content-Type': 'application/json',
-//                     'Access-Control-Allow-Origin': '*',
-//                     'Authorization': bearer
-//                 }
-//             });
-//             const data = res.json();
-//             return await data;
-//         }
-//         catch(err){
-//             console.log(err)
-//         }
-//     }
-//     else{
-//         try{
-//             const bearer = 'Bearer ' + JSON.parse(localStorage.getItem('token'));
-//             const res = await fetch(url+target, {
-//                 method: method,
-//                 headers: {
-//                     'Content-Type': 'application/json',
-//                     'Access-Control-Allow-Origin': '*',
-//                     'Authorization': bearer
-//                 },
-//                 body: JSON.stringify(body)
-//             });
-//             const data = res.json();
-//             return await data;
-//         }
-//         catch(err){
-//             console.log(err)
-//         }
-//     }
-// }
-
-
 //FUNCIONES SECCION CONTACTOS
-
 
 function removeHidden(x){
     x.classList.remove("hidden")
@@ -1545,8 +1145,9 @@ async function updateContact(id){
 }
 
 //PROMPTS:
-function prompt(status, message, id){
+function prompt(status, message, id, origin){
     const contactMainDiv = document.querySelector(".contactMainDiv");
+    const regionMainDiv = document.querySelector(".regionMainDiv");
     const createPrompt = document.createElement("div");
     createPrompt.classList.add("createPrompt");
 
@@ -1555,10 +1156,12 @@ function prompt(status, message, id){
         createPrompt.innerHTML=`
         <img src="./styles/assets/error.png" alt="error">
         <p>${message}</p>`;
-        contactMainDiv.appendChild(createPrompt)
-        setTimeout(()=>{
-            createPrompt.remove()}, 2000
-        );
+
+        document.querySelector(`.${origin}`).appendChild(createPrompt)
+            // contactMainDiv.appendChild(createPrompt)
+            setTimeout(()=>{
+                createPrompt.remove()}, 2000
+            );
     }
 
     //MENSAJE DE EXITO
@@ -1566,7 +1169,8 @@ function prompt(status, message, id){
         createPrompt.innerHTML=`
         <img src="./styles/assets/success.png" alt="exito">
         <p>${message}</p>`;
-        contactMainDiv.appendChild(createPrompt)
+
+        document.querySelector(`.${origin}`).appendChild(createPrompt)
         setTimeout(()=>{
             document.querySelector(".contactModal").remove()}, 2000
         );
@@ -1884,10 +1488,11 @@ async function fillLocations(regions){
         <p>+</p>`
     document.querySelector(".regionsSection").appendChild(addRegionBtn);
 
+
+    //LISTENERS BOTONES
     addRegionBtn.addEventListener("click",()=>{
-        openRegionModal("Crear nueva región")
+        openLocationModal("Crear nueva región", "newRegion")
     })
-    
     
     regions.forEach(async region=>{
 
@@ -1946,49 +1551,51 @@ async function fillLocations(regions){
 
             //OBTIENE CIUDADES DEL PAIS
             const cities= await getCitiesByCountry(countries[i].name);
+            if(cities.length>0){
+
+                cities.sort((a,b)=>{
+                    if(a.name>b.name) return 1;
+                    if(a.name<b.name) return -1;
+                    return 0
+                });
     
-            cities.sort((a,b)=>{
-                if(a.name>b.name) return 1;
-                if(a.name<b.name) return -1;
-                return 0
-            });
-
-            for(let i=0; i<cities.length; i++){
-
-                //CREA DIV PARA CADA CIUDAD
-                const cityDiv= document.createElement("div");
-                cityDiv.classList.add("cityDiv");
-                cityDiv.classList.add("hidden");
-                cityDiv.innerHTML=`
-                    <p class="cityName">${cities[i].name}</p>
-                    <div class="cityOptions" id="${cities[i].id}">
-                        <div class="cityHoverBtns cityEdit">
-                            <img src="./styles/assets/edit.png" alt="editar ciudad" id="cityEdit">
-                        </div>
-                        <div class="cityHoverBtns cityDelete">
-                            <img src="./styles/assets/delete.png" alt="eliminar ciudad" id="cityDelete">
-                        </div>
-                    </div>`
-                countryDiv.appendChild(cityDiv);
-
-            };
-
-            countryDiv.addEventListener("click", async (e)=>{
-
-                const toHide= countryDiv.querySelectorAll(".cityDiv");
-
-                if(e.target.classList=="countryDiv"|| e.target.classList=="countryHeader"){
-                    //MUESTRA/ESCONDE CIUDADES AL CLIQUEAR PAIS
-                    for(let i=0; i<toHide.length;i++){
-                        toHide[i].classList.toggle("hidden")
+                for(let i=0; i<cities.length; i++){
+    
+                    //CREA DIV PARA CADA CIUDAD
+                    const cityDiv= document.createElement("div");
+                    cityDiv.classList.add("cityDiv");
+                    cityDiv.classList.add("hidden");
+                    cityDiv.innerHTML=`
+                        <p class="cityName">${cities[i].name}</p>
+                        <div class="cityOptions" id="${cities[i].id}">
+                            <div class="cityHoverBtns cityEdit">
+                                <img src="./styles/assets/edit.png" alt="editar ciudad" id="cityEdit">
+                            </div>
+                            <div class="cityHoverBtns cityDelete">
+                                <img src="./styles/assets/delete.png" alt="eliminar ciudad" id="cityDelete">
+                            </div>
+                        </div>`
+                    countryDiv.appendChild(cityDiv);
+    
+                };
+    
+                countryDiv.addEventListener("click", async (e)=>{
+    
+                    const toHide= countryDiv.querySelectorAll(".cityDiv");
+    
+                    if(e.target.classList=="countryDiv"|| e.target.classList=="countryHeader"){
+                        //MUESTRA/ESCONDE CIUDADES AL CLIQUEAR PAIS
+                        for(let i=0; i<toHide.length;i++){
+                            toHide[i].classList.toggle("hidden")
+                        }
                     }
-                }
-            })
+                })
+            }
         }
     });
 }
 
-function openRegionModal(title, origin){
+async function openLocationModal(title, origin, id){
     //CREA DIV 
     const locationDiv = document.createElement("div");
     locationDiv.classList.add("contactModal");
@@ -2014,27 +1621,81 @@ function openRegionModal(title, origin){
     </div>`
     document.querySelector(".main").appendChild(locationDiv);
 
-    //AGREGA LISTENERS
+    //AGREGA LISTENERS A BOTON GUARDAR SEGUN CORRESPONDA
     document.querySelector(".cancelLocation").addEventListener("click", ()=>{
         locationDiv.remove()
     })
-    
-    if(origin=="newRegion"){
-        
-        //TOMA VALOR DE INPUT Y ENVIA A API 
-        const name= locationDiv.querySelector(".regionNameInput").value;
-        if(name.length>0){
 
-            createRegion(name)
-            locationDiv.remove()
+    if(origin=="newRegion"){
+
+        document.querySelector(".saveLocation").addEventListener("click", ()=>{
+            saveNewRegion()
+        })
+    }
+
+    if(origin=="newCountry"){
+
+        //CAMBIA PLACEHOLDER DE INPUT 
+        document.querySelector(".regionNameInput").placeholder= "Nombre nuevo país"
+
+
+        //GUARDA PAIS EN REGION CON ID DETERMINADO
+        document.querySelector(".saveLocation").addEventListener("click", ()=>{
+            saveNewCountry(id);
+        })
+        
+    }
+}
+
+async function saveNewRegion(){
+
+    //TOMA VALOR DE INPUT Y LLAMA FUNCION GUARDADO
+    const name= document.querySelector(".regionNameInput").value;
+    if(name.length>0){
+        //SI EL NOMBRE TIENE AL MENOS UN CARACTER
+        const body={
+            name: name
         }
-        else{
-            // prompt("")
-            console.log("continuar funcion aca")
+        const createdRegion= await createRegion(body);
+        if(createdRegion){
+            prompt("success", "Region creada!", null, "regionMainDiv");
+            openRegions();
         }
+    }
+    else{
+
+        //SI SE INTENTA GUARDAR CON UN NOMBRE DE MENOS DE 1 CARACTER
+        prompt("mandatory", "El nombre debe tener al menos 1 caracter", null, "regionMainDiv")
     }
 
 }
+
+async function saveNewCountry(id){
+
+    //TOMA VALOR DE INPUT Y LLAMA FUNCION GUARDADO
+    const countryName= document.querySelector(".regionNameInput").value;
+
+    if(countryName.length>0){
+        //SI EL NOMBRE TIENE AL MENOS UN CARACTER
+        const body={
+            name: countryName,
+            region: id
+        }
+        const createdCountry= await createCountry(body);
+        if(createdCountry){
+            prompt("success", "Pais creado!", null, "regionMainDiv");
+            openRegions();
+        }
+    }
+    else{
+
+        //SI SE INTENTA GUARDAR CON UN NOMBRE DE MENOS DE 1 CARACTER
+        prompt("mandatory", "El nombre debe tener al menos 1 caracter", null, "regionMainDiv")
+    }
+
+}
+
+
 
 
 

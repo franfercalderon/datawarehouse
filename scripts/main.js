@@ -131,7 +131,10 @@ document.addEventListener("click",async (e)=>{
 
     if(e.target.id=="regionAdd"){
         //CLICK EN AGREGAR PAIS A REGION 
-        console.log('add to '+e.target.parentNode.parentNode.id);
+        // console.log('add to puto'+e.target.parentNode.parentNode.id);
+        const id = e.target.parentNode.parentNode.id;
+        const regionName = await getRegionById(id);
+        openLocationModal(`Agregar país a ${regionName}`, "newCountry", id);
     }
 
 
@@ -148,7 +151,10 @@ document.addEventListener("click",async (e)=>{
 
     if(e.target.id=="countryAdd"){
         //CLICK EN AGREGAR CIUDAD A PAIS
-        console.log('add to '+e.target.parentNode.parentNode.id);
+
+        
+
+        // console.log('add to '+e.target.parentNode.parentNode.id);
     }
 
 
