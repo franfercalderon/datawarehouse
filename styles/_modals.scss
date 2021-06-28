@@ -114,6 +114,7 @@
 .contactData.n3{
     width: 200px;
 }
+
 .contactModalBtns{
     display: flex;
     position: absolute;
@@ -216,4 +217,96 @@
 
 .companiesSugDiv p:first-child{
     margin-top: 12px;
+}
+
+.regionMainDiv{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 800px;
+    height: 300px;
+    background-color: white;
+    border-radius: 8px;
+    margin-top: 40px;
+    box-shadow: 2px 2px 8px rgba($shadow, $alpha: 0.5);
+}
+
+.locationDataDiv{
+    position: absolute;
+    display: flex;
+    align-items: center;
+    width: 95%;
+}
+.locationDataDiv.level1{
+    display: flex;
+    justify-content: space-around;
+    padding: 0 20px 0 20px;
+    margin-top:70px;
+    height: 120px;
+    background-color: white;
+    border-radius: 8px;
+    border: 2px solid $blue4;
+    
+}
+
+.locationData{
+    display: flex;
+    flex-direction: column;
+    width: 220px;
+    padding: 8px;
+    font-family: $raleway;
+    font-size: 16px;
+}
+
+.locationData input{
+    border: 1px solid $blue5;
+    margin-top: 5px;
+    height: 25px;
+    padding-left: 5px;
+}
+
+.locationModalBtns{
+    display: flex;
+    position: absolute;
+    width: auto;
+    bottom: 0;
+    right: 0;
+    margin: 0 40px 30px 0 ;
+    font-family: $raleway;
+    font-size: 16px;
+    color: white;
+}
+.locationModalBtns div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 20px 0 20px;
+    height: 43px;
+    width: auto;
+    background-color: $blue3;
+    margin-left: 28px;
+    border-radius: 4px;
+    box-shadow: 3px 3px 4px rgb(211, 209, 209);
+    cursor: pointer;
+
+}
+// .newContactCompany{
+//     width: 160px;
+//     z-index: 2;
+// }
+
+.locationModalBtns div:first-child{
+    background-color: $blue5 ;
+    color: black;
+}
+
+.locationModalBtns div:first-child:hover{
+    background-color: $blue4;
+    font-weight: 500;
+}
+
+.saveLocation:hover{
+    background-color: $blue1;
+    font-weight: 500;
 }

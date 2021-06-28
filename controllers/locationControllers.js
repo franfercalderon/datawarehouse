@@ -122,21 +122,48 @@ router.get('/cities/name_:name', jwtValidation, async (req, res)=>{
         return res.status(400).json({message: 'No city found'})
     })
 
-    .get('/all', jwtValidation, async (req,res)=>{
-        const locations = await models.City.findAll({
-            include: [{
-                model: models.Country,
-                as:'cityCountry',
-                attributes: ['name'],
-                include:{
-                    model: models.Region,
-                    as:'countryRegion',
-                    attributes:['name']
-                }}]
-            });
-            
-        if(locations.length>0)return res.status(200).json(locations);
-        return res.status(400).json({message: 'No locations found'})
+    // .get('/all', jwtValidation, async (req,res)=>{
+    //     const locations = await models.City.findAll({
+    //         include: [{
+    //             model: models.Country,
+    //             as:'cityCountry',
+    //             attributes: ['name'],
+    //             include:{
+    //                 model: models.Region,
+    //                 as:'countryRegion',
+    //                 attributes:['name']
+    //             }}]
+    //         });
+
+    //     if(locations.length>0)return res.status(200).json(locations);
+    //     return res.status(400).json({message: 'No locations found'})
+    // })
+
+    .delete('/regions/:id', jwtValidation, async(req, res)=>{
+        const id = req.params.id;
+        const deletedRegion= await models.Region.destroy({
+            where:{id:id}
+        })
+        if(deletedRegion)return res.status(200).json(deletedRegion);
+        return res.status(400).json({message: 'No regions found'})
+    })
+
+    .delete('/countries/:id', jwtValidation, async (req, res)=>{
+        const id = req.params.id;
+        const deletedCountry= await models.Country.destroy({
+            where:{id:id}
+        })
+        if(deletedCountry)return res.status(200).json(deletedCountry);
+        return res.status(400).json({message: 'No country found'})
+    })
+
+    .delete('/cities/:id', jwtValidation, async (req, res)=>{
+        const id = req.params.id;
+        const deletedCity= await models.City.destroy({
+            where:{id:id}
+        })
+        if(deletedCity)return res.status(200).json(deletedCity);
+        return res.status(400).json({message: 'No city found'})
     })
 
 

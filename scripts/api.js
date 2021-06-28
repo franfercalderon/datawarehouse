@@ -13,7 +13,6 @@ async function deleteContact(id){
     })
 }
 
-
 async function getAllContacts(){
     const contacts = await fetchApi(url, '/contacts', 'GET');
     return contacts
@@ -48,10 +47,12 @@ async function getRegionById(id){
     return region.name
 }
 
-async function getAllLocations(){
-    const locations = await fetchApi(url, '/location/all', 'GET');
-    return locations
+async function deleteRegionById(id){
+    const region = await fetchApi(url, '/location/regions/'+id, 'DELETE');
+    return region
 }
+
+async function createRegion(name)
 
 //PAISES
 
@@ -77,6 +78,11 @@ async function getCountryById(id){
     return country.name
 }
 
+async function deleteCountryById(id){
+    const country = await fetchApi(url, '/location/countries/'+id, 'DELETE');
+    return country
+}
+
 //CIUDADES
 
 async function getallCities(){
@@ -97,6 +103,11 @@ async function getCityByName(cty){
     return city.id;
 }
 
+async function deleteCityById(id){
+    const city = await fetchApi(url, '/location/cities/'+id, 'DELETE');
+    return city
+
+}
 //CANALES DE CONTACTO
 
 async function getallChannels(){

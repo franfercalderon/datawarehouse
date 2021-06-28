@@ -5,6 +5,34 @@
     align-items: center;
 }
 
+.addRegionBtn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 100px;
+    right: 30px;
+    width: 40px;
+    height: 40px;
+    background-color: $blue3;
+    border-radius: 8px;
+    box-shadow: 2px 2px 8px rgb(226, 226, 226);
+    color: white;
+    text-align: center;
+    cursor: pointer;
+}
+
+.addRegionBtn p{
+    font-size: 25px;
+    text-align: center;
+    margin-bottom: 3px;
+}
+
+.addRegionBtn:hover{
+    background-color: $blue2;
+    box-shadow: 2px 2px 8px rgb(189, 189, 189);
+}
+
 .regionDiv{
     width: 60%;
     height: auto;
@@ -27,11 +55,24 @@
     color: black;
 }
 
-.regionTitle{
+.regionHeader{
     font-size: 18px;
     font-weight: 600;
     margin-bottom:15px;
 }
+
+.regionBtns img{
+    height: 20px;
+}
+
+.regionOptions{
+    opacity: 0.7;
+}
+
+.regionOptions:hover{
+    opacity: 1;
+}
+
 
 .countryDiv{
     margin: 10px 0 10px 20px;
@@ -40,11 +81,67 @@
     border-radius: 8px;
     padding: 20px;
     box-shadow: 2px 2px 8px rgb(226, 226, 226);
+    font-weight: 400;
 }
 
 .countryDiv:hover{
     box-shadow: 2px 2px 8px rgb(189, 189, 189);
 }
+
+.countryHeader{
+    display: flex;
+    justify-content: space-between;
+}
+
+.regionHeader{
+    display: flex;
+    justify-content: space-between;
+}
+
+.regionAdd{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 20px;
+    width: 20px;
+    border-radius: 5px;
+    border: 1.5px solid $blue3;
+    font-size: 20px;
+    margin-bottom: 2px;
+}
+
+.regionDelete{
+    margin: 0 15px 0 15px;
+}
+
+.countryDelete{
+    margin: 0 15px 0 15px;
+}
+
+.countryOptions{
+    display: flex;
+    opacity: 0.7;
+}
+
+.countryOptions img{
+    height: 20px;
+}
+
+.countryOptions:hover{
+    opacity: 1;
+}
+
+.countryAdd{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 20px;
+    width: 20px;
+    border-radius: 5px;
+    border: 1.5px solid $blue3;
+    font-size: 20px;
+}
+
 
 .cityDiv{
     display: flex;
@@ -52,7 +149,7 @@
     justify-content: space-between;
     margin: 10px 20px 10px 20px;
     height: 25px;
-    width: 75%;
+    width: 70%;
     border-radius: 8px;
     padding: 20px;
     border-radius: 25px;
@@ -61,8 +158,22 @@
 .cityOptions{
     display: flex;
     align-items: center;
-    font-size: 20px;
-    text-align: center;
+    justify-content: space-between;
+    opacity: 0.7;
+}
+
+.cityOptions:hover{
+    opacity: 1;
+}
+
+.regionOptions{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.cityDiv{
+    font-weight:300 ;
 }
 
 .cityDiv:hover{
@@ -76,3 +187,8 @@
 .cityOptions img{
     width: 24px;
 }
+
+.cityDelete{
+    margin-left:10px ;
+}
+

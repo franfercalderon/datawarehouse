@@ -115,3 +115,56 @@ document.querySelector(".searchByRole input").addEventListener("keyup", (e)=>{
 
 newContactBtn.addEventListener("click", ()=> {openNewContact()})
 
+//AGREGA LISTENERS A SECCION REGIONES
+document.addEventListener("click",async (e)=>{
+
+    //LISTENERS REGIONES
+    if(e.target.id=="regionEdit"){
+        //CLICK EN EDITAR REGION
+        console.log('edit '+e.target.parentNode.parentNode.id);
+    }
+
+    if(e.target.id=="regionDelete"){
+        //CLICK EN ELIMINAR REGION
+        prompt("deleteregion", "Desea eliminar la región?", e.target.parentNode.parentNode.id)
+    }
+
+    if(e.target.id=="regionAdd"){
+        //CLICK EN AGREGAR PAIS A REGION 
+        console.log('add to '+e.target.parentNode.parentNode.id);
+    }
+
+
+    //LISTENERS PAISES
+    if(e.target.id=="countryEdit"){
+        //CLICK EN EDITAR PAIS
+        console.log('edit '+e.target.parentNode.parentNode.id);
+    }
+
+    if(e.target.id=="countryDelete"){
+        //CLICK EN ELIMINAR PAIS
+        prompt("deletecountry", "Desea eliminar el país?", e.target.parentNode.parentNode.id)
+    }
+
+    if(e.target.id=="countryAdd"){
+        //CLICK EN AGREGAR CIUDAD A PAIS
+        console.log('add to '+e.target.parentNode.parentNode.id);
+    }
+
+
+    //LISTENERS CIUDADES
+    if(e.target.id=="cityEdit"){
+        //CLICK EN EDITAR CIUDAD
+        console.log('edit '+e.target.parentNode.parentNode.id);
+    }
+
+    if(e.target.id=="cityDelete"){
+        //CLICK EN ELIMINAR CIUDAD
+        prompt("deletecity", "Desea eliminar la ciudad?", e.target.parentNode.parentNode.id)
+    }
+
+})
+
+
+
+

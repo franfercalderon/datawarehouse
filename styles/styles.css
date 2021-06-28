@@ -1209,6 +1209,123 @@
   margin-top: 12px;
 }
 
+.regionMainDiv {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 800px;
+  height: 300px;
+  background-color: white;
+  border-radius: 8px;
+  margin-top: 40px;
+  -webkit-box-shadow: 2px 2px 8px rgba(48, 48, 48, 0.5);
+          box-shadow: 2px 2px 8px rgba(48, 48, 48, 0.5);
+}
+
+.locationDataDiv {
+  position: absolute;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 95%;
+}
+
+.locationDataDiv.level1 {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  padding: 0 20px 0 20px;
+  margin-top: 70px;
+  height: 120px;
+  background-color: white;
+  border-radius: 8px;
+  border: 2px solid #748CAB;
+}
+
+.locationData {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  width: 220px;
+  padding: 8px;
+  font-family: "Raleway", sans-serif;
+  font-size: 16px;
+}
+
+.locationData input {
+  border: 1px solid #becde0;
+  margin-top: 5px;
+  height: 25px;
+  padding-left: 5px;
+}
+
+.locationModalBtns {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  position: absolute;
+  width: auto;
+  bottom: 0;
+  right: 0;
+  margin: 0 40px 30px 0;
+  font-family: "Raleway", sans-serif;
+  font-size: 16px;
+  color: white;
+}
+
+.locationModalBtns div {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 0 20px 0 20px;
+  height: 43px;
+  width: auto;
+  background-color: #3E5C76;
+  margin-left: 28px;
+  border-radius: 4px;
+  -webkit-box-shadow: 3px 3px 4px #d3d1d1;
+          box-shadow: 3px 3px 4px #d3d1d1;
+  cursor: pointer;
+}
+
+.locationModalBtns div:first-child {
+  background-color: #becde0;
+  color: black;
+}
+
+.locationModalBtns div:first-child:hover {
+  background-color: #748CAB;
+  font-weight: 500;
+}
+
+.saveLocation:hover {
+  background-color: #0D1321;
+  font-weight: 500;
+}
+
 .regionsSection {
   position: relative;
   display: -webkit-box;
@@ -1221,6 +1338,42 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+}
+
+.addRegionBtn {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  position: fixed;
+  top: 100px;
+  right: 30px;
+  width: 40px;
+  height: 40px;
+  background-color: #3E5C76;
+  border-radius: 8px;
+  -webkit-box-shadow: 2px 2px 8px #e2e2e2;
+          box-shadow: 2px 2px 8px #e2e2e2;
+  color: white;
+  text-align: center;
+  cursor: pointer;
+}
+
+.addRegionBtn p {
+  font-size: 25px;
+  text-align: center;
+  margin-bottom: 3px;
+}
+
+.addRegionBtn:hover {
+  background-color: #1D2D44;
+  -webkit-box-shadow: 2px 2px 8px #bdbdbd;
+          box-shadow: 2px 2px 8px #bdbdbd;
 }
 
 .regionDiv {
@@ -1247,10 +1400,22 @@
   color: black;
 }
 
-.regionTitle {
+.regionHeader {
   font-size: 18px;
   font-weight: 600;
   margin-bottom: 15px;
+}
+
+.regionBtns img {
+  height: 20px;
+}
+
+.regionOptions {
+  opacity: 0.7;
+}
+
+.regionOptions:hover {
+  opacity: 1;
 }
 
 .countryDiv {
@@ -1261,11 +1426,88 @@
   padding: 20px;
   -webkit-box-shadow: 2px 2px 8px #e2e2e2;
           box-shadow: 2px 2px 8px #e2e2e2;
+  font-weight: 400;
 }
 
 .countryDiv:hover {
   -webkit-box-shadow: 2px 2px 8px #bdbdbd;
           box-shadow: 2px 2px 8px #bdbdbd;
+}
+
+.countryHeader {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.regionHeader {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.regionAdd {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  height: 20px;
+  width: 20px;
+  border-radius: 5px;
+  border: 1.5px solid #3E5C76;
+  font-size: 20px;
+  margin-bottom: 2px;
+}
+
+.regionDelete {
+  margin: 0 15px 0 15px;
+}
+
+.countryDelete {
+  margin: 0 15px 0 15px;
+}
+
+.countryOptions {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  opacity: 0.7;
+}
+
+.countryOptions img {
+  height: 20px;
+}
+
+.countryOptions:hover {
+  opacity: 1;
+}
+
+.countryAdd {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  height: 20px;
+  width: 20px;
+  border-radius: 5px;
+  border: 1.5px solid #3E5C76;
+  font-size: 20px;
 }
 
 .cityDiv {
@@ -1280,7 +1522,7 @@
           justify-content: space-between;
   margin: 10px 20px 10px 20px;
   height: 25px;
-  width: 75%;
+  width: 70%;
   border-radius: 8px;
   padding: 20px;
   border-radius: 25px;
@@ -1293,8 +1535,30 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  font-size: 20px;
-  text-align: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  opacity: 0.7;
+}
+
+.cityOptions:hover {
+  opacity: 1;
+}
+
+.regionOptions {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.cityDiv {
+  font-weight: 300;
 }
 
 .cityDiv:hover {
@@ -1308,5 +1572,9 @@
 
 .cityOptions img {
   width: 24px;
+}
+
+.cityDelete {
+  margin-left: 10px;
 }
 /*# sourceMappingURL=styles.css.map */
