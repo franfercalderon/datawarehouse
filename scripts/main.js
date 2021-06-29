@@ -121,7 +121,8 @@ document.addEventListener("click",async (e)=>{
     //LISTENERS REGIONES
     if(e.target.id=="regionEdit"){
         //CLICK EN EDITAR REGION
-        console.log('edit '+e.target.parentNode.parentNode.id);
+        const id= e.target.parentNode.parentNode.id;
+        openLocationModal("Editar región", "editRegion", id)
     }
 
     if(e.target.id=="regionDelete"){
@@ -131,17 +132,17 @@ document.addEventListener("click",async (e)=>{
 
     if(e.target.id=="regionAdd"){
         //CLICK EN AGREGAR PAIS A REGION 
-        // console.log('add to puto'+e.target.parentNode.parentNode.id);
         const id = e.target.parentNode.parentNode.id;
         const regionName = await getRegionById(id);
-        openLocationModal(`Agregar país a ${regionName}`, "newCountry", id);
+        openLocationModal(`Agregar nuevo país a ${regionName}`, "newCountry", id);
     }
 
 
     //LISTENERS PAISES
     if(e.target.id=="countryEdit"){
         //CLICK EN EDITAR PAIS
-        console.log('edit '+e.target.parentNode.parentNode.id);
+        const id= e.target.parentNode.parentNode.id;
+        openLocationModal("Editar pais", "editCountry", id)
     }
 
     if(e.target.id=="countryDelete"){
@@ -151,17 +152,17 @@ document.addEventListener("click",async (e)=>{
 
     if(e.target.id=="countryAdd"){
         //CLICK EN AGREGAR CIUDAD A PAIS
-
-        
-
-        // console.log('add to '+e.target.parentNode.parentNode.id);
+        const id= e.target.parentNode.parentNode.id;
+        const countryName = await getCountryById(id);
+        openLocationModal(`Agregar nueva ciudad a ${countryName}`, "newCity", id);
     }
 
 
     //LISTENERS CIUDADES
     if(e.target.id=="cityEdit"){
         //CLICK EN EDITAR CIUDAD
-        console.log('edit '+e.target.parentNode.parentNode.id);
+        const id= e.target.parentNode.parentNode.id;
+        openLocationModal("Editar ciudad","editCity", id)
     }
 
     if(e.target.id=="cityDelete"){

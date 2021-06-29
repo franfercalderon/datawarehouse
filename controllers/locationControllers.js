@@ -29,7 +29,6 @@ router.get('/regions/name_:name', jwtValidation, async (req, res)=>{
 
 router.get('/regions/:id', jwtValidation, async (req, res)=>{
         const id = req.params.id;
-        console.log(id);
         const region = await models.Region.findOne({
             where: {id: id}
         })
@@ -41,7 +40,6 @@ router.get('/regions/:id', jwtValidation, async (req, res)=>{
 
 router.get('/countries', jwtValidation, async (req, res)=>{
         const allCountries = await models.Country.findAll();
-        // console.log(allRegions);
         if(allCountries){
             return res.status(200).json(allCountries)
         }
@@ -179,13 +177,63 @@ router.get('/cities/name_:name', jwtValidation, async (req, res)=>{
 
     .post('/countries', jwtValidation, async (req, res)=>{
         const {name, region} = req.body;
-        console.log(name+region);
         const newCountry = await models.Country.create({
             name:name,
             region: region
         })
         if(newCountry)return res.status(200).json(newCountry);
         return res.status(400).json({message: 'Country was not created'})
+    })
+
+    .post('/cities', jwtValidation, async (req, res)=>{
+        const {name, country} = req.body;
+        const newCity= await models.City.create({
+            name: name,
+            country: country
+        })
+        if(newCity) return res.status(200).json(newCity);
+        return res.status(400).json({message: 'City was not created'})
+    })
+
+    .put('/regions', jwtValidation, async (req, res)=>{
+        const {id, name} = req.body;
+        const updatedRegion = await models.Region.update({
+                name:name
+            },
+            {where:{id:id}})
+        if(updatedRegion)return res.status(200).json(updatedRegion);
+        return res.status(400).json({message: 'Region was not updated'})
+    })
+
+    .put('/countries', jwtValidation, async (req, res)=>{
+        const {id, name, region} = req.body;
+        const updatedCountry = await models.Country.update({
+                name:name,
+                region: region
+            },
+            {where:{id:id}})
+        if(updatedCountry)return res.status(200).json(updatedCountry);
+        return res.status(400).json({message: 'Country was not updated'})
+    })
+
+    .put('/cities', jwtValidation, async (req, res)=>{
+        const {id, name, country} = req.body;
+        const updatedCity = await models.City.update({
+                name:name,
+                country:country
+            },
+            {where:{id:id}})
+        if(updatedCity)return res.status(200).json(updatedCity);
+        return res.status(400).json({message: 'City was not updated'})
+    })
+
+    .get('/cities/id_:id', jwtValidation, async(req, res)=>{
+        const id = req.params.id;
+        const city= await models.City.findOne({
+            where: {id:id}
+        });
+        if(city) return res.status(200).json(city);
+        return res.status(400).json({message: 'City was not found'})
     })
 
 

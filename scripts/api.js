@@ -57,6 +57,11 @@ async function createRegion(body){
     return region
 }
 
+async function updateRegion(body){
+    const updatedRegion = await fetchApi(url, '/location/regions', 'PUT', body);
+    return updatedRegion
+}
+
 //PAISES
 
 async function getallCountries(){
@@ -92,6 +97,11 @@ async function createCountry(body){
     return region
 }
 
+async function updateCountry(body){
+    const updatedCountry = await fetchApi(url, '/location/countries', 'PUT', body);
+    return updatedCountry
+}
+
 //CIUDADES
 
 async function getallCities(){
@@ -112,11 +122,26 @@ async function getCityByName(cty){
     return city.id;
 }
 
+async function getCityById(id){
+    const city = await fetchApi(url, '/location/cities/id_'+id, 'GET');
+    return city.name;
+}
+
 async function deleteCityById(id){
     const city = await fetchApi(url, '/location/cities/'+id, 'DELETE');
     return city
-
 }
+
+async function createCity(body){
+    const newCity = fetchApi(url, '/location/cities', 'POST', body);
+    return newCity
+}
+
+async function updateCity(body){
+    const updatedCity = await fetchApi(url, '/location/cities', 'PUT', body);
+    return updatedCity
+}
+
 //CANALES DE CONTACTO
 
 async function getallChannels(){

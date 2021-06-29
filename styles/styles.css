@@ -1577,4 +1577,11 @@
 .cityDelete {
   margin-left: 10px;
 }
+
+.editSelect {
+  border: 1px solid #becde0;
+  margin-top: 5px;
+  height: 25px;
+  padding-left: 5px;
+}
 /*# sourceMappingURL=styles.css.map */

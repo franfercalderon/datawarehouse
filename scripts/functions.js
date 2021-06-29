@@ -19,7 +19,6 @@ async function openContacts(contacts){
 
     //ESCONDE OTRAS SECCIONES
     if(regionOpen==true){
-        console.log("la saca")
         document.querySelector(".regionsSection").remove()
     }
 
@@ -1596,6 +1595,7 @@ async function fillLocations(regions){
 }
 
 async function openLocationModal(title, origin, id){
+
     //CREA DIV 
     const locationDiv = document.createElement("div");
     locationDiv.classList.add("contactModal");
@@ -1621,14 +1621,19 @@ async function openLocationModal(title, origin, id){
     </div>`
     document.querySelector(".main").appendChild(locationDiv);
 
+    //POSICIONA PANTALLA EN MODAL
+    locationDiv.scrollIntoView()
+
     //AGREGA LISTENERS A BOTON GUARDAR SEGUN CORRESPONDA
     document.querySelector(".cancelLocation").addEventListener("click", ()=>{
         locationDiv.remove()
     })
 
+    const saveLocation= document.querySelector(".saveLocation");
+
     if(origin=="newRegion"){
 
-        document.querySelector(".saveLocation").addEventListener("click", ()=>{
+        saveLocation.addEventListener("click", ()=>{
             saveNewRegion()
         })
     }
@@ -1640,10 +1645,96 @@ async function openLocationModal(title, origin, id){
 
 
         //GUARDA PAIS EN REGION CON ID DETERMINADO
-        document.querySelector(".saveLocation").addEventListener("click", ()=>{
+        saveLocation.addEventListener("click", ()=>{
             saveNewCountry(id);
         })
+    }
+
+    if(origin=="newCity"){
+
+        //CAMBIA PLACEHOLDER DE INPUT 
+        document.querySelector(".regionNameInput").placeholder= "Nombre nueva ciudad"
         
+        //GUARDA CIUDAD EN PAIS CON ID DETERMINADO
+        saveLocation.addEventListener("click", ()=>{
+            saveNewCity(id);
+        })
+    }
+
+    if(origin=="editRegion"){
+
+        //COLOCA NOMBRE DE LA REGION EN IMPUT
+        const regionName= await getRegionById(id)
+        document.querySelector(".regionNameInput").value=regionName;
+
+        //GUARDA CIUDAD EN PAIS CON ID DETERMINADO
+        saveLocation.addEventListener("click", ()=>{
+            editRegion(id);
+        })
+    }
+
+    if(origin=="editCountry"){
+
+        //AGREGA SELECT DE REGIONES
+        document.querySelector(".locationDataDiv").innerHTML=`
+            <div class="locationData">
+                <label for="editRegion">Región*</label>
+                <select name="editRegion"  class= "editSelect" id="editRegionSelect">
+                </select>
+            </div>
+            <div class="locationData">
+                <label for="regionName">Nombre<span>*</span></label>
+                <input name="regionName" class= "regionNameInput" type="text">
+            </div>`
+
+        const regions= await getallRegions();
+        regions.forEach(e=>{
+            let option=document.createElement("option");
+            option.value= e.name;
+            option.innerHTML= e.name;
+            document.querySelector("#editRegionSelect").appendChild(option)
+        }) 
+
+        //COLOCA NOMBRE DE LA REGION EN IMPUT
+        const countryName= await getCountryById(id)
+        document.querySelector(".regionNameInput").value=countryName;
+    
+        //GUARDA CIUDAD EN PAIS CON ID DETERMINADO
+        saveLocation.addEventListener("click", ()=>{
+            editCountry(id);
+        })
+    }
+
+    if(origin=="editCity"){
+
+        //AGREGA SELECT DE PAISES
+        document.querySelector(".locationDataDiv").innerHTML=`
+            <div class="locationData">
+                <label for="editCountry">Pais*</label>
+                <select name="editCountry"  class= "editSelect" id="editCountrySelect">
+                </select>
+            </div>
+            <div class="locationData">
+                <label for="regionName">Nombre<span>*</span></label>
+                <input name="regionName" class= "regionNameInput" type="text">
+            </div>`
+
+        const countries= await getallCountries();
+        countries.forEach(e=>{
+            let option=document.createElement("option");
+            option.value= e.name;
+            option.innerHTML= e.name;
+            document.querySelector("#editCountrySelect").appendChild(option)
+        }) 
+
+        //COLOCA NOMBRE DE LA CIUDAD EN IMPUT
+        const cityName= await getCityById(id)
+        document.querySelector(".regionNameInput").value=cityName;
+    
+        //GUARDA CIUDAD EN PAIS CON ID DETERMINADO
+        saveLocation.addEventListener("click", ()=>{
+            editCity(id);
+        })
     }
 }
 
@@ -1693,6 +1784,107 @@ async function saveNewCountry(id){
         prompt("mandatory", "El nombre debe tener al menos 1 caracter", null, "regionMainDiv")
     }
 
+}
+
+async function saveNewCity(id){
+    //TOMA VALOR DE INPUT Y LLAMA FUNCION GUARDADO
+    const cityName= document.querySelector(".regionNameInput").value;
+
+    if(cityName.length>0){
+        //SI EL NOMBRE TIENE AL MENOS UN CARACTER
+        const body={
+            name: cityName,
+            country: id
+        }
+
+        const createdCity= await createCity(body);
+        if(createdCity){
+            prompt("success", "Ciudad creada!", null, "regionMainDiv");
+            openRegions();
+        }
+    }
+    else{
+
+        //SI SE INTENTA GUARDAR CON UN NOMBRE DE MENOS DE 1 CARACTER
+        prompt("mandatory", "El nombre debe tener al menos 1 caracter", null, "regionMainDiv")
+    }
+}
+
+async function editRegion(id){
+
+    //TOMA VALOR DE INPUT Y LLAMA FUNCION GUARDADO
+    const regionName= document.querySelector(".regionNameInput").value;
+
+    if(regionName.length>0){
+        //SI EL NOMBRE TIENE AL MENOS UN CARACTER
+        const body={
+            id:id,
+            name: regionName
+        }
+
+        const updatedRegion= await updateRegion(body);
+        if(updatedRegion){
+            prompt("success", "Region editada!", null, "regionMainDiv");
+            openRegions();
+        }
+    }
+    else{
+
+        //SI SE INTENTA GUARDAR CON UN NOMBRE DE MENOS DE 1 CARACTER
+        prompt("mandatory", "El nombre debe tener al menos 1 caracter", null, "regionMainDiv")
+    }
+}
+
+async function editCountry(id){
+
+    //TOMA VALOR DE INPUT Y LLAMA FUNCION GUARDADO
+    const countryName= document.querySelector(".regionNameInput").value;
+    const regionId= await getRegionByName(document.querySelector("#editRegionSelect").value)
+    if(countryName.length>0){
+        //SI EL NOMBRE TIENE AL MENOS UN CARACTER
+        const body={
+            id:id,
+            name: countryName,
+            region: regionId
+        }
+
+        const updatedCountry= await updateCountry(body);
+        if(updatedCountry){
+            prompt("success", "Pais editado!", null, "regionMainDiv");
+            openRegions();
+        }
+    }
+    else{
+
+        //SI SE INTENTA GUARDAR CON UN NOMBRE DE MENOS DE 1 CARACTER
+        prompt("mandatory", "El nombre debe tener al menos 1 caracter", null, "regionMainDiv")
+    }
+}
+
+async function editCity(id){
+
+    //TOMA VALOR DE INPUT Y LLAMA FUNCION GUARDADO
+    const cityName= document.querySelector(".regionNameInput").value;
+    const countryId= await getCountryByName(document.querySelector("#editCountrySelect").value)
+    if(cityName.length>0){
+        //SI EL NOMBRE TIENE AL MENOS UN CARACTER
+        const body={
+            id:id,
+            name: cityName,
+            country: countryId
+        }
+
+        const updatedCity= await updateCity(body);
+        if(updatedCity){
+            prompt("success", "Ciudad editada!", null, "regionMainDiv");
+            openRegions();
+        }
+    }
+    else{
+
+        //SI SE INTENTA GUARDAR CON UN NOMBRE DE MENOS DE 1 CARACTER
+        prompt("mandatory", "El nombre debe tener al menos 1 caracter", null, "regionMainDiv")
+    }
 }
 
 
