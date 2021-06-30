@@ -17,19 +17,28 @@ async function openContacts(contacts){
     //MUESTRA SEECION
     contactsSection.classList.remove("hidden");
 
-    //ESCONDE OTRAS SECCIONES
-    if(regionOpen==true){
-        document.querySelector(".regionsSection").remove()
-    }
-
     //UPDATE ESTADO SECCIONES:
-    contactsOpen= true;
-    regionOpen=false;
-
-    //SRC IMG BOTONES
-    regionBtn.src="./styles/assets/region.png"
+    contactsOpen=true;
     contactsBtn.src="./styles/assets/contacts_hover.png";
 
+    if(regionOpen==true){
+        regionBtn.src="./styles/assets/region.png";
+        document.querySelector(".regionsSection").classList.add("hidden");
+        regionOpen=false
+    }
+
+    if(usersOpen==true){
+        usersBtn.src="./styles/assets/users.png";
+        document.querySelector(".usersSection").classList.add("hidden");
+        contactsOpen=false
+    }
+
+    if(companyOpen==true){
+        companyBtn.src="./styles/assets/company.png";
+        document.querySelector(".companySection").classList.add("hidden");
+        companyOpen=false
+    }
+    
     //OBTIENE REGIONES DESDE DB
     const regions= await getallRegions();
 
@@ -54,44 +63,86 @@ async function openContacts(contacts){
     }
 }
 
-async function pagination(contactList, offset, sort, way){
+async function pagination(list, offset, origin){
+
+    if(origin=="contacts"){
+
+        //VARIABLES
+        const next= document.querySelector(".forwardContainer");
+        const prev= document.querySelector(".backContainer");
+        const showingContacts = document.querySelector(".showingContacts");
+        const totalContacts = document.querySelector(".totalContacts");
     
-    //VARIABLES
-    const next= document.querySelector(".forwardContainer");
-    const prev= document.querySelector(".backContainer");
-    const showingContacts = document.querySelector(".showingContacts");
-    const totalContacts = document.querySelector(".totalContacts");
+        //OBTIENE INFORMACIOÓN DE CONTACTOS TOTALES Y USA EL LARGO PARA MOSTRARLO EN INDEX
+        totalContacts.innerHTML=`${list.length}`
+        showingContacts.innerHTML=`${offset+1} - ${offset+10}`;
+    
+        //MOSTRAR MÁS CONTACTOS
+        next.addEventListener("click", ()=>{
+            if(list.length> offset+10){
+                offset=offset+10;
+                document.querySelector(".contactsTable").remove();
+                fillContactTable(list, offset);
+            }
+        })  
+    
+        //MOSTRAR CONTACTOS ANTERIORES
+        prev.addEventListener("click", ()=>{
+    
+            //SI LLEGA A LA PRIMERA PÁGINA
+            if(offset>=0 && offset<10){
+                offset=0;
+                document.querySelector(".contactsTable").remove();
+                fillContactTable(list, offset);
+            }
+    
+            else{
+                offset=offset-10;
+                document.querySelector(".contactsTable").remove();
+                fillContactTable(list, offset);
+            }
+        })
+    }
 
-    //OBTIENE INFORMACIOÓN DE CONTACTOS TOTALES Y USA EL LARGO PARA MOSTRARLO EN INDEX
-    const contacts = await getAllContacts();
-    totalContacts.innerHTML=`${contactList.length}`
-    showingContacts.innerHTML=`${offset+1} - ${offset+10}`;
+    if(origin=="companies"){
 
-    //MOSTRAR MÁS CONTACTOS
-    next.addEventListener("click", ()=>{
-        if(contactList.length> offset+10){
-            offset=offset+10;
-            document.querySelector(".contactsTable").remove();
-            fillContactTable(contactList, offset);
-        }
-    })  
-
-    //MOSTRAR CONTACTOS ANTERIORES
-    prev.addEventListener("click", ()=>{
-
-        //SI LLEGA A LA PRIMERA PÁGINA
-        if(offset>=0 && offset<10){
-            offset=0;
-            document.querySelector(".contactsTable").remove();
-            fillContactTable(contactList, offset);
-        }
-
-        else{
-            offset=offset-10;
-            document.querySelector(".contactsTable").remove();
-            fillContactTable(contactList, offset);
-        }
-    })
+        //VARIABLES
+        const next= document.querySelector(".coForwardContainer");
+        const prev= document.querySelector(".coBackContainer");
+        const showingCompanies = document.querySelector(".showingCompanies");
+        const totalCompanies = document.querySelector(".totalCompanies");
+    
+        //OBTIENE INFORMACIOÓN DE COMPANIAS Y USA EL LARGO PARA MOSTRARLO EN INDEX
+        totalCompanies.innerHTML=`${list.length}`
+        showingCompanies.innerHTML=`${offset+1} - ${offset+10}`;
+    
+        //MOSTRAR MÁS COMPANIAS
+        next.addEventListener("click", ()=>{
+            if(list.length> offset+10){
+                offset=offset+10;
+                document.querySelector(".companyTable").remove();
+                fillCompanies(list, offset);
+            }
+        })  
+    
+        //MOSTRAR CONTACTOS ANTERIORES
+        prev.addEventListener("click", ()=>{
+    
+            //SI LLEGA A LA PRIMERA PÁGINA
+            if(offset>=0 && offset<10){
+                offset=0;
+                document.querySelector(".companyTable").remove();
+                fillCompanies(list, offset);
+            }
+    
+            else{
+                offset=offset-10;
+                document.querySelector(".companyTable").remove();
+                fillCompanies(list, offset);
+            }
+        })
+    }
+    
 }
 
 function sortAlpha(contactList, attribute){
@@ -207,7 +258,6 @@ function sortAlpha(contactList, attribute){
 async function fillContactTable(contactList, offset, sort){
 
     //OBTIENE CONTACTOS SEGUN OFFSET
-    // const contactList = await getAllContacts();
     const contacts = contactList.slice(offset, offset+10)
 
     //CREA DIV Y TABLA CON CONTACTOS DE DB
@@ -280,7 +330,7 @@ async function fillContactTable(contactList, offset, sort){
     });
 
     //LLAMA A FUNCION DE PAGINACIÓN/INDEX
-    pagination(contactList, offset);
+    pagination(contactList, offset, "contacts");
 
     //IF HEADER CHECHBOX IS SELECTED:
     const selectAll = document.querySelector("#selectall");
@@ -331,7 +381,7 @@ async function fillContactTable(contactList, offset, sort){
     })
     
     for(let i=0; i<contacts.length; i++){
-        //CREA DIV POR CADA CONTACTO Y COMLPETA CON DATOS EXISTENTES
+        //CREA DIV POR CADA CONTACTO Y COMPLETA CON DATOS EXISTENTES
         const thisContact= document.createElement("div");
         thisContact.classList.add("tableRow");
         thisContact.classList.add("itemRow");
@@ -448,19 +498,19 @@ async function editContact(id){
         <div class="contactDataDiv level1">
             <div class="contactData">
                 <label for="newUserName">Nombre<span>*</span></label>
-                <input name="newUserName" class= "newContactName" type="text" placeholder="Nombre" value='${contact.name}'>
+                <input name="newUserName" class= "newContactName" type="text" placeholder="Maria" value='${contact.name}'>
             </div>
             <div class="contactData">
                 <label for="newUserLastname">Apellido<span>*</span></label>
-                <input name="newUserLastname" class= "newContactLastname" type="text" placeholder="Apellido" value='${contact.lastname}'>
+                <input name="newUserLastname" class= "newContactLastname" type="text" placeholder="Diaz" value='${contact.lastname}'>
             </div>
             <div class="contactData">
                 <label for="newUserEmail">Email<span>*</span></label>
-                <input name="newUserEmail" class= "newContactEmail" type="text" placeholder="Email" value='${contact.email}'>
+                <input name="newUserEmail" class= "newContactEmail" type="text" placeholder="your@email.com" value='${contact.email}'>
             </div>
             <div class="contactData contactCompanyDiv">
                 <label for="newUserCompany">Compañía<span>*</span></label>
-                <input name="newUserCompany" class= "newContactCompany" type="text" placeholder="Compañía" value='${contact.contactCompany.name}'>
+                <input name="newUserCompany" class= "newContactCompany" type="text" placeholder="Your Company" value='${contact.contactCompany.name}'>
                 <div class="companiesSugDiv"></div>
             </div>
             <div class="contactData">
@@ -941,6 +991,56 @@ function dynamicLocation(origin){
             }
         });
     }
+
+    if(origin == "companyModal"){
+
+        const regionSelect = document.querySelector("#newCompanyRegion");
+        const countrySelect = document.querySelector("#newCompanyCountry");
+        const citySelect = document.querySelector("#newCompanyCity");
+    
+        regionSelect.addEventListener("change", async ()=>{
+            //LIMPIA RESULTADOS ANTERIORES
+            countrySelect.innerHTML="";
+
+            //OBTIENE PAISES POR NOMBRE DE REGION
+            const region = regionSelect.value;
+            const countries= await getCountryByRegion(region);
+            
+            //CREA UNA PRIMERA OPCION "NULA"
+            let nullOption = document.createElement("option");
+            nullOption.innerHTML= '<option value="" disabled selected></option>';
+            countrySelect.appendChild(nullOption);
+
+            for(let i=0; i<countries.length; i++){
+                //CREA OPCIONES EN SELECT DE PAISES
+                const option = document.createElement("option");
+                option.value= countries[i].name;
+                option.innerHTML= countries[i].name;
+                countrySelect.appendChild(option);
+                }
+        });
+    
+        countrySelect.addEventListener("change", async () =>{
+            //LIMPIA RESULTADOS ANTERIORES
+            citySelect.innerHTML="";
+
+            //CREA UNA PRIMERA OPCION "NULA"
+            let nullOption = document.createElement("option");
+            nullOption.innerHTML= '<option value="" disabled selected></option>';
+            citySelect.appendChild(nullOption);
+
+            //OBTIENE CIUDADES POR NOMBRE DE PAIS
+            const cities= await getCitiesByCountry(countrySelect.value);
+        
+            for(let i=0; i<cities.length; i++){
+                //CREA OPCIONES EN SELECT DE CIUDADES
+                const option = document.createElement("option");
+                option.value= cities[i].name;
+                option.innerHTML= cities[i].name;
+                citySelect.appendChild(option);
+                }
+        });
+    }
 }
 
 //FUNCION CONTADOR CONACS SELECCIONADOS
@@ -1047,16 +1147,17 @@ async function saveNewConact(){
     const city = document.querySelector("#newUserCity").value;
     const interest = document.querySelector("#newUserInterest").value;
 
+
+    //CORROBORA DATOS OBLIGATORIOS 
+    if(name=="" || lastname== "" || email=="" || company=="" || role== ""){
+        return prompt("mandatory","Faltan datos obligatorios", null, "contactMainDiv")
+    }
+
     //GET IDS
     const regionId= await getRegionByName(region);
     const countryId = await getCountryByName(country);
     const cityId = await getCityByName(city);
     const companyId = await getCompanyByName(company);
-
-    //CORROBORA DATOS OBLIGATORIOS 
-    if(name=="" || lastname== "" || email=="" || company=="" || role== ""){
-        return prompt("mandatory","Faltan datos obligatorios")
-    }
 
     const body ={
         name: name,
@@ -1072,7 +1173,7 @@ async function saveNewConact(){
 
     //ENVIA POST A API
     const newContact = await fetchApi(url, '/contacts', 'POST', body);
-    if(newContact.error) return prompt("mandatory","Formato de email incorrecto")
+    if(newContact.error) return prompt("mandatory","Formato de email incorrecto", null, "contactMainDiv")
     else{
 
         //GUARDA CANALES DE CONTACTO SELECCIONADOS
@@ -1081,7 +1182,7 @@ async function saveNewConact(){
         //SI SE CREA AL MENOS UN CONTACTO
         if(savechannel){
             openContacts()
-            return prompt("success","Contacto creado con éxito");
+            return prompt("success","Contacto creado con éxito", null, "contactMainDiv");
             
         }
         //SI NO SE CREO NINGUN CANAL DE CONTACTO BORRA AL USUARIO PARA CREARLO NUEVAMENTE CON CANAL DE CONTACTO
@@ -1138,17 +1239,20 @@ async function updateContact(id){
         const savechannel= await saveContactChannel(contact);
         if(savechannel){
             //DEVUELVE MENSAJE DE ÉXITO
-            return prompt("success","Contacto actualizado")
+            return prompt("success","Contacto actualizado", null, "contactMainDiv")
         }
     }
 }
 
 //PROMPTS:
 function prompt(status, message, id, origin){
-    const contactMainDiv = document.querySelector(".contactMainDiv");
-    const regionMainDiv = document.querySelector(".regionMainDiv");
+
+    
+    // const contactMainDiv = document.querySelector(".contactMainDiv");
+    // const regionMainDiv = document.querySelector(".regionMainDiv");
     const createPrompt = document.createElement("div");
     createPrompt.classList.add("createPrompt");
+
 
     //ALERTA DE CAMPOS FALTANTES
     if(status=="mandatory"){
@@ -1170,9 +1274,20 @@ function prompt(status, message, id, origin){
         <p>${message}</p>`;
 
         document.querySelector(`.${origin}`).appendChild(createPrompt)
-        setTimeout(()=>{
-            document.querySelector(".contactModal").remove()}, 2000
-        );
+
+        if(origin=="companyMainDiv"){
+            
+            setTimeout(()=>{
+                document.querySelector(".companyModal").remove()}, 2000
+            );
+        }
+
+        if(origin=="regionMainDiv" || origin=="contactMainDiv"){
+            
+            setTimeout(()=>{
+                document.querySelector(".contactModal").remove()}, 2000
+            );
+        }
     }
 
     //CONFIRMACION DELETE CONTACT
@@ -1196,6 +1311,7 @@ function prompt(status, message, id, origin){
             <div id="promptConfirmBtn">Eliminar</div>
         </div>`;
         document.querySelector(".regionsSection").appendChild(createPrompt);
+        createPrompt.scrollIntoView({block: 'end', behavior: 'smooth'})
         createPrompt.addEventListener("click",  async (e)=>{  
             //SI HACE CLICK EN CANCELAR, BORRA EL PROMPT
             if(e.target.id=="promptCancelBtn"){
@@ -1234,6 +1350,7 @@ function prompt(status, message, id, origin){
             <div id="promptConfirmBtn">Eliminar</div>
         </div>`;
         document.querySelector(".regionsSection").appendChild(createPrompt);
+        createPrompt.scrollIntoView({block: 'end', behavior: 'smooth'})
         createPrompt.addEventListener("click",  async (e)=>{  
             //SI HACE CLICK EN CANCELAR, BORRA EL PROMPT
             if(e.target.id=="promptCancelBtn"){
@@ -1272,6 +1389,7 @@ function prompt(status, message, id, origin){
             <div id="promptConfirmBtn">Eliminar</div>
         </div>`;
         document.querySelector(".regionsSection").appendChild(createPrompt);
+        createPrompt.scrollIntoView({block: 'end', behavior: 'smooth'})
         createPrompt.addEventListener("click",  async (e)=>{  
             //SI HACE CLICK EN CANCELAR, BORRA EL PROMPT
             if(e.target.id=="promptCancelBtn"){
@@ -1346,6 +1464,45 @@ function prompt(status, message, id, origin){
         })
 
     }
+
+    //CONFIRMACION DELETE PAIS
+    if(status=="deleteCompany"){
+        createPrompt.innerHTML=`
+        <img src="./styles/assets/error.png" alt="alert">
+        <p>${message}</p>
+        <div class="promptBtns">
+            <div id="promptCancelBtn">Cancelar</div>
+            <div id="promptConfirmBtn">Eliminar</div>
+        </div>`;
+        document.querySelector(".companySection").appendChild(createPrompt);
+        createPrompt.scrollIntoView({block: 'end', behavior: 'smooth'})
+        createPrompt.addEventListener("click",  async (e)=>{  
+            //SI HACE CLICK EN CANCELAR, BORRA EL PROMPT
+            if(e.target.id=="promptCancelBtn"){
+                createPrompt.remove()
+            }
+            //SI HACE CLICK EN ELIMINAR
+            if(e.target.id=="promptConfirmBtn"){
+
+                //ELIMINA REGION POR ID
+                const deletedCompany= await deleteCompanyById(id);
+
+                if(deletedCompany){
+                    createPrompt.innerHTML=`
+                    <img src="./styles/assets/success.png" alt="exito">
+                     <p>Compañía eliminada!</p>`
+                    
+                    setTimeout(()=>{
+                        //RENDERIZA NUEVAMENTE LISTA DE COMPAÑIAS Y BORRA PROMPT
+                        openCompanies()
+                        createPrompt.remove()
+                    }, 2000);
+                }
+
+            }
+        })
+        
+    }
 }
 
 //GUARDAR INFORMACION DE CONTACTO
@@ -1376,14 +1533,14 @@ async function saveContactChannel(contact){
                 contactInfos.push(newChannel);
             }
             else{
-                return prompt("mandatory", "Canal de contacto incompleto")
+                return prompt("mandatory", "Canal de contacto incompleto", null, "contactMainDiv")
             }
         }
     }
     if(contactInfos.length>0) return contactInfos;
 
     //SI NO RECIBE NINGUN CANAL DE CONTACTO
-    return prompt("mandatory", "Se requiere al menos un canal de contacto")
+    return prompt("mandatory", "Se requiere al menos un canal de contacto", null, "contactMainDiv")
 }
 
 //BUSQUEDA DE CONTACTOS
@@ -1449,15 +1606,26 @@ async function openRegions(){
     if(section) section.remove()
 
     //UPDATE ESTADO SECCIONES:
-    contactsOpen= false;
     regionOpen=true;
+    regionBtn.src="./styles/assets/region_hover.png";
 
-    //SRC IMG BOTONES
-    regionBtn.src="./styles/assets/region_hover.png"
-    contactsBtn.src="./styles/assets/contacts.png";
+    if(contactsOpen==true){
+        contactsBtn.src="./styles/assets/contacts.png";
+        document.querySelector(".contactsSection").classList.add("hidden");
+        contactsOpen=false
+    }
 
-    //ESCONDE SECCIONES:
-    contactsSection.classList.add("hidden");
+    if(usersOpen==true){
+        usersBtn.src="./styles/assets/users.png";
+        document.querySelector(".usersSection").classList.add("hidden");
+        contactsOpen=false
+    }
+
+    if(companyOpen==true){
+        companyBtn.src="./styles/assets/company.png";
+        document.querySelector(".companySection").classList.add("hidden");
+        companyOpen=false
+    }
 
     //CREA DIV CONTENEDOR
     const regionsSection = document.createElement("section");
@@ -1622,7 +1790,7 @@ async function openLocationModal(title, origin, id){
     document.querySelector(".main").appendChild(locationDiv);
 
     //POSICIONA PANTALLA EN MODAL
-    locationDiv.scrollIntoView()
+    locationDiv.scrollIntoView({block: 'end',behavior: 'smooth'})
 
     //AGREGA LISTENERS A BOTON GUARDAR SEGUN CORRESPONDA
     document.querySelector(".cancelLocation").addEventListener("click", ()=>{
@@ -1885,6 +2053,447 @@ async function editCity(id){
         //SI SE INTENTA GUARDAR CON UN NOMBRE DE MENOS DE 1 CARACTER
         prompt("mandatory", "El nombre debe tener al menos 1 caracter", null, "regionMainDiv")
     }
+}
+
+//FUNCIONES SECCION COMPANIES
+
+async function openCompanies(){
+
+    //LIMPIA SECCION SI YA ESTABA ABIERTA
+    const section = document.querySelector(".companySection");
+    if(section) section.remove()
+
+    //UPDATE ESTADO SECCIONES:
+    companyOpen=true;
+    companyBtn.src="./styles/assets/company_hover.png";
+
+    if(contactsOpen==true){
+        contactsBtn.src="./styles/assets/contacts.png";
+        document.querySelector(".contactsSection").classList.add("hidden");
+        contactsOpen=false
+    }
+
+    if(regionOpen==true){
+        regionBtn.src="./styles/assets/region.png";
+        document.querySelector(".regionsSection").classList.add("hidden");
+        regionOpen=false
+    }
+
+    if(usersOpen==true){
+        usersBtn.src="./styles/assets/users.png";
+        document.querySelector(".usersSection").classList.add("hidden");
+        usersOpen=false
+    }
+
+    //CREA DIV CONTENEDOR
+    const companySection = document.createElement("section");
+    companySection.classList.add("companySection");
+    document.querySelector(".main").appendChild(companySection);
+
+    //BOTON AGREGAR COMPAÑIA
+    const addCompanyBtn = document.createElement("div");
+    addCompanyBtn.classList.add("addCompanyBtn");
+    addCompanyBtn.innerHTML= `
+        <p>+</p>`
+    companySection.appendChild(addCompanyBtn);
+
+    //AGREGA LISTENER DE BOTON CREAR
+    addCompanyBtn.addEventListener("click", ()=>{
+        newCompanyModal()
+    })
+
+    //TRAE COMPAÑIAS DESDE DB
+    const companies = await getAllCompanies();
+
+    //ORDENA COMPAÑIAS ALFABETICAMENTE
+    companies.sort((a,b)=>{
+        if(a.name>b.name) return 1;
+        if(a.name<b.name) return -1;
+        return 0
+        });
+
+    //RENDERIZA COMPAÑIAS
+    fillCompanies(companies, 0)
+}
+
+async function fillCompanies(companyList, offset){
+
+    //OBTIENE COMPAÑIAS SEGUN OFFSET
+    const companies = companyList.slice(offset, offset+10)
+
+    //CREA TABLA DE COMPANIAS
+    const companyTable = document.createElement("div");
+    companyTable.classList.add("companyTable");
+    document.querySelector(".companySection").appendChild(companyTable);
+
+    companyTable.innerHTML=`
+    <div class="tableRow tableHeader">
+        <div class="companyColumn">
+            <p>Compañía</p> 
+        </div>
+        <div class="companyColumn">
+            <p>Región</p> 
+        </div>
+        <div class="companyColumn">
+            <p>País</p> 
+        </div>
+        <div class="companyColumn ">
+            <p>E-mail</p> 
+        </div>
+        <div class="companyColumn ">
+            <p>Teléfono</p> 
+        </div>
+        <div class="companyColumn companyOptions">
+            <p>Opciones</p> 
+        </div>
+    </div>
+    <div class="headerDivider"></div>
+    <div class="companyRows"></div>
+    <div class="headerDivider"></div>
+    <div class="indexBtns">
+        <div class="indexContainer">
+            <p><span class="showingCompanies"></span> de <span class="totalCompanies"></span> contactos</p>
+        </div>
+        <div class="coBackContainer arrowContainer">
+            <img src="./styles/assets/back.png" alt="back" class="indexArrow">
+        </div>
+        <div class="coForwardContainer arrowContainer">
+            <img src="./styles/assets/forward.png" alt="forward" class="indexArrow">
+        </div>
+    </div>`
+
+    companies.forEach(co=>{
+
+        //CREA DIV POR CADA CONTACTO Y COMPLETA CON DATOS EXISTENTES
+        const thisCo= document.createElement("div");
+        thisCo.classList.add("tableRow");
+        thisCo.classList.add("itemRow");
+        thisCo.innerHTML=`
+            <div class="tableColumn">${co.name}</div>
+            <div class="tableColumn">${co.companyRegion.name}</div>
+            <div class="tableColumn">${co.companyCountry.name}</div>
+            <div class="tableColumn">${co.email}</div>
+            <div class="tableColumn">${co.phone}</div>
+            <div class="tableColumn companyOptions">...</div>
+        `
+        document.querySelector(".companyRows").appendChild(thisCo);
+
+        thisCo.addEventListener("mouseenter", ()=>{
+            thisCo.classList.add("companyHover");
+            thisCo.querySelector(".companyOptions").innerHTML=`
+                <div class="optionHoverBtns optionEdit" ">
+                    <img src="./styles/assets/edit.png" alt="editar contacto" id="optionEdit">
+                </div>
+                <div class="optionHoverBtns optionDelete">
+                    <img src="./styles/assets/delete.png" alt="eliminar contacto" id="optionDelete">
+                </div>`
+            thisCo.querySelector("#optionEdit").addEventListener("click", ()=>{
+                openEditCompany(co)
+            })
+
+            thisCo.querySelector("#optionDelete").addEventListener("click", ()=>{
+
+                //ENVIA PROMPT DE CONFIRMACION Y LUEGO ELIMINA;
+                prompt("deleteCompany", "Desea borrar la compañía?",co.id)
+            })
+        })
+
+        thisCo.addEventListener("mouseleave", ()=>{
+            thisCo.classList.remove("companyHover");
+            thisCo.querySelector(".companyOptions").innerHTML=`...`
+        })
+
+    })
+
+    //LLAMA FUNCION DE PAGINACION
+    pagination(companyList, 0, "companies")
+}
+
+async function openEditCompany(company){
+
+    //CREA DIV
+    const companyDiv = document.createElement("div");
+    companyDiv.classList.add("companyModal");
+    companyDiv.innerHTML= `
+    <div class="companyMainDiv">
+        <div class="title">
+            <p>Editar compañía</p>
+        </div>
+        <div class="companyDataDiv level1">
+            <div class="companyData">
+                <label for="newCompanyName">Nombre<span>*</span></label>
+                <input name="newCompanyName" class= "newCompanyName" type="text" placeholder="MyCompany">
+            </div>
+            <div class="companyData">
+                <label for="newCompanyEmail">Email<span>*</span></label>
+                <input name="newCompanyEmail" class= "newCompanyEmail" type="text" placeholder="company@email.com">
+            </div>
+            <div class="companyData">
+                <label for="newCompanyPhone">Teléfono<span>*</span></label>
+                <input name="newCompanyPhone" class= "newCompanyPhone" type="text" placeholder="+(123) 456 789">
+            </div>
+        </div>
+        <div class="companyDataDiv level2">
+            <div class="companyData n2">
+                <label for="newCompanyAddress">Domicilio<span>*</span></label>
+                <input name="newCompanyAddress" class= "newCompanyAddress" type="text" placeholder="122 75North, Suite 203">
+            </div>
+            <div class="companyData n2">
+                <label for="newCompanyRegion" >Region<span>*</span></label>
+                <select name="newCompanyRegion" id="newCompanyRegion">
+                    <option value="" disabled selected></option>
+                </select>
+            </div>
+            <div class="companyData n2">
+                <label for="newCompanyCountry" >País<span>*</span></label>
+                <select name="newCompanyCountry" id="newCompanyCountry">
+                    <option value="" disabled selected></option>
+                </select>
+            </div>
+            <div class="companyData n2">
+                <label for="newCompanyCity" >Ciudad<span>*</span></label>
+                <select name="newCompanyCity" id="newCompanyCity">
+                    <option value="" disabled selected></option>
+                </select>
+            </div>
+        </div>
+        <div class="companyDataDiv level3">
+          
+        </div>
+        <div class="contactModalBtns">
+            <div class="cancelNewCompany">
+                <p>Cancelar</p>
+            </div>
+            <div class="saveNewCompany">
+                <p>Guardar</p>
+            </div>
+        </div>
+    </div>`
+    document.querySelector(".main").appendChild(companyDiv);
+    companyDiv.scrollIntoView({block: 'end', behavior: 'smooth'});
+
+    //FILLS VALUES WITH CURRENT
+    document.querySelector(".newCompanyName").value= company.name;
+    document.querySelector(".newCompanyEmail").value= company.email;
+    document.querySelector(".newCompanyPhone").value= company.phone;
+    document.querySelector(".newCompanyAddress").value= company.address;
+
+    //INYECTA REGIONES A SELECT
+    const regions= await getallRegions();
+    for(let i=0; i<regions.length; i++){
+        const option = document.createElement("option");
+        option.value= regions[i].name;
+        option.innerHTML= regions[i].name;
+        document.querySelector("#newCompanyRegion").appendChild(option);
+    }
+
+    //OBTIENE PAISES DE LA REGION SELECCIONADA
+    const countries = await getCountryByRegion(company.companyRegion.name);
+    for(let i=0; i<countries.length; i++){
+        const option = document.createElement("option");
+        option.value= countries[i].name;
+        option.innerHTML= countries[i].name;
+        document.querySelector("#newCompanyCountry").appendChild(option);
+    }
+
+    //OBTIENE CIUDADES DEL PAIS SELECCIONADO
+    const cities = await getCitiesByCountry(company.companyCountry.name);
+    for(let i=0; i<cities.length; i++){
+        const option = document.createElement("option");
+        option.value= cities[i].name;
+        option.innerHTML= cities[i].name;
+        document.querySelector("#newCompanyCity").appendChild(option);
+    }
+
+    //LLAMA A SELECT DINAMICO SEGUN REGION/PAIS 
+    dynamicLocation("companyModal");
+
+    //FILL VALUES WITH LOCATION DATA
+    document.querySelector("#newCompanyRegion").value= company.companyRegion.name;
+    document.querySelector("#newCompanyCountry").value= company.companyCountry.name;
+
+    const city= await getCityById(company.city)
+    document.querySelector("#newCompanyCity").value= city;
+
+    //FUNCIONES BOTONES
+    document.querySelector(".cancelNewCompany").addEventListener("click", ()=>{
+        companyDiv.remove();
+    })
+    document.querySelector(".saveNewCompany").addEventListener("click", ()=>{
+        editCompany(company.id)
+    });
+}
+
+async function newCompanyModal(){
+
+    //CREA DIV
+    const companyDiv = document.createElement("div");
+    companyDiv.classList.add("companyModal");
+    companyDiv.innerHTML= `
+    <div class="companyMainDiv">
+        <div class="title">
+            <p>Editar compañía</p>
+        </div>
+        <div class="companyDataDiv level1">
+            <div class="companyData">
+                <label for="newCompanyName">Nombre<span>*</span></label>
+                <input name="newCompanyName" class= "newCompanyName" type="text" placeholder="MyCompany">
+            </div>
+            <div class="companyData">
+                <label for="newCompanyEmail">Email<span>*</span></label>
+                <input name="newCompanyEmail" class= "newCompanyEmail" type="text" placeholder="company@email.com">
+            </div>
+            <div class="companyData">
+                <label for="newCompanyPhone">Teléfono<span>*</span></label>
+                <input name="newCompanyPhone" class= "newCompanyPhone" type="text" placeholder="+(123) 456 789">
+            </div>
+        </div>
+        <div class="companyDataDiv level2">
+            <div class="companyData n2">
+                <label for="newCompanyAddress">Domicilio<span>*</span></label>
+                <input name="newCompanyAddress" class= "newCompanyAddress" type="text" placeholder="122 75North, Suite 203">
+            </div>
+            <div class="companyData n2">
+                <label for="newCompanyRegion" >Region<span>*</span></label>
+                <select name="newCompanyRegion" id="newCompanyRegion">
+                    <option value="" disabled selected></option>
+                </select>
+            </div>
+            <div class="companyData n2">
+                <label for="newCompanyCountry" >País<span>*</span></label>
+                <select name="newCompanyCountry" id="newCompanyCountry">
+                    <option value="" disabled selected></option>
+                </select>
+            </div>
+            <div class="companyData n2">
+                <label for="newCompanyCity" >Ciudad<span>*</span></label>
+                <select name="newCompanyCity" id="newCompanyCity">
+                    <option value="" disabled selected></option>
+                </select>
+            </div>
+        </div>
+        <div class="companyDataDiv level3">
+          
+        </div>
+        <div class="contactModalBtns">
+            <div class="cancelNewCompany">
+                <p>Cancelar</p>
+            </div>
+            <div class="saveNewCompany">
+                <p>Guardar</p>
+            </div>
+        </div>
+    </div>`
+    document.querySelector(".main").appendChild(companyDiv);
+    companyDiv.scrollIntoView({block: 'end', behavior: 'smooth'});
+    
+    //INYECTA REGIONES A SELECT
+    const regions= await getallRegions();
+    for(let i=0; i<regions.length; i++){
+        const option = document.createElement("option");
+        option.value= regions[i].name;
+        option.innerHTML= regions[i].name;
+        document.querySelector("#newCompanyRegion").appendChild(option);
+    }
+
+    //LLAMA A SELECT DINAMICO SEGUN REGION/PAIS 
+    dynamicLocation("companyModal");
+
+    //FUNCIONES BOTONES
+    document.querySelector(".cancelNewCompany").addEventListener("click", ()=>{
+        companyDiv.remove();
+    })
+    document.querySelector(".saveNewCompany").addEventListener("click", ()=>{
+        saveNewCompany()
+    });
+
+}
+
+async function saveNewCompany(){
+
+
+    //TOMA VALORES DE INPUTS
+    const name= document.querySelector(".newCompanyName").value;
+    const email= document.querySelector(".newCompanyEmail").value;
+    const phone= document.querySelector(".newCompanyPhone").value;
+    const address= document.querySelector(".newCompanyAddress").value;
+    const region = document.querySelector("#newCompanyRegion").value;
+    const country = document.querySelector("#newCompanyCountry").value;
+    const city = document.querySelector("#newCompanyCity").value;
+
+    //CORROBORA DATOS OBLIGATORIOS 
+    if(name=="" || email== "" || phone=="" || address=="" || region== ""|| country== "" || city==""){
+        return prompt("mandatory","Faltan datos obligatorios", null, "companyMainDiv")
+    }
+
+    const regionId = await getRegionByName(region);
+    const countryId = await getCountryByName(country);
+    const cityid = await getCityByName(city)
+
+    const body={
+        name:name,
+        email:email,
+        phone:phone,
+        address:address,
+        region:regionId,
+        country:countryId,
+        city:cityid
+    };
+
+    //ENVIA POST A API
+   
+    const newCompany = await createCompany(body);
+    if(newCompany.error) return prompt("mandatory","Formato de email incorrecto", null, "companyMainDiv");
+    else{
+        openCompanies()
+        return prompt("success","Compañía creada",null, "companyMainDiv");
+    }
+}
+
+async function editCompany(id){
+
+    //TOMA VALORES DE INPUTS
+    const name= document.querySelector(".newCompanyName").value;
+    const email= document.querySelector(".newCompanyEmail").value;
+    const phone= document.querySelector(".newCompanyPhone").value;
+    const address= document.querySelector(".newCompanyAddress").value;
+    const region = document.querySelector("#newCompanyRegion").value;
+    const country = document.querySelector("#newCompanyCountry").value;
+    const city = document.querySelector("#newCompanyCity").value;
+
+    //CORROBORA DATOS OBLIGATORIOS 
+    if(name=="" || email== "" || phone=="" || address=="" || region== ""|| country== "" || city==""){
+        return prompt("mandatory","Faltan datos obligatorios", null, "companyMainDiv")
+    }
+
+    const regionId = await getRegionByName(region);
+    const countryId = await getCountryByName(country);
+    const cityid = await getCityByName(city)
+
+    const body={
+        name:name,
+        email:email,
+        phone:phone,
+        address:address,
+        region:regionId,
+        country:countryId,
+        city:cityid
+    };
+
+    //ENVIA POST A API
+
+    console.log(body)
+    const updatedCompany = await fetchApi(url, '/companies/'+id, 'PUT', body);
+
+    console.log(updatedCompany)
+
+    
+    if(updatedCompany.error) return prompt("mandatory","Formato de email incorrecto", null, "companyMainDiv");
+    else{
+        openCompanies()
+        return prompt("success","Compañía editada",null, "companyMainDiv");
+    }
+
 }
 
 

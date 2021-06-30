@@ -14,6 +14,10 @@ companyBtn.addEventListener("mouseover", ()=>{
     companyBtn.src="./styles/assets/company_hover.png"
 });
 
+companyBtn.addEventListener("click", ()=>{
+    openCompanies()
+})
+
 usersBtn.addEventListener("mouseover", ()=>{
     removeHidden(usersLabel)
     usersBtn.src="./styles/assets/users_hover.png"
@@ -36,8 +40,10 @@ contactsBtn.addEventListener("mouseleave", ()=>{
 });
 
 companyBtn.addEventListener("mouseleave", ()=>{
-    addHidden(companyLabel)
-    companyBtn.src="./styles/assets/company.png"
+    addHidden(companyLabel);
+    if(companyOpen==false){
+        companyBtn.src="./styles/assets/company.png"
+    }
 });
 
 usersBtn.addEventListener("mouseleave", ()=>{
@@ -100,6 +106,7 @@ searchOptions.addEventListener("click", ()=>{
 searchBtn.addEventListener("click", ()=>{
     searchContact()
 })
+
 
 document.querySelector(".searchByName input").addEventListener("keyup", (e)=>{
     if(e.keyCode===13) searchContact()

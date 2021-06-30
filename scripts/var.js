@@ -34,6 +34,9 @@ const logincontainer = document.querySelector(".logincontainer");
 const loginscreen = document.querySelector(".loginscreen");
 const searchDetail = document.querySelector(".searchDetail");
 const contactsSection = document.querySelector(".contactsSection");
+const regionsSection = document.querySelector(".regionsSection");
+const usersSection = document.querySelector(".usersSection");
+const companySection = document.querySelector(".companySection");
 
 //STATES
 let contactsOpen = false;

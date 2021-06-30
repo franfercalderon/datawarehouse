@@ -253,24 +253,28 @@ Contact.belongsTo(Company, {
 
 
 Region.hasMany(Company, {
+    as:'companyRegion',
     foreignKey:'region',
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
 });
 
 Company.belongsTo(Region, {
+    as:'companyRegion',
     foreignKey:'region',
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
 });
 
 Country.hasMany(Company, {
+    as:'companyCountry',
     foreignKey:'country',
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
 });
 
 Company.belongsTo(Country, {
+    as:'companyCountry',
     foreignKey:'country',
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'

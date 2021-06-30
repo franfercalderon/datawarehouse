@@ -636,6 +636,46 @@ router.post('/users', async (req, res)=>{
                 country: 2,
                 city: 41
             },
+            {
+                id: 10,
+                name: "Avianca",
+                email: "info@airline.com",
+                phone: "13502345098",
+                address: "432 Park Ave, 6th floor",
+                region: 1,
+                country: 5,
+                city: 5
+            },
+            {
+                id: 11,
+                name: "Japan Airlines",
+                email: "info@airline.com",
+                phone: "13502345098",
+                address: "432 Park Ave, 6th floor",
+                region: 4,
+                country: 12,
+                city: 40
+            },
+            {
+                id: 12,
+                name: "Latam Airlines",
+                email: "info@airline.com",
+                phone: "13502345098",
+                address: "432 Park Ave, 6th floor",
+                region: 1,
+                country: 3,
+                city: 35
+            },
+            {
+                id: 13,
+                name: "Aeroflot",
+                email: "info@airline.com",
+                phone: "13502345098",
+                address: "432 Park Ave, 6th floor",
+                region: 4,
+                country: 15,
+                city: 29
+            },
         ];
         startCompanies.forEach(e=>{
             models.Company.create(e)

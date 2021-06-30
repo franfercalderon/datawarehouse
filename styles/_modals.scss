@@ -310,3 +310,85 @@
     background-color: $blue1;
     font-weight: 500;
 }
+
+.companyModal{
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    left: 0;
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba($shadow, $alpha: 0.3);
+    z-index: 2;
+}
+
+.companyMainDiv{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 1050px;
+    min-height: 430px;
+    background-color: white;
+    border-radius: 8px;
+    margin-top: 40px;
+    box-shadow: 2px 2px 8px rgba($shadow, $alpha: 0.5);
+}
+
+.companyDataDiv{
+    position: absolute;
+    display: flex;
+    align-items: center;
+    width: 990px;
+}
+
+.companyDataDiv.level1{
+    display: flex;
+    justify-content: space-evenly;
+    padding: 0 20px 0 20px;
+    margin-top:70px;
+    height: 120px;
+    background-color: white;
+    border-radius: 8px;
+    border: 2px solid $blue4;
+    
+}
+
+.companyData{
+    display: flex;
+    flex-direction: column;
+    width: 19%;
+    padding: 8px;
+    font-family: $raleway;
+    font-size: 16px;
+}
+
+.companyData input{
+    border: 1px solid $blue5;
+    margin-top: 5px;
+    height: 25px;
+    padding-left: 5px;
+}
+
+.companyData select{
+    border: 1px solid $blue5;
+    margin-top: 5px;
+    height: 25px;
+    padding-left: 5px
+}
+
+.companyData.n2{
+    width: 200px;
+}
+
+
+.companyData span{
+    color: red;
+}
+
+.companyDataDiv.level2{
+    margin: 215px 30px 0 30px;
+    justify-content: space-between;
+}

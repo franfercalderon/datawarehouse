@@ -92,7 +92,6 @@ async function deleteCountryById(id){
 }
 
 async function createCountry(body){
-    console.log(body)
     const region = await fetchApi(url, '/location/countries', 'POST', body);
     return region
 }
@@ -185,6 +184,26 @@ async function getCompanyById(id){
     const company = await fetchApi(url, '/companies/'+id, 'GET');
     return company.name
 }
+
+async function getAllCompanies(){
+    const companies = await fetchApi(url, '/companies', 'GET');
+    return companies
+}
+
+async function deleteCompanyById(id){
+    const company = await fetchApi(url, '/companies/'+id, 'DELETE');
+    return company
+}
+
+async function createCompany(body){
+    const newCompany = await fetchApi(url, '/companies', 'POST', body);
+    return newCompany
+}
+
+// async function updateCompany(id){
+//     const updatedCompany = await fetchApi(url, '/companies/:id', 'PUT');
+//     return updatedCompany
+// }
 
 
 
