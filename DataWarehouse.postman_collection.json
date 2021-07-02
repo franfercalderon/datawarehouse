@@ -1,0 +1,208 @@
+{
+	"info": {
+		"_postman_id": "a5dbba54-62d9-4691-9cbb-bb3946490d11",
+		"name": "DataWarehouse",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Start",
+			"item": [
+				{
+					"name": "Start users",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/start/users",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"start",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Start regions",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/start/regions",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"start",
+								"regions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Start countries",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/start/countries",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"start",
+								"countries"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Start cities",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/start/cities",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"start",
+								"cities"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Start companies",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiZnJhbmZlciIsImFkbWluIjp0cnVlLCJpYXQiOjE2MjE0NTQ5MDF9.p1J3IEZoCMBontIW5OdSILciFMcc3jD2UkxH3_nPD1M",
+								"description": "admin franfer",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoibW9tYXpvIiwiYWRtaW4iOmZhbHNlLCJpYXQiOjE2MjE0NDkzNDl9.tJZqvlE3yx8mDl1l3tMxD-OB15xYxvD0-Sz9mTcSeWk",
+								"description": "not admin momazo",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "localhost:3000/start/companies",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"start",
+								"companies"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Start contacts",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiZnJhbmZlciIsImFkbWluIjp0cnVlLCJpYXQiOjE2MjE0NTQ5MDF9.p1J3IEZoCMBontIW5OdSILciFMcc3jD2UkxH3_nPD1M",
+								"description": "admin franfer",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoibW9tYXpvIiwiYWRtaW4iOmZhbHNlLCJpYXQiOjE2MjE0NDkzNDl9.tJZqvlE3yx8mDl1l3tMxD-OB15xYxvD0-Sz9mTcSeWk",
+								"description": "not admin momazo",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "localhost:3000/start/contacts",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"start",
+								"contacts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Start channels",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/start/channels",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"start",
+								"channels"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Start contactInfo",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiZnJhbmZlciIsImFkbWluIjp0cnVlLCJpYXQiOjE2MjE0NTQ5MDF9.p1J3IEZoCMBontIW5OdSILciFMcc3jD2UkxH3_nPD1M",
+								"description": "admin franfer",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoibW9tYXpvIiwiYWRtaW4iOmZhbHNlLCJpYXQiOjE2MjE0NDkzNDl9.tJZqvlE3yx8mDl1l3tMxD-OB15xYxvD0-Sz9mTcSeWk",
+								"description": "not admin momazo",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "localhost:3000/start/contactInfo",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"start",
+								"contactInfo"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

@@ -30,7 +30,7 @@ async function openContacts(contacts){
     if(usersOpen==true){
         usersBtn.src="./styles/assets/users.png";
         document.querySelector(".usersSection").classList.add("hidden");
-        contactsOpen=false
+        usersOpen=false
     }
 
     if(companyOpen==true){
@@ -125,7 +125,7 @@ async function pagination(list, offset, origin){
             }
         })  
     
-        //MOSTRAR CONTACTOS ANTERIORES
+        //MOSTRAR COMPAÑIAS ANTERIORES
         prev.addEventListener("click", ()=>{
     
             //SI LLEGA A LA PRIMERA PÁGINA
@@ -139,6 +139,45 @@ async function pagination(list, offset, origin){
                 offset=offset-10;
                 document.querySelector(".companyTable").remove();
                 fillCompanies(list, offset);
+            }
+        })
+    }
+
+    if(origin=="users"){
+
+        //VARIABLES
+        const next= document.querySelector(".usForwardContainer");
+        const prev= document.querySelector(".usBackContainer");
+        const showingUsers = document.querySelector(".showingUsers");
+        const totalUsers = document.querySelector(".totalUsers");
+    
+        //OBTIENE INFORMACIOÓN DE USUARIOS Y USA EL LARGO PARA MOSTRARLO EN INDEX
+        totalUsers.innerHTML=`${list.length}`
+        showingUsers.innerHTML=`${offset+1} - ${offset+10}`;
+    
+        //MOSTRAR MÁS COMPANIAS
+        next.addEventListener("click", ()=>{
+            if(list.length> offset+10){
+                offset=offset+10;
+                document.querySelector(".usersTable").remove();
+                fillUsers(list, offset);
+            }
+        })  
+    
+        //MOSTRAR USUARIOS ANTERIORES
+        prev.addEventListener("click", ()=>{
+    
+            //SI LLEGA A LA PRIMERA PÁGINA
+            if(offset>=0 && offset<10){
+                offset=0;
+                document.querySelector(".usersTable").remove();
+                fillUsers(list, offset);
+            }
+    
+            else{
+                offset=offset-10;
+                document.querySelector(".usersTable").remove();
+                fillUsers(list, offset);
             }
         })
     }
@@ -715,7 +754,14 @@ async function loginLoad(){
 
 function loginSuccess(user, welcome){
 
+    //ESTABLECE FOTO GENERICA SI NO HAY FOTO DE USUARIO
+    let userPhoto="";
+    
+    if(user.photo==null) userPhoto="./styles/assets/random_user.jpg";
+    else userPhoto= user.photo;
+
     if(welcome=="welcome"){
+
 
         //SI ESTÁ LOGGUEANDO POR PRIMERA VEZ
         logincontainer.innerHTML= "";
@@ -730,7 +776,7 @@ function loginSuccess(user, welcome){
             openContacts();
             document.querySelector(".loggedusercontainer").innerHTML=`
             <p>${user.name}</p>
-            <img src=${user.photo} alt="foto usuario">`
+            <img src=${userPhoto} alt="foto usuario">`
         }, 2000)
     }
     else{
@@ -740,7 +786,7 @@ function loginSuccess(user, welcome){
             openContacts();
             document.querySelector(".loggedusercontainer").innerHTML=`
             <p>${user.name}</p>
-            <img src=${user.photo} alt="foto usuario">`
+            <img src=${userPhoto} alt="foto usuario">`
     }
 
     if (localStorage.getItem("admin") == "true") {
@@ -936,7 +982,7 @@ function dynamicLocation(origin){
                 option.value= countries[i].name;
                 option.innerHTML= countries[i].name;
                 countrySelect.appendChild(option);
-                }
+            }
         });
     
         countrySelect.addEventListener("change", async () =>{
@@ -1282,6 +1328,13 @@ function prompt(status, message, id, origin){
             );
         }
 
+        if(origin=="userMainDiv"){
+            
+            setTimeout(()=>{
+                document.querySelector(".userModal").remove()}, 2000
+            );
+        }
+
         if(origin=="regionMainDiv" || origin=="contactMainDiv"){
             
             setTimeout(()=>{
@@ -1296,6 +1349,17 @@ function prompt(status, message, id, origin){
         <img src="./styles/assets/error.png" alt="error">
         <p>${message}</p>`;
         document.querySelector(".contactsSection").appendChild(createPrompt);
+        setTimeout(()=>{
+            createPrompt.remove()}, 2000
+        );
+    }
+
+    //PASSWORD NOT MATCHING
+    if(status=="nomatch"){
+        createPrompt.innerHTML=`
+        <img src="./styles/assets/error.png" alt="error">
+        <p>${message}</p>`;
+        document.querySelector(".usersSection").appendChild(createPrompt);
         setTimeout(()=>{
             createPrompt.remove()}, 2000
         );
@@ -1495,6 +1559,45 @@ function prompt(status, message, id, origin){
                     setTimeout(()=>{
                         //RENDERIZA NUEVAMENTE LISTA DE COMPAÑIAS Y BORRA PROMPT
                         openCompanies()
+                        createPrompt.remove()
+                    }, 2000);
+                }
+
+            }
+        })
+        
+    }
+
+    //CONFIRMACION DELETE USER
+    if(status=="deleteUser"){
+        createPrompt.innerHTML=`
+        <img src="./styles/assets/error.png" alt="alert">
+        <p>${message}</p>
+        <div class="promptBtns">
+            <div id="promptCancelBtn">Cancelar</div>
+            <div id="promptConfirmBtn">Eliminar</div>
+        </div>`;
+        document.querySelector(".usersSection").appendChild(createPrompt);
+        createPrompt.scrollIntoView({block: 'end', behavior: 'smooth'})
+        createPrompt.addEventListener("click",  async (e)=>{  
+            //SI HACE CLICK EN CANCELAR, BORRA EL PROMPT
+            if(e.target.id=="promptCancelBtn"){
+                createPrompt.remove()
+            }
+            //SI HACE CLICK EN ELIMINAR
+            if(e.target.id=="promptConfirmBtn"){
+
+                //ELIMINA REGION POR ID
+                const deletedUser= await deleteUserById(id);
+
+                if(deletedUser){
+                    createPrompt.innerHTML=`
+                    <img src="./styles/assets/success.png" alt="exito">
+                     <p>Usuario eliminado!</p>`
+                    
+                    setTimeout(()=>{
+                        //RENDERIZA NUEVAMENTE LISTA DE COMPAÑIAS Y BORRA PROMPT
+                        openUsers()
                         createPrompt.remove()
                     }, 2000);
                 }
@@ -2257,9 +2360,6 @@ async function openEditCompany(company){
                 </select>
             </div>
         </div>
-        <div class="companyDataDiv level3">
-          
-        </div>
         <div class="contactModalBtns">
             <div class="cancelNewCompany">
                 <p>Cancelar</p>
@@ -2332,7 +2432,7 @@ async function newCompanyModal(){
     companyDiv.innerHTML= `
     <div class="companyMainDiv">
         <div class="title">
-            <p>Editar compañía</p>
+            <p>Agregar nueva compañía</p>
         </div>
         <div class="companyDataDiv level1">
             <div class="companyData">
@@ -2371,9 +2471,6 @@ async function newCompanyModal(){
                     <option value="" disabled selected></option>
                 </select>
             </div>
-        </div>
-        <div class="companyDataDiv level3">
-          
         </div>
         <div class="contactModalBtns">
             <div class="cancelNewCompany">
@@ -2482,10 +2579,8 @@ async function editCompany(id){
 
     //ENVIA POST A API
 
-    console.log(body)
     const updatedCompany = await fetchApi(url, '/companies/'+id, 'PUT', body);
 
-    console.log(updatedCompany)
 
     
     if(updatedCompany.error) return prompt("mandatory","Formato de email incorrecto", null, "companyMainDiv");
@@ -2496,7 +2591,401 @@ async function editCompany(id){
 
 }
 
+//FUNCIONES SECCION USUARIOS
 
+async function openUsers(){
+
+    //LIMPIA SECCION SI YA ESTABA ABIERTA
+    const section = document.querySelector(".usersSection");
+    if(section) section.remove()
+
+    //UPDATE ESTADO SECCIONES:
+    usersOpen=true;
+    usersBtn.src="./styles/assets/users_hover.png";
+
+    if(contactsOpen==true){
+        contactsBtn.src="./styles/assets/contacts.png";
+        document.querySelector(".contactsSection").classList.add("hidden");
+        contactsOpen=false
+    }
+
+    if(regionOpen==true){
+        regionBtn.src="./styles/assets/region.png";
+        document.querySelector(".regionsSection").classList.add("hidden");
+        regionOpen=false
+    }
+
+    if(companyOpen==true){
+        companyBtn.src="./styles/assets/company.png";
+        document.querySelector(".companySection").classList.add("hidden");
+        companyOpen=false
+    }
+
+    //CREA DIV CONTENEDOR
+    const usersSection = document.createElement("section");
+    usersSection.classList.add("usersSection");
+    document.querySelector(".main").appendChild(usersSection);
+
+    //BOTON AGREGAR USUARIO
+    const addUserBtn = document.createElement("div");
+    addUserBtn.classList.add("addUserBtn");
+    addUserBtn.innerHTML= `
+        <p>+</p>`
+        usersSection.appendChild(addUserBtn);
+
+    //AGREGA LISTENER DE BOTON CREAR
+    addUserBtn.addEventListener("click", ()=>{
+        newUserModal()
+    })
+    
+    //TRAE USUARIS DESDE DB (SOLO ADMIN)
+    const users = await getAllUsers();
+
+    //ORDENA COMPAÑIAS ALFABETICAMENTE
+    users.sort((a,b)=>{
+        if(a.name>b.name) return 1;
+        if(a.name<b.name) return -1;
+        return 0
+        });
+
+    //RENDERIZA COMPAÑIAS
+    fillUsers(users, 0)
+}
+
+async function fillUsers(usersList, offset){
+
+    //OBTIENE USUARIOS SEGUN OFFSET
+    const users = usersList.slice(offset, offset+10)
+
+    //CREA TABLA DE COMPANIAS
+    const usersTable = document.createElement("div");
+    usersTable.classList.add("usersTable");
+    document.querySelector(".usersSection").appendChild(usersTable);
+
+    usersTable.innerHTML=`
+    <div class="tableRow tableHeader">
+        <div class="usersColumn">
+            <p>Nombre</p> 
+        </div>
+        <div class="usersColumn">
+            <p>Email</p> 
+        </div>
+        <div class="usersColumn">
+            <p>Teléfono</p> 
+        </div>
+        <div class="usersColumn ">
+            <p>Administrador</p> 
+        </div>  
+        <div class="usersColumn userOptions">
+            <p>Opciones</p> 
+        </div>
+    </div>
+    <div class="headerDivider"></div>
+    <div class="usersRows"></div>
+    <div class="headerDivider"></div>
+    <div class="indexBtns">
+        <div class="indexContainer">
+            <p><span class="showingUsers"></span> de <span class="totalUsers"></span> usuarios</p>
+        </div>
+        <div class="usBackContainer arrowContainer">
+            <img src="./styles/assets/back.png" alt="back" class="indexArrow">
+        </div>
+        <div class="usForwardContainer arrowContainer">
+            <img src="./styles/assets/forward.png" alt="forward" class="indexArrow">
+        </div>
+    </div>`
+
+    users.forEach(us=>{
+
+        //CREA DIV POR CADA USUARIO Y COMPLETA CON DATOS EXISTENTES
+        let userAdmin=""
+        if(us.isAdmin==true) {
+            userAdmin="Sí";
+        } 
+        else userAdmin="No";
+
+        const thisUser= document.createElement("div");
+        thisUser.classList.add("tableRow");
+        thisUser.classList.add("itemRow");
+        thisUser.innerHTML=`
+            <div class="tableColumn">${us.name} ${us.lastname}</div>
+            <div class="tableColumn">${us.email}</div>
+            <div class="tableColumn">${us.phone}</div>
+            <div class="tableColumn">${userAdmin}</div>
+            <div class="tableColumn userOptions">...</div>
+        `
+        document.querySelector(".usersRows").appendChild(thisUser);
+
+        thisUser.addEventListener("mouseenter", ()=>{
+            thisUser.classList.add("userHover");
+            thisUser.querySelector(".userOptions").innerHTML=`
+                <div class="optionHoverBtns optionEdit" ">
+                    <img src="./styles/assets/edit.png" alt="editar contacto" id="optionEdit">
+                </div>
+                <div class="optionHoverBtns optionDelete">
+                    <img src="./styles/assets/delete.png" alt="eliminar contacto" id="optionDelete">
+                </div>`
+                thisUser.querySelector("#optionEdit").addEventListener("click", ()=>{
+                openEditUser(us)
+            })
+
+            thisUser.querySelector("#optionDelete").addEventListener("click", ()=>{
+
+                //ENVIA PROMPT DE CONFIRMACION Y LUEGO ELIMINA;
+                prompt("deleteUser", "Desea borrar el usuario?",us.id)
+            })
+        })
+
+        thisUser.addEventListener("mouseleave", ()=>{
+            thisUser.classList.remove("userHover");
+            thisUser.querySelector(".userOptions").innerHTML=`...`
+        })
+
+    })
+
+    //LLAMA FUNCION DE PAGINACION
+    pagination(usersList, 0, "users")
+}
+
+async function newUserModal(){
+    //CREA DIV
+    const userDiv = document.createElement("div");
+    userDiv.classList.add("userModal");
+
+    userDiv.innerHTML= `
+    <div class="userMainDiv">
+        <div class="title">
+            <p>Agregar usuario</p>
+        </div>
+        <div class="userDataDiv level1">
+            <div class="userData">
+                <label for="newUserName">Nombre<span>*</span></label>
+                <input name="newUserName" class= "newUserName" type="text" placeholder="Katherine">
+            </div>
+            <div class="userData">
+                <label for="newUserLastname">Nombre<span>*</span></label>
+                <input name="newUserLastname" class= "newUserLastname" type="text" placeholder="Taborda">
+            </div>
+            <div class="userData">
+                <label for="newUserEmail">Email<span>*</span></label>
+                <input name="newUserEmail" class= "newUserEmail" type="text" placeholder="user@email.com">
+            </div>
+            <div class="userData">
+                <label for="newUserPhone">Teléfono<span>*</span></label>
+                <input name="newUserPhone" class= "newUserPhone" type="text" placeholder="+(123) 456 789">
+            </div>
+        </div>
+        <div class="userDataDiv level2">
+            <div class="userData n2">
+                <label for="newUserAddress">Domicilio<span>*</span></label>
+                <input name="newUserAddress" class= "newUserAddress" type="text" placeholder="122 75North, Suite 203">
+            </div>
+            <div class="userData n2">
+                <label for="newUserPass">Contraseña<span>*</span></label>
+                <input name="newUserPass" class= "newUserPass" type="password" placeholder="*******">
+            </div>
+            <div class="userData n2">
+                <label for="newUserPassRep">Repetir contraseña<span>*</span></label>
+                <input name="newUserPassRep" class= "newUserPassRep" type="password" placeholder="*******">
+            </div>
+            <div class="userData n2">
+                <label for="newUserAdmin">Administrador<span>*</span></label>
+                <input name="newUserAdmin" class= "newUserAdmin" id="newUserAdmin" type="checkbox">
+            </div>
+        </div>
+        <div class="contactModalBtns">
+            <div class="cancelNewUser">
+                <p>Cancelar</p>
+            </div>
+            <div class="saveNewUser">
+                <p>Guardar</p>
+            </div>
+        </div>
+    </div>`
+    document.querySelector(".main").appendChild(userDiv);
+    userDiv.scrollIntoView({block: 'end', behavior: 'smooth'});
+
+    //FUNCIONES BOTONES
+    document.querySelector(".cancelNewUser").addEventListener("click", ()=>{
+        userDiv.remove();
+    })
+    document.querySelector(".saveNewUser").addEventListener("click", ()=>{
+        saveNewUser()
+    });
+}
+
+async function openEditUser(user){
+    //CREA DIV
+    const userDiv = document.createElement("div");
+    userDiv.classList.add("userModal");
+
+    userDiv.innerHTML= `
+    <div class="userMainDiv">
+        <div class="title">
+            <p>Agregar usuario</p>
+        </div>
+        <div class="userDataDiv level1">
+            <div class="userData">
+                <label for="newUserName">Nombre<span>*</span></label>
+                <input name="newUserName" class= "newUserName" type="text" placeholder="Katherine">
+            </div>
+            <div class="userData">
+                <label for="newUserLastname">Nombre<span>*</span></label>
+                <input name="newUserLastname" class= "newUserLastname" type="text" placeholder="Taborda">
+            </div>
+            <div class="userData">
+                <label for="newUserEmail">Email<span>*</span></label>
+                <input name="newUserEmail" class= "newUserEmail" type="text" placeholder="user@email.com">
+            </div>
+            <div class="userData">
+                <label for="newUserPhone">Teléfono<span>*</span></label>
+                <input name="newUserPhone" class= "newUserPhone" type="text" placeholder="+(123) 456 789">
+            </div>
+        </div>
+        <div class="userDataDiv level2">
+            <div class="userData n2">
+                <label for="newUserAddress">Domicilio<span>*</span></label>
+                <input name="newUserAddress" class= "newUserAddress" type="text" placeholder="122 75North, Suite 203">
+            </div>
+            <div class="userData n2">
+                <label for="newUserPass">Contraseña<span>*</span></label>
+                <input name="newUserPass" class= "newUserPass" type="password" placeholder="*******">
+            </div>
+            <div class="userData n2">
+                <label for="newUserPassRep">Repetir contraseña<span>*</span></label>
+                <input name="newUserPassRep" class= "newUserPassRep" type="password" placeholder="*******">
+            </div>
+            <div class="userData n2">
+                <label for="newUserAdmin">Administrador<span>*</span></label>
+                <input name="newUserAdmin" class= "newUserAdmin" id= "newUserAdmin" type="checkbox">
+            </div>
+        </div>
+        <div class="contactModalBtns">
+            <div class="cancelNewUser">
+                <p>Cancelar</p>
+            </div>
+            <div class="saveNewUser">
+                <p>Guardar</p>
+            </div>
+        </div>
+    </div>`
+    document.querySelector(".main").appendChild(userDiv);
+    userDiv.scrollIntoView({block: 'end', behavior: 'smooth'});
+
+    //FILLS VALUES WITH CURRENT
+    document.querySelector(".newUserName").value = user.name;
+    document.querySelector(".newUserLastname").value = user.lastname;
+    document.querySelector(".newUserEmail").value = user.email;
+    document.querySelector(".newUserPhone").value = user.phone;
+    document.querySelector(".newUserAddress").value = user.adress;
+    document.querySelector(".newUserPass").value = user.password;
+    if(user.isAdmin==true){
+        document.querySelector("#newUserAdmin").checked=true
+    }
+
+
+    //FUNCIONES BOTONES
+    document.querySelector(".cancelNewUser").addEventListener("click", ()=>{
+        userDiv.remove();
+    })
+    document.querySelector(".saveNewUser").addEventListener("click", ()=>{
+
+        //LLAMA FUNCION PARA COTEJAR CONTRASEÑAS
+        const passMatch = passwordMatch(document.querySelector(".newUserPass").value, document.querySelector(".newUserPassRep").value);
+
+        //SI DEVUELVE TRUE, GUARDA DATOS
+        if(passMatch) editUser(user.id)
+        
+    });
+
+    
+}
+
+async function editUser(id){
+
+    //TOMA VALORES DE INPUTS
+    const name= document.querySelector(".newUserName").value;
+    const lastname= document.querySelector(".newUserLastname").value; 
+    const email= document.querySelector(".newUserEmail").value;
+    const phone=document.querySelector(".newUserPhone").value;
+    const adress = document.querySelector(".newUserAddress").value;
+    const password = document.querySelector(".newUserPass").value;
+    let isAdmin=false
+    if(document.querySelector("#newUserAdmin").checked==true){
+        isAdmin=true
+    }
+
+    //CORROBORA DATOS OBLIGATORIOS 
+    if(name=="" || lastname== "" || phone=="" || email=="" || adress== ""|| password== ""){
+        return prompt("mandatory","Faltan datos obligatorios", null, "userMainDiv")
+    }
+
+    const body = {
+        name: name,
+        lastname: lastname,
+        email: email,
+        phone: phone,
+        adress: adress,
+        password: password,
+        isAdmin: isAdmin
+    }
+
+    //ENVIA PUT A API
+
+    const updatedUser = await fetchApi(url, '/users/'+id, 'PUT', body);
+    if(updatedUser.error) return prompt("mandatory","Formato de email incorrecto", null, "userMainDiv");
+    else{
+        openUsers()
+        return prompt("success","Usuario editado!",null, "userMainDiv");
+    }
+    
+}
+
+function passwordMatch(main, check){
+    if(main.trim()==check.trim())return true
+    return prompt("nomatch", "Las contraseñas no coinciden")
+}
+
+
+async function saveNewUser(){
+
+    //TOMA VALORES DE INPUTS
+    const name= document.querySelector(".newUserName").value;
+    const lastname= document.querySelector(".newUserLastname").value; 
+    const email= document.querySelector(".newUserEmail").value;
+    const phone=document.querySelector(".newUserPhone").value;
+    const adress = document.querySelector(".newUserAddress").value;
+    const password = document.querySelector(".newUserPass").value;
+    let isAdmin=false
+    if(document.querySelector("#newUserAdmin").checked==true){
+        isAdmin=true
+    }
+
+    //CORROBORA DATOS OBLIGATORIOS 
+    if(name=="" || lastname== "" || phone=="" || email=="" || adress== ""|| password== ""){
+        return prompt("mandatory","Faltan datos obligatorios", null, "userMainDiv")
+    }
+
+    const body = {
+        name: name,
+        lastname: lastname,
+        email: email,
+        phone: phone,
+        adress: adress,
+        password: password,
+        isAdmin: isAdmin
+    }
+
+    //ENVIA POST A API
+
+    const updatedUser = await fetchApi(url, '/users', 'POST', body);
+    if(updatedUser.error) return prompt("mandatory","Formato de email incorrecto", null, "userMainDiv");
+    else{
+        openUsers()
+        return prompt("success","Usuario creado!",null, "userMainDiv");
+    }
+
+}
 
 
 

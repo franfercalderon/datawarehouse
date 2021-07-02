@@ -1,0 +1,65 @@
+.usersSection{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.usersTable{
+    width: 100%;
+    height: 590px;
+    background-color: white;
+    margin-top: 65px;
+    padding: 0 25px 0 25px;
+    border-radius: 8px;
+    box-shadow: 2px 2px 8px rgb(211, 209, 209);
+    font-family: "Raleway", sans-serif;
+    font-size: 14px;
+}
+
+.addUserBtn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 40px;
+    height: 40px;
+    background-color: $blue3;
+    border-radius: 8px;
+    box-shadow: 2px 2px 8px rgb(226, 226, 226);
+    color: white;
+    text-align: center;
+    font-size: 25px;
+    padding-bottom:4px;
+    cursor: pointer;
+}
+
+.itemRow .userOptions{
+    font-size: 24px;
+    font-weight: 300;
+}
+
+.itemRow.userHover{
+    background-color: $lightgray;
+    font-weight: 400;
+}
+
+.usersSection.hidden{
+    display: none;
+    background-color: red;
+}
+
+.usersColumn{
+    width: 20%;
+    display: flex;
+    justify-content: center;
+}
+
+.userOptions{
+    width: 6%;
+    display: flex;
+    justify-content: space-around;
+}

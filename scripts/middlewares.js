@@ -102,6 +102,14 @@ function newToken (email, isAdmin){
     return token
 };
 
+//VALIDACION ADMIN
+
+const adminValidation = async (req, res, next)=>{
+    if(req.userData.admin==true) next();
+    else res.status(400).json({message: 'You are not authorized'})
+
+}
 
 
-module.exports = {loginValidation, jwtValidation, emailValid }
+
+module.exports = {loginValidation, jwtValidation, emailValid, adminValidation}

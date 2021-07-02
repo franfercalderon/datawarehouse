@@ -48,8 +48,15 @@ companyBtn.addEventListener("mouseleave", ()=>{
 
 usersBtn.addEventListener("mouseleave", ()=>{
     addHidden(usersLabel)
-    usersBtn.src="./styles/assets/users.png"
+    if(usersOpen==false){
+        usersBtn.src="./styles/assets/users.png"
+    }
 });
+
+usersBtn.addEventListener("click", ()=>{
+    openUsers();
+})
+
 
 regionBtn.addEventListener("mouseleave", ()=>{
     addHidden(regionLabel)
@@ -179,6 +186,7 @@ document.addEventListener("click",async (e)=>{
 
 })
 
+  
 
 
 

@@ -200,16 +200,24 @@ async function createCompany(body){
     return newCompany
 }
 
-// async function updateCompany(id){
-//     const updatedCompany = await fetchApi(url, '/companies/:id', 'PUT');
-//     return updatedCompany
-// }
+//USERS
+
+async function getAllUsers(){
+    const users = await fetchApi(url, '/users', 'GET');
+    return users
+}
+
+async function deleteUserById(id){
+    const deleted = await fetchApi(url, '/users/'+id, 'DELETE');
+    return deleted
+}
 
 
 
 //LLAMADA A API, FUNCION GENERAL:
 
 async function fetchApi(url, target, method, body){
+
     if(method== 'GET'){
         try{
             const bearer = 'Bearer ' + JSON.parse(localStorage.getItem('token'));

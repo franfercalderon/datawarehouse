@@ -28,6 +28,16 @@ router.post('/users', async (req, res)=>{
                 photo: './styles/assets/users/bonzo.jpg',
                 password: 'Password123!',
                 isAdmin: false
+            },
+            {
+                name: 'Evaluador',
+                lastname: 'Bueno',
+                email: 'evaluador@acamica.com',
+                phone: '1234567890',
+                adress: 'Evergreen Ave. 123, Springfield, USA',
+                photo: './styles/assets/users/eval.jpg',
+                password: 'Password123!',
+                isAdmin: true
             }
         ];
 

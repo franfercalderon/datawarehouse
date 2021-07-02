@@ -52,6 +52,7 @@
 
 .logocontainer img {
   width: 50px;
+  height: 37.5px;
   margin: 0 20px 0 50px;
 }
 
@@ -80,6 +81,7 @@
 
 .loggedusercontainer img {
   height: 40px;
+  width: 40px;
   border-radius: 50%;
   margin: 0 45px 0 20px;
   -webkit-box-shadow: 0 2px 8px #0D1321;
@@ -1435,6 +1437,134 @@
           justify-content: space-between;
 }
 
+.userModal {
+  position: absolute;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  top: 0;
+  left: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(48, 48, 48, 0.3);
+  z-index: 2;
+}
+
+.userMainDiv {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 1050px;
+  min-height: 440px;
+  background-color: white;
+  border-radius: 8px;
+  margin-top: 40px;
+  -webkit-box-shadow: 2px 2px 8px rgba(48, 48, 48, 0.5);
+          box-shadow: 2px 2px 8px rgba(48, 48, 48, 0.5);
+}
+
+.userDataDiv {
+  position: absolute;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 990px;
+}
+
+.userDataDiv.level1 {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+  padding: 0 20px 0 20px;
+  margin-top: 70px;
+  height: 120px;
+  background-color: white;
+  border-radius: 8px;
+  border: 2px solid #748CAB;
+}
+
+.userData {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  width: 19%;
+  padding: 8px;
+  font-family: "Raleway", sans-serif;
+  font-size: 16px;
+}
+
+.userData input {
+  border: 1px solid #becde0;
+  margin-top: 5px;
+  height: 25px;
+  padding-left: 5px;
+}
+
+.userData select {
+  border: 1px solid #becde0;
+  margin-top: 5px;
+  height: 25px;
+  padding-left: 5px;
+}
+
+.userData.n2 {
+  width: 200px;
+}
+
+.userData span {
+  color: red;
+}
+
+.userDataDiv.level2 {
+  width: 900px;
+  margin: 215px 30px 0 30px;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.newUserAddress {
+  width: 180px;
+}
+
+#newUserPhoto {
+  border: none;
+}
+
+.newUserAdmin {
+  width: 18px;
+}
+
+.n2:last-child {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
 .regionsSection {
   position: relative;
   display: -webkit-box;
@@ -1785,5 +1915,95 @@
 .itemRow.companyHover {
   background-color: #f1f1f1;
   font-weight: 400;
+}
+
+.usersSection {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.usersTable {
+  width: 100%;
+  height: 590px;
+  background-color: white;
+  margin-top: 65px;
+  padding: 0 25px 0 25px;
+  border-radius: 8px;
+  -webkit-box-shadow: 2px 2px 8px #d3d1d1;
+          box-shadow: 2px 2px 8px #d3d1d1;
+  font-family: "Raleway", sans-serif;
+  font-size: 14px;
+}
+
+.addUserBtn {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40px;
+  height: 40px;
+  background-color: #3E5C76;
+  border-radius: 8px;
+  -webkit-box-shadow: 2px 2px 8px #e2e2e2;
+          box-shadow: 2px 2px 8px #e2e2e2;
+  color: white;
+  text-align: center;
+  font-size: 25px;
+  padding-bottom: 4px;
+  cursor: pointer;
+}
+
+.itemRow .userOptions {
+  font-size: 24px;
+  font-weight: 300;
+}
+
+.itemRow.userHover {
+  background-color: #f1f1f1;
+  font-weight: 400;
+}
+
+.usersSection.hidden {
+  display: none;
+  background-color: red;
+}
+
+.usersColumn {
+  width: 20%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.userOptions {
+  width: 6%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
 }
 /*# sourceMappingURL=styles.css.map */
