@@ -49,7 +49,7 @@ Desde Postman u otro cliente API, realizar peticiones POST para llenar base de d
     localhost:3000/start/channels
     localhost:3000/start/contactInfo
 
-Colección de peticiones Postman incluida en los archivos ()
+Colección de peticiones Postman incluida en los archivos (DataWarehouse.postman_collection.json)
 
 6 - Listo para usar!
 
@@ -112,7 +112,7 @@ From Postman or other API client, make the following POST petitions. It is impor
     localhost:3000/start/channels
     localhost:3000/start/contactInfo
 
-Postman petition collection is incuded on files()
+Postman petition collection is incuded on files(DataWarehouse.postman_collection.json)
 
 6 - Ready to use!
 
